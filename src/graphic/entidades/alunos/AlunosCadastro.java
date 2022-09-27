@@ -1,11 +1,11 @@
 package graphic.entidades.alunos;
 
-import graphic.entidades.base.FrameCadastro;
+import graphic.entidades.base.EntidadesCadastro;
 
 import javax.swing.*;
 
-public class CadastroAlunos extends FrameCadastro {
-    public CadastroAlunos(){
+public class AlunosCadastro extends EntidadesCadastro {
+    public AlunosCadastro(){
         JButton btn = new JButton("OIII");
         btn.setBounds(150,150,50,50);
         add(btn);

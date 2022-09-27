@@ -3,9 +3,9 @@ package graphic.entidades.base;
 import javax.swing.*;
 import java.awt.*;
 
-public abstract class FrameCadastro extends JDialog {
+public abstract class EntidadesCadastro extends JDialog {
 
-    public FrameCadastro(){
+    public EntidadesCadastro(){
         setBackground(new Color(255,255,255));
         setLayout(null);
         setModal(true);
