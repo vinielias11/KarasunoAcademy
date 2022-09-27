@@ -1,10 +1,12 @@
 package database.dao;
 
+import model.UsuarioModel;
+
 import java.sql.SQLException;
 import java.util.List;
 
 public abstract class SistemaDAO {
-    public abstract List<Object> select() throws SQLException;
+    public abstract List<UsuarioModel> select() throws SQLException;
 
     public abstract void insert(Object param) throws SQLException;
 

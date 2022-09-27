@@ -42,9 +42,9 @@ public class UsuarioDAO extends SistemaDAO {
     }
 
     @Override
-    public List<Object> select() throws SQLException {
+    public List<UsuarioModel> select() throws SQLException {
         ResultSet resultadoQuery = pstSelect.executeQuery();
-        List<Object> arrayListUsuarios = new ArrayList<Object>();
+        List<UsuarioModel> arrayListUsuarios = new ArrayList<UsuarioModel>();
 
         while (resultadoQuery.next()) {
             UsuarioModel usuarioModel = new UsuarioModel();

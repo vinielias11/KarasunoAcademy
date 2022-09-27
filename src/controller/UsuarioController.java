@@ -3,8 +3,8 @@ package controller;
 import database.dao.UsuarioDAO;
 import model.UsuarioModel;
 
-import javax.swing.*;
 import java.sql.SQLException;
+import java.util.List;
 
 public class UsuarioController {
     private UsuarioDAO usuarioDAO;
@@ -17,6 +17,15 @@ public class UsuarioController {
         try {
             return usuarioDAO.selectByNomeESenha(nome, senha);
         } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public List<UsuarioModel> recuperarTodos(){
+        try {
+            return usuarioDAO.select();
+        }
+        catch (SQLException e){
             throw new RuntimeException(e);
         }
     }

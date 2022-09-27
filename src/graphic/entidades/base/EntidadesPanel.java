@@ -22,7 +22,11 @@ public abstract class EntidadesPanel extends JPanel {
 
         criaPainelCima();
         criarPainelBaixo();
+
     }
+
+    protected abstract String[] getColunasTabela();
+    protected abstract void montaDadosTabela(JTable tabela, DefaultTableModel tableModel);
 
     private void criaPainelCima(){
         JPanel menuCima = new JPanel();
@@ -64,35 +68,15 @@ public abstract class EntidadesPanel extends JPanel {
     }
 
     private void criarPainelBaixo() {
-        Object[][] data = {
-                {1, "Leo", "489", "Criciúma"},
-                {2, "Vinicius", "488", "Criciúma"},
-                {3, "Maria", "487", "Criciúma"},
-        };
+        String[] colunasTabela = getColunasTabela();
+
+        DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0);
 
         JTable tabela = new JTable();
 
-        tabela.setModel(new DefaultTableModel(
-                data,
-                new String[]{"Codigo", "Nome", "Telefone", "Cidade"}
-        ) {
-            @Override
-            public boolean isCellEditable(int row, int column) {
-                return false;
-            }
-        });
+        montaDadosTabela(tabela, tableModel);
 
         JScrollPane scrollPane = new JScrollPane(tabela);
-
-        TableColumnModel colums = tabela.getColumnModel();
-        colums.getColumn(0).setMaxWidth(50);
-        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
-        centerRender.setHorizontalAlignment(JLabel.CENTER);
-        colums.getColumn(0).setCellRenderer(centerRender);
-        colums.getColumn(1).setCellRenderer(centerRender);
-        colums.getColumn(2).setCellRenderer(centerRender);
-        colums.getColumn(3).setCellRenderer(centerRender);
-
         scrollPane.setBounds(45, 230, 1000, 400);
         add(scrollPane);
 

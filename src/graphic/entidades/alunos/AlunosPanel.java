@@ -1,13 +1,44 @@
 package graphic.entidades.alunos;
 
+import controller.UsuarioController;
 import graphic.entidades.base.EntidadesPanel;
+import model.UsuarioModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.util.List;
 
 public class AlunosPanel extends EntidadesPanel {
+    private UsuarioController usuarioController;
+
     public AlunosPanel(JFrame cmpPai) {
         super(cmpPai);
         criaComponentes();
+
+        usuarioController = new UsuarioController();
+
+    }
+
+    @Override
+    protected String[] getColunasTabela() {
+        return new String[]{"Nome", "Senha", "Perfil"};
+    }
+
+    @Override
+    protected void montaDadosTabela(JTable tabela, DefaultTableModel tableModel) {
+        List<UsuarioModel> dados = usuarioController.recuperarTodos();
+
+        for (int i = 0; i < dados.size(); i++) {
+            String nome = dados.get(i).getNome();
+            String senha = dados.get(i).getSenha();
+            Integer perfil = dados.get(i).getPerfil();
+
+            Object[] linha = {nome, senha, perfil};
+
+            tableModel.addRow(linha);
+        }
+
+        tabela.setModel(tableModel);
     }
 
     @Override
@@ -18,5 +49,6 @@ public class AlunosPanel extends EntidadesPanel {
     }
 
     private void criaComponentes() {
+
     }
 }
