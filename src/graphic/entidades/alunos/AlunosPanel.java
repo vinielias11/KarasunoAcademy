@@ -9,13 +9,10 @@ import javax.swing.table.DefaultTableModel;
 import java.util.List;
 
 public class AlunosPanel extends EntidadesPanel {
-    private UsuarioController usuarioController;
 
     public AlunosPanel(JFrame cmpPai) {
         super(cmpPai);
         criaComponentes();
-
-        usuarioController = new UsuarioController();
 
     }
 
@@ -26,6 +23,7 @@ public class AlunosPanel extends EntidadesPanel {
 
     @Override
     protected void montaDadosTabela(JTable tabela, DefaultTableModel tableModel) {
+        UsuarioController usuarioController = new UsuarioController();
         List<UsuarioModel> dados = usuarioController.recuperarTodos();
 
         for (int i = 0; i < dados.size(); i++) {
