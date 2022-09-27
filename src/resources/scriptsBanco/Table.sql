@@ -31,7 +31,7 @@ USUARIOS
 CREATE	TABLE				usuarios
 	(
 	id 				integer
-					NOT NULL,
+					NOT NULL
 					CONSTRAINT usuarios_pk
 					PRIMARY KEY
 					,
@@ -39,7 +39,7 @@ CREATE	TABLE				usuarios
 					NOT NULL
 					UNIQUE
 					,
-	senha			text,
+	senha			text
 					NOT NULL
 					,
 	perfil			text

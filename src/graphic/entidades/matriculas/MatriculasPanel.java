@@ -8,4 +8,9 @@ public class MatriculasPanel extends EntidadesPanel {
     public MatriculasPanel(JFrame cmpPai) {
         super(cmpPai);
     }
+
+    @Override
+    protected void onClickNovo() {
+
+    }
 }

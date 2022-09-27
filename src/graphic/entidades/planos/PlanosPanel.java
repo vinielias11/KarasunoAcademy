@@ -8,4 +8,9 @@ public class PlanosPanel extends EntidadesPanel {
     public PlanosPanel(JFrame cmpPai) {
         super(cmpPai);
     }
+
+    @Override
+    protected void onClickNovo() {
+
+    }
 }

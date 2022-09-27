@@ -8,4 +8,9 @@ public class SobrePanel extends EntidadesPanel {
     public SobrePanel(JFrame cmpPai) {
         super(cmpPai);
     }
+
+    @Override
+    protected void onClickNovo() {
+
+    }
 }

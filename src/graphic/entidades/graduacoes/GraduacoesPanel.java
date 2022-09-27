@@ -8,4 +8,9 @@ public class GraduacoesPanel extends EntidadesPanel {
     public GraduacoesPanel(JFrame cmpPai) {
         super(cmpPai);
     }
+
+    @Override
+    protected void onClickNovo() {
+
+    }
 }

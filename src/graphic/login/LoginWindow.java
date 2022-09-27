@@ -1,6 +1,7 @@
 package graphic.login;
 
 import controller.UsuarioController;
+import graphic.main.Main;
 
 import javax.swing.*;
 
@@ -71,8 +72,8 @@ public class LoginWindow extends JFrame {
 
     private void onClickEntrar(String nome, String senha) {
         if (usuarioController.logar(senha, nome)) {
-//            Main main = new Main();
-//            main.setVisible(true);
+            Main main = new Main();
+            main.setVisible(true);
             dispose();
         } else {
             JOptionPane.showMessageDialog(null, "Usuário ou senha inválidos!");

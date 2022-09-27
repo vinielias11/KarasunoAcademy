@@ -8,4 +8,9 @@ public class ModalidadesPanel extends EntidadesPanel {
     public ModalidadesPanel(JFrame cmpPai) {
         super(cmpPai);
     }
+
+    @Override
+    protected void onClickNovo() {
+
+    }
 }
