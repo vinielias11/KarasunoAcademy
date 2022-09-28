@@ -4,9 +4,9 @@ package model;
 import java.util.Date;
 
 public class AlunoModel {
-    private Integer/*Serial*/ codigoAluno;
+    private Integer codigoAluno;
     private String nome;
-    private Date/*String*/ dataNascimento;
+    private Date dataNascimento;
     private char sexo;
     private String telefone;
     private String celular;
