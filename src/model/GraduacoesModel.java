@@ -1,6 +1,7 @@
 package model;
 
 public class GraduacoesModel {
+    private Integer id;
     private String modalidade;
     private String graduacao;
 
@@ -10,6 +11,14 @@ public class GraduacoesModel {
 
     public String getModalidade() {
         return modalidade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setModalidade(String modalidade) {

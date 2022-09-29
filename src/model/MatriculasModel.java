@@ -3,6 +3,7 @@ package model;
 import java.util.Date;
 
 public class MatriculasModel {
+    private Integer id;
     private Integer codigoMatricula;
     private Integer codigoAluno;
     private Date dataMatricula;
@@ -15,6 +16,14 @@ public class MatriculasModel {
 
     public Integer getCodigoMatricula() {
         return codigoMatricula;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setCodigoMatricula(Integer codigoMatricula) {

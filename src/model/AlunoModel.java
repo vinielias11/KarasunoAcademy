@@ -4,6 +4,7 @@ package model;
 import java.util.Date;
 
 public class AlunoModel {
+    private Integer id;
     private Integer codigoAluno;
     private String nome;
     private Date dataNascimento;
@@ -24,6 +25,14 @@ public class AlunoModel {
 
     public AlunoModel(){
 
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Integer getCodigoAluno() {

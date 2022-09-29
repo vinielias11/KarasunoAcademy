@@ -1,6 +1,7 @@
 package model;
 
 public class CidadesModel {
+   private Integer id;
     private String cidade;
     private String estado;
     private String pais;
@@ -11,6 +12,14 @@ public class CidadesModel {
 
     public String getCidade() {
         return cidade;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public void setCidade(String cidade) {
