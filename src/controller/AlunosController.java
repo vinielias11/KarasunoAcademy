@@ -22,4 +22,13 @@ public class AlunosController {
             throw new RuntimeException(e);
         }
     }
+
+    public void inserir(Object aluno) {
+        try {
+            alunosDAO.insert(aluno);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao inserir o aluno!");
+            throw new RuntimeException(e);
+        }
+    }
 }
