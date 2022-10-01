@@ -11,6 +11,11 @@ public class MatriculasPanel extends EntidadesPanel {
     }
 
     @Override
+    protected String getTitulo() {
+        return "Matrículas";
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[0];
     }

@@ -14,6 +14,7 @@ CREATE TABLE cidades (
   pais text NOT NULL,
   CONSTRAINT cidades_pk PRIMARY KEY(cidade, estado, pais)
 );
+
 /*********************************************
 USUARIOS
 *********************************************/
@@ -22,6 +23,7 @@ CREATE TABLE usuarios (
   nome text NOT NULL UNIQUE, senha text NOT NULL,
   perfil text NOT NULL
 );
+
 /*********************************************
 ALUNOS
 *********************************************/
@@ -59,6 +61,7 @@ CREATE TABLE modalidades (
   id serial NOT NULL CONSTRAINT modalidades_pk PRIMARY KEY,
   modalidade text NOT NULL
 );
+
 /*********************************************
 GRADUACOES
 *********************************************/
@@ -69,6 +72,7 @@ CREATE TABLE graduacoes (
   graduacao text NOT NULL,
   CONSTRAINT graduacoes_pk PRIMARY KEY(id, id_modalidade)
 );
+
 /*********************************************
 PLANOS
 *********************************************/
@@ -80,6 +84,7 @@ CREATE TABLE planos (
   CONSTRAINT planos_pk PRIMARY KEY(id_modalidade, id),
   valor_mensal numeric(9, 2) NOT NULL
 );
+
 /*********************************************
 MATRICULAS
 *********************************************/
@@ -91,6 +96,7 @@ CREATE TABLE matriculas (
   dia_vencimento integer NOT NULL,
   data_encerramento date
 );
+
 /*********************************************
 MATRICULAS_MODALIDADES
 *********************************************/
@@ -107,6 +113,7 @@ CREATE TABLE matriculas_modalidades (
   data_inicio date DEFAULT current_date,
   data_fim date
 );
+
 /*********************************************
 FATURAS_MATRICULAS
 *********************************************/
@@ -121,6 +128,7 @@ CREATE TABLE faturas_matriculas (
   data_pagamento timestamp,
   data_cancelamento date
 );
+
 /*********************************************
 ASSIDUIDADE
 *********************************************/

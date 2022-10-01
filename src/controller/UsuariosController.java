@@ -1,29 +1,28 @@
 package controller;
 
-import database.dao.UsuarioDAO;
-import model.UsuarioModel;
+import database.dao.UsuariosDAO;
 
 import java.sql.SQLException;
 import java.util.List;
 
-public class UsuarioController {
-    private UsuarioDAO usuarioDAO;
+public class UsuariosController {
+    private UsuariosDAO usuariosDAO;
 
-    public UsuarioController() {
-        usuarioDAO = new UsuarioDAO();
+    public UsuariosController() {
+        usuariosDAO = new UsuariosDAO();
     }
 
     public boolean logar(String nome, String senha) {
         try {
-            return usuarioDAO.selectByNomeESenha(nome, senha);
+            return usuariosDAO.selectByNomeESenha(nome, senha);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
 
-    public List<UsuarioModel> recuperarTodos(){
+    public List<Object> recuperarTodos() {
         try {
-            return usuarioDAO.select();
+            return usuariosDAO.select();
         }
         catch (SQLException e){
             throw new RuntimeException(e);

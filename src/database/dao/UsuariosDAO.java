@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class UsuarioDAO extends SistemaDAO {
+public class UsuariosDAO extends SistemaDAO {
     private Connection conexao;
 
     private final String select = "SELECT * FROM public.usuarios;";
@@ -27,7 +27,7 @@ public class UsuarioDAO extends SistemaDAO {
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectByNomeESenha;
 
-    public UsuarioDAO() {
+    public UsuariosDAO() {
         try {
             this.conexao = ConnectionFactory.getConection(new EntidadeConexao());
             pstSelect = this.conexao.prepareStatement(select);
@@ -42,12 +42,13 @@ public class UsuarioDAO extends SistemaDAO {
     }
 
     @Override
-    public List<UsuarioModel> select() throws SQLException {
+    public List<Object> select() throws SQLException {
         ResultSet resultadoQuery = pstSelect.executeQuery();
-        List<UsuarioModel> arrayListUsuarios = new ArrayList<UsuarioModel>();
+        List<Object> arrayListUsuarios = new ArrayList<>();
 
         while (resultadoQuery.next()) {
             UsuarioModel usuarioModel = new UsuarioModel();
+
             usuarioModel.setNome(resultadoQuery.getString("nome"));
             usuarioModel.setSenha(resultadoQuery.getString("senha"));
             usuarioModel.setPerfil(resultadoQuery.getInt("perfil"));

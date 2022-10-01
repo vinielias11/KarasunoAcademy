@@ -11,6 +11,11 @@ public class PlanosPanel extends EntidadesPanel {
     }
 
     @Override
+    protected String getTitulo() {
+        return "Planos";
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[0];
     }

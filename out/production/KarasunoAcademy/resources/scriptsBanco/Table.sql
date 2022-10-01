@@ -7,292 +7,134 @@
 /*********************************************
 CIDADES
 *********************************************/
-
-CREATE	TABLE				cidades
-	(
-	cidade				text
-					NOT NULL
-					,
-	estado				char(2)
-					NOT NULL
-					,
-	pais				text
-					NOT NULL
-					,
-					CONSTRAINT cidades_pk
-						PRIMARY KEY(cidade, estado, pais)
-	)
-;
+CREATE TABLE cidades (
+  id serial NOT NULL,
+  cidade text NOT NULL,
+  estado char(2) NOT NULL,
+  pais text NOT NULL,
+  CONSTRAINT cidades_pk PRIMARY KEY(cidade, estado, pais)
+);
 
 /*********************************************
 USUARIOS
 *********************************************/
-
-CREATE	TABLE				usuarios
-	(
-	id 				integer
-					NOT NULL
-					CONSTRAINT usuarios_pk
-					PRIMARY KEY
-					,
-	nome			text
-					NOT NULL
-					UNIQUE
-					,
-	senha			text
-					NOT NULL
-					,
-	perfil			text
-					NOT NULL
-	)
-;
+CREATE TABLE usuarios (
+  id serial NOT NULL CONSTRAINT usuarios_pk PRIMARY KEY,
+  nome text NOT NULL UNIQUE, senha text NOT NULL,
+  perfil text NOT NULL
+);
 
 /*********************************************
 ALUNOS
 *********************************************/
-
-CREATE	TABLE				alunos
-	(
-	codigo_aluno			serial
-					CONSTRAINT alunos_pk
-					PRIMARY KEY
-					,
-	aluno				text
-					NOT NULL
-					,
-	data_nascimento			date
-					,
-	sexo				char(1)
-					CONSTRAINT alunos_sexo
-						check
-						(
-							sexo			in	('M', 'F')
-						)
-					,
-	telefone			text
-					,
-	celular				text
-					,
-	email				text
-					,
-	observacao			text
-					,
-	endereco			text
-					,
-	numero				text
-					,
-	complemento			text
-					,
-	bairro				text
-					,
-	cidade				text
-					,
-	estado				char(2)
-					,
-	pais				text
-					,
-					CONSTRAINT alunos_enderecos_f2
-						FOREIGN KEY(cidade, estado, pais)
-							REFERENCES cidades(cidade, estado, pais)
-						DEFERRABLE
-					,
-	cep				text
-	)
-;
-
+CREATE TABLE alunos (
+  id serial NOT NULL CONSTRAINT aluno_pk PRIMARY KEY,
+  codigo_aluno integer NOT NULL,
+  nome text NOT NULL,
+  data_nascimento date,
+  sexo char(1) CONSTRAINT alunos_sexo check (
+    sexo in ('M', 'F')
+  ),
+  telefone text,
+  celular text,
+  email text,
+  observacao text,
+  endereco text,
+  numero text,
+  complemento text,
+  bairro text,
+  cidade text,
+  estado char(2),
+  pais text,
+  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(cidade, estado, pais) REFERENCES cidades(cidade, estado, pais) DEFERRABLE,
+  cep text
+);
 --
 --
-
-CREATE	INDEX				alunos_1
-	ON				alunos(aluno)
-;
-
+CREATE INDEX alunos_1 ON alunos(nome);
 --
 --
-
 /*********************************************
 MODALIDADES
 *********************************************/
-
-CREATE	TABLE				modalidades
-	(
-	modalidade			text
-					NOT NULL
-					CONSTRAINT modalidades_pk
-						PRIMARY KEY
-	)
-;
+CREATE TABLE modalidades (
+  id serial NOT NULL CONSTRAINT modalidades_pk PRIMARY KEY,
+  modalidade text NOT NULL
+);
 
 /*********************************************
 GRADUACOES
 *********************************************/
-
-CREATE	TABLE				graduacoes
-	(
-	modalidade			text
-					NOT NULL
-					,
-					CONSTRAINT graduacoes_f1
-						FOREIGN KEY(modalidade)
-							REFERENCES modalidades(modalidade)
-						DEFERRABLE
-					,
-	graduacao			text
-					NOT NULL
-					,
-					CONSTRAINT graduacoes_pk
-						PRIMARY KEY(modalidade, graduacao)
-	)
-;
+CREATE TABLE graduacoes (
+  id serial NOT NULL,
+  id_modalidade integer not null,
+  CONSTRAINT graduacoes_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
+  graduacao text NOT NULL,
+  CONSTRAINT graduacoes_pk PRIMARY KEY(id, id_modalidade)
+);
 
 /*********************************************
 PLANOS
 *********************************************/
-
-CREATE	TABLE				planos
-	(
-	modalidade			text
-					NOT NULL
-					,
-					CONSTRAINT planos_f1
-						FOREIGN KEY(modalidade)
-							REFERENCES modalidades(modalidade)
-						DEFERRABLE
-					,
-	plano				text
-					NOT NULL
-					,
-					CONSTRAINT planos_pk
-						PRIMARY KEY(modalidade, plano)
-					,
-	valor_mensal			numeric(9,2)
-					NOT NULL
-	)
-;
+CREATE TABLE planos (
+  id serial NOT NULL,
+  id_modalidade integer NOT NULL,
+  CONSTRAINT planos_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
+  plano text NOT NULL,
+  CONSTRAINT planos_pk PRIMARY KEY(id_modalidade, id),
+  valor_mensal numeric(9, 2) NOT NULL
+);
 
 /*********************************************
 MATRICULAS
 *********************************************/
-
-CREATE	TABLE				matriculas
-	(
-	codigo_matricula		serial
-					CONSTRAINT matriculas_pk
-						PRIMARY KEY
-					,
-	codigo_aluno			integer
-					NOT NULL
-					,
-					CONSTRAINT matriculas_f1
-						FOREIGN KEY(codigo_aluno)
-							REFERENCES alunos(codigo_aluno)
-						DEFERRABLE
-					,
-	data_matricula			date
-					NOT NULL
-					,
-	dia_vencimento			integer
-					NOT NULL
-					,
-	data_encerramento		date
-	)
-;
+CREATE TABLE matriculas (
+  codigo_matricula serial CONSTRAINT matriculas_pk PRIMARY KEY,
+  id_aluno integer NOT NULL,
+  CONSTRAINT matriculas_f1 FOREIGN KEY(id_aluno) REFERENCES alunos(id) DEFERRABLE,
+  data_matricula date NOT NULL,
+  dia_vencimento integer NOT NULL,
+  data_encerramento date
+);
 
 /*********************************************
 MATRICULAS_MODALIDADES
 *********************************************/
-
-CREATE	TABLE				matriculas_modalidades
-	(
-	codigo_matricula		integer
-					NOT NULL
-					,
-					CONSTRAINT matriculas_modalidades_f1
-						FOREIGN KEY(codigo_matricula)
-							REFERENCES matriculas(codigo_matricula)
-						DEFERRABLE
-					,
-	modalidade			text
-					NOT NULL
-					,
-					CONSTRAINT matriculas_modalidades_f2
-						FOREIGN KEY(modalidade)
-							REFERENCES modalidades(modalidade)
-						DEFERRABLE
-					,
-					CONSTRAINT matriculas_modalidades_pk
-						PRIMARY KEY(codigo_matricula, modalidade)
-					,
-	graduacao			text
-					,
-					CONSTRAINT matriculas_modalidades_f3
-						FOREIGN KEY(modalidade, graduacao)
-							REFERENCES graduacoes(modalidade, graduacao)
-						DEFERRABLE
-					,
-	plano				text
-					NOT NULL
-					,
-					CONSTRAINT matriculas_modalidades_f4
-						FOREIGN KEY(modalidade, plano)
-							REFERENCES planos(modalidade, plano)
-						DEFERRABLE
-					,
-	data_inicio			date
-					DEFAULT current_date
-					,
-	data_fim			date
-	)
-;
+CREATE TABLE matriculas_modalidades (
+  codigo_matricula integer NOT NULL,
+  CONSTRAINT matriculas_modalidades_f1 FOREIGN KEY(codigo_matricula) REFERENCES matriculas(codigo_matricula) DEFERRABLE,
+  id_modalidade integer NOT NULL,
+  CONSTRAINT matriculas_modalidades_f2 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
+  CONSTRAINT matriculas_modalidades_pk PRIMARY KEY(codigo_matricula, id_modalidade),
+  id_graduacao integer,
+  CONSTRAINT matriculas_modalidades_f3 FOREIGN KEY(id_modalidade, id_graduacao) REFERENCES graduacoes(id_modalidade, id) DEFERRABLE,
+  id_plano integer NOT NULL,
+  CONSTRAINT matriculas_modalidades_f4 FOREIGN KEY(id_modalidade, id_plano) REFERENCES planos(id_modalidade, id) DEFERRABLE,
+  data_inicio date DEFAULT current_date,
+  data_fim date
+);
 
 /*********************************************
 FATURAS_MATRICULAS
 *********************************************/
-
-CREATE	TABLE				faturas_matriculas
-	(
-	codigo_matricula		integer
-					NOT NULL
-					,
-					CONSTRAINT faturas_matriculas_f1
-						FOREIGN KEY(codigo_matricula)
-							REFERENCES matriculas(codigo_matricula)
-						DEFERRABLE
-					,
-	data_vencimento			date
-					NOT NULL
-					,
-					CONSTRAINT faturas_matriculas_pk
-						PRIMARY KEY(codigo_matricula, data_vencimento)
-					,
-	valor				numeric(9,2)
-					NOT NULL
-					,
-	data_pagamento			timestamp
-					,
-	data_cancelamento		date
-	)
-;
+CREATE TABLE faturas_matriculas (
+  codigo_matricula integer NOT NULL,
+  CONSTRAINT faturas_matriculas_f1 FOREIGN KEY(codigo_matricula) REFERENCES matriculas(codigo_matricula) DEFERRABLE,
+  data_vencimento date NOT NULL,
+  CONSTRAINT faturas_matriculas_pk PRIMARY KEY(
+    codigo_matricula, data_vencimento
+  ),
+  valor numeric(9, 2) NOT NULL,
+  data_pagamento timestamp,
+  data_cancelamento date
+);
 
 /*********************************************
 ASSIDUIDADE
 *********************************************/
-
-CREATE	TABLE				assiduidade
-	(
-	codigo_matricula		integer
-					NOT NULL
-					,
-					CONSTRAINT assiduidade_f1
-						FOREIGN KEY(codigo_matricula)
-							REFERENCES matriculas(codigo_matricula)
-						DEFERRABLE
-					,
-	data_entrada			timestamp
-					NOT NULL
-					DEFAULT localtimestamp
-					,
-					CONSTRAINT assiduidade_pk
-						PRIMARY KEY(codigo_matricula, data_entrada)
-	)
-;
+CREATE TABLE assiduidade (
+  codigo_matricula integer NOT NULL,
+  CONSTRAINT assiduidade_f1 FOREIGN KEY(codigo_matricula) REFERENCES matriculas(codigo_matricula) DEFERRABLE,
+  data_entrada timestamp NOT NULL DEFAULT localtimestamp,
+  CONSTRAINT assiduidade_pk PRIMARY KEY(codigo_matricula, data_entrada)
+);

@@ -11,6 +11,11 @@ public class SobrePanel extends EntidadesPanel {
     }
 
     @Override
+    protected String getTitulo() {
+        return null;
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[0];
     }

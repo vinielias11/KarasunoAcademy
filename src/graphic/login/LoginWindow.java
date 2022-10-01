@@ -1,12 +1,12 @@
 package graphic.login;
 
-import controller.UsuarioController;
+import controller.UsuariosController;
 import graphic.main.Main;
 
 import javax.swing.*;
 
 public class LoginWindow extends JFrame {
-    private final UsuarioController usuarioController = new UsuarioController();
+    private final UsuariosController usuariosController = new UsuariosController();
 
     public LoginWindow() {
         setSize(350, 220);
@@ -71,7 +71,7 @@ public class LoginWindow extends JFrame {
     }
 
     private void onClickEntrar(String nome, String senha) {
-        if (usuarioController.logar(senha, nome)) {
+        if (usuariosController.logar(senha, nome)) {
             Main main = new Main();
             main.setVisible(true);
             dispose();

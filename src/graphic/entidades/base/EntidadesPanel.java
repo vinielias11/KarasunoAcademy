@@ -15,33 +15,38 @@ public abstract class EntidadesPanel extends JPanel {
 
     public EntidadesPanel(JFrame cmpPai) {
         this.cmpPai = cmpPai;
-
         setBackground(new Color(255,255,255));
         setLayout(null);
         setBounds(0, 0, 1100, 820);
-
-        criaPainelCima();
-        criarPainelBaixo();
-
+        criaPainelDeCima();
+        criaPainelDeBaixo();
     }
 
-    protected abstract String[] getColunasTabela();
-    protected abstract void montaDadosTabela(JTable tabela, DefaultTableModel tableModel);
+    protected abstract String getTitulo();
 
-    private void criaPainelCima(){
-        JPanel menuCima = new JPanel();
-        menuCima.setBackground(new Color(223, 129, 57));
-        menuCima.setLayout(null);
-        menuCima.setBounds(0, 0, 1100, 140);
-        add(menuCima);
+    private void criaPainelDeCima(){
+        JPanel painelCima = new JPanel();
+        painelCima.setBackground(new Color(223, 129, 57));
+        painelCima.setLayout(null);
+        painelCima.setBounds(0, 0, 1100, 140);
+        add(painelCima);
 
         ImageIcon imagemLogo = new ImageIcon(this.getClass().getResource("/resources/icons/logoPequeno.png"));
         JLabel labelLogo = new JLabel(imagemLogo);
         labelLogo.setBounds(925, 15, 87, 105);
-        menuCima.add(labelLogo);
+        painelCima.add(labelLogo);
 
+        JButton btnVoltar = criaBotaoVoltar();
+        painelCima.add(btnVoltar);
+
+        JLabel titulo = new JLabel(getTitulo());
+        titulo.setFont(new Font("Helvetica", Font.BOLD, 36));
+        titulo.setBounds(30, 90, 300, 40);
+        painelCima.add(titulo);
+    }
+
+    private JButton criaBotaoVoltar() {
         ImageIcon homeIcon = new ImageIcon(this.getClass().getResource("/resources/icons/homePage.png"));
-        homeIcon = new ImageIcon(homeIcon.getImage().getScaledInstance(35,35, Image.SCALE_DEFAULT));
         JButton jButton = new JButton(homeIcon);
         jButton.setText(" Voltar");
         jButton.setFont(new Font("Helvetica", Font.BOLD, 16));
@@ -49,6 +54,7 @@ public abstract class EntidadesPanel extends JPanel {
         jButton.setBorder(BorderFactory.createEmptyBorder());
         jButton.setBounds(5, 15, 100, 30);
         jButton.setOpaque(false);
+        jButton.setRolloverEnabled(false);
         jButton.setCursor(new Cursor(Cursor.HAND_CURSOR));
 
         jButton.addActionListener(e -> {
@@ -64,53 +70,65 @@ public abstract class EntidadesPanel extends JPanel {
             cmpPai.getContentPane().repaint();
         });
 
-        menuCima.add(jButton);
+        return jButton;
     }
 
-    private void criarPainelBaixo() {
-        String[] colunasTabela = getColunasTabela();
+    private void criaPainelDeBaixo() {
+        JPanel painelBaixo = new JPanel();
+        painelBaixo.setBackground(new Color(255, 255, 255));
+        painelBaixo.setLayout(null);
+        painelBaixo.setBounds(0, 140, 1100, 680);
+        add(painelBaixo);
 
-        DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0);
-
-        JTable tabela = new JTable();
-
-        montaDadosTabela(tabela, tableModel);
-
-        JScrollPane scrollPane = new JScrollPane(tabela);
-        scrollPane.setBounds(45, 230, 1000, 400);
-        add(scrollPane);
+        JScrollPane tabela = criaTabela();
+        painelBaixo.add(tabela);
 
         ImageIcon smbMais = new ImageIcon(this.getClass().getResource("/resources/icons/plusIcon.png"));
         JButton btnCadastrar = new JButton(smbMais);
-        btnCadastrar.setBounds(45, 170, 40, 40);
+        btnCadastrar.setBounds(45, 30, 40, 40);
         btnCadastrar.setBackground(Color.WHITE);
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder());
         btnCadastrar.setOpaque(false);
         btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(btnCadastrar);
+        btnCadastrar.addActionListener(e -> onClickNovo());
 
-        btnCadastrar.addActionListener(e -> {
-            onClickNovo();
-        });
-
-        ImageIcon smbProximo = new ImageIcon(this.getClass().getResource("/resources/icons/nextPage.png"));
-        JButton btnProximo = new JButton(smbProximo);
-        btnProximo.setBounds(760, 675, 40, 40);
-        btnProximo.setBackground(Color.WHITE);
-        btnProximo.setBorder(BorderFactory.createEmptyBorder());
-        btnProximo.setOpaque(false);
-        btnProximo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(btnProximo);
+        painelBaixo.add(btnCadastrar);
 
         ImageIcon smbAnterior = new ImageIcon(this.getClass().getResource("/resources/icons/backPage.png"));
         JButton btnAnterior = new JButton(smbAnterior);
-        btnAnterior.setBounds(300, 675, 40, 40);
+        btnAnterior.setBounds(300, 535, 40, 40);
         btnAnterior.setBackground(Color.WHITE);
         btnAnterior.setBorder(BorderFactory.createEmptyBorder());
         btnAnterior.setOpaque(false);
         btnAnterior.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        add(btnAnterior);
+        painelBaixo.add(btnAnterior);
+
+        ImageIcon smbProximo = new ImageIcon(this.getClass().getResource("/resources/icons/nextPage.png"));
+        JButton btnProximo = new JButton(smbProximo);
+        btnProximo.setBounds(760, 535, 40, 40);
+        btnProximo.setBackground(Color.WHITE);
+        btnProximo.setBorder(BorderFactory.createEmptyBorder());
+        btnProximo.setOpaque(false);
+        btnProximo.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        painelBaixo.add(btnProximo);
     }
+
+    private JScrollPane criaTabela() {
+        JTable tabela = new JTable();
+        String[] colunasTabela = getColunasTabela();
+        DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0);
+
+        montaDadosTabela(tabela, tableModel);
+
+        JScrollPane jScrollPane = new JScrollPane(tabela);
+        jScrollPane.setBounds(45, 90, 1000, 400);
+
+        return jScrollPane;
+    }
+
+    protected abstract String[] getColunasTabela();
+
+    protected abstract void montaDadosTabela(JTable tabela, DefaultTableModel tableModel);
 
     protected abstract void onClickNovo();
 

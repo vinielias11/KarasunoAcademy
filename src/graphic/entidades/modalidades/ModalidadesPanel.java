@@ -11,6 +11,11 @@ public class ModalidadesPanel extends EntidadesPanel {
     }
 
     @Override
+    protected String getTitulo() {
+        return "Modalidades";
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[0];
     }

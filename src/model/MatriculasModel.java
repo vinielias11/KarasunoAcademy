@@ -18,16 +18,16 @@ public class MatriculasModel {
         return codigoMatricula;
     }
 
+    public void setCodigoMatricula(Integer codigoMatricula) {
+        this.codigoMatricula = codigoMatricula;
+    }
+
     public Integer getId() {
         return id;
     }
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public void setCodigoMatricula(Integer codigoMatricula) {
-        this.codigoMatricula = codigoMatricula;
     }
 
     public Integer getCodigoAluno() {

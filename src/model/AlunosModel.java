@@ -1,14 +1,14 @@
 package model;
 
 
-import java.util.Date;
+import java.sql.Date;
 
-public class AlunoModel {
+public class AlunosModel {
     private Integer id;
     private Integer codigoAluno;
     private String nome;
     private Date dataNascimento;
-    private char sexo;
+    private String sexo;
     private String telefone;
     private String celular;
     private String email;
@@ -22,8 +22,7 @@ public class AlunoModel {
     private String pais;
     private String cep;
 
-
-    public AlunoModel(){
+    public AlunosModel(){
 
     }
 
@@ -59,11 +58,11 @@ public class AlunoModel {
         this.dataNascimento = dataNascimento;
     }
 
-    public char getSexo() {
+    public String getSexo() {
         return sexo;
     }
 
-    public void setSexo(char sexo) {
+    public void setSexo(String sexo) {
         this.sexo = sexo;
     }
 
