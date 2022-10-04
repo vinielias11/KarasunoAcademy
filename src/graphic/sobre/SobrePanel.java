@@ -26,6 +26,11 @@ public class SobrePanel extends EntidadesPanel {
     }
 
     @Override
+    protected void onDoubleClickLinha(String id) {
+
+    }
+
+    @Override
     protected void onClickNovo() {
 
     }

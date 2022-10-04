@@ -4,14 +4,16 @@ import controller.UsuariosController;
 import graphic.main.Main;
 
 import javax.swing.*;
+import java.awt.*;
 
 public class LoginWindow extends JFrame {
     private final UsuariosController usuariosController = new UsuariosController();
 
     public LoginWindow() {
         setSize(350, 220);
-        setResizable(false);
         setTitle("Login");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/resources/icons/sistemaIcon.png")));
+        setResizable(false);
         setLayout(null);
         setDefaultCloseOperation(EXIT_ON_CLOSE);
         setLocationRelativeTo(null);

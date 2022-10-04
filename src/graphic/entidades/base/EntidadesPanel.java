@@ -6,8 +6,11 @@ import graphic.main.paineisPrincipais.painelCima.PainelCimaMain;
 import javax.swing.*;
 import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableColumn;
 import javax.swing.table.TableColumnModel;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 // Painel base para todos os outros. Por padrão virá com o botão voltar, que reiniciará o JFrame Main, recolocando os paineis padrão.
 public abstract class EntidadesPanel extends JPanel {
@@ -48,7 +51,7 @@ public abstract class EntidadesPanel extends JPanel {
     private JButton criaBotaoVoltar() {
         ImageIcon homeIcon = new ImageIcon(this.getClass().getResource("/resources/icons/homePage.png"));
         JButton jButton = new JButton(homeIcon);
-        jButton.setText(" Voltar");
+        jButton.setText("Voltar");
         jButton.setFont(new Font("Helvetica", Font.BOLD, 16));
         jButton.setBackground(Color.WHITE);
         jButton.setBorder(BorderFactory.createEmptyBorder());
@@ -93,32 +96,22 @@ public abstract class EntidadesPanel extends JPanel {
         btnCadastrar.addActionListener(e -> onClickNovo());
 
         painelBaixo.add(btnCadastrar);
-
-        ImageIcon smbAnterior = new ImageIcon(this.getClass().getResource("/resources/icons/backPage.png"));
-        JButton btnAnterior = new JButton(smbAnterior);
-        btnAnterior.setBounds(300, 535, 40, 40);
-        btnAnterior.setBackground(Color.WHITE);
-        btnAnterior.setBorder(BorderFactory.createEmptyBorder());
-        btnAnterior.setOpaque(false);
-        btnAnterior.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        painelBaixo.add(btnAnterior);
-
-        ImageIcon smbProximo = new ImageIcon(this.getClass().getResource("/resources/icons/nextPage.png"));
-        JButton btnProximo = new JButton(smbProximo);
-        btnProximo.setBounds(760, 535, 40, 40);
-        btnProximo.setBackground(Color.WHITE);
-        btnProximo.setBorder(BorderFactory.createEmptyBorder());
-        btnProximo.setOpaque(false);
-        btnProximo.setCursor(new Cursor(Cursor.HAND_CURSOR));
-        painelBaixo.add(btnProximo);
     }
 
     private JScrollPane criaTabela() {
         JTable tabela = new JTable();
+        tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        tabela.setRowHeight(22);
         String[] colunasTabela = getColunasTabela();
-        DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0);
+        DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                return false;
+            }
+        };
 
         montaDadosTabela(tabela, tableModel);
+        implementaDoubleClickNasLinhas(tabela);
 
         JScrollPane jScrollPane = new JScrollPane(tabela);
         jScrollPane.setBounds(45, 90, 1000, 400);
@@ -126,9 +119,27 @@ public abstract class EntidadesPanel extends JPanel {
         return jScrollPane;
     }
 
+    private void implementaDoubleClickNasLinhas(JTable tabela) {
+        tabela.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                if (e.getClickCount() == 2) {
+                    JTable target = (JTable) e.getSource();
+                    int linha = target.getSelectedRow();
+                    int coluna = 0;
+                    String id = tabela.getModel().getValueAt(linha, coluna).toString();
+
+                    onDoubleClickLinha(id);
+                }
+            }
+        });
+    }
+
     protected abstract String[] getColunasTabela();
 
     protected abstract void montaDadosTabela(JTable tabela, DefaultTableModel tableModel);
+
+    protected abstract void onDoubleClickLinha(String id);
 
     protected abstract void onClickNovo();
 
