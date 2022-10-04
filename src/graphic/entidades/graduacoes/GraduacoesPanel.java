@@ -26,6 +26,11 @@ public class GraduacoesPanel extends EntidadesPanel {
     }
 
     @Override
+    protected void onDoubleClickLinha(String id) {
+
+    }
+
+    @Override
     protected void onClickNovo() {
 
     }
