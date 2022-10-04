@@ -26,6 +26,11 @@ public class MatriculasPanel extends EntidadesPanel {
     }
 
     @Override
+    protected void onDoubleClickLinha(String id) {
+
+    }
+
+    @Override
     protected void onClickNovo() {
 
     }

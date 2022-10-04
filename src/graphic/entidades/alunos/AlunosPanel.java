@@ -21,7 +21,7 @@ public class AlunosPanel extends EntidadesPanel {
 
     @Override
     protected String[] getColunasTabela() {
-        return new String[]{ "Código", "Nome", "Celular", "Email", "Cidade" };
+        return new String[]{ "Id", "Código", "Nome", "Celular", "Email", "Cidade" };
     }
 
     @Override
@@ -33,18 +33,24 @@ public class AlunosPanel extends EntidadesPanel {
         alunosBanco.forEach(aluno -> listaAlunos.add((AlunosModel) aluno));
 
         for (int i = 0; i < listaAlunos.size(); i++) {
+            Integer id = listaAlunos.get(i).getId();
             Integer codigoAluno = listaAlunos.get(i).getCodigoAluno();
             String nome = listaAlunos.get(i).getNome();
             String celular = listaAlunos.get(i).getCelular();
             String email = listaAlunos.get(i).getEmail();
             String cidade = listaAlunos.get(i).getCidade();
 
-            Object[] linha = { codigoAluno, nome, celular, email, cidade };
+            Object[] linha = { id, codigoAluno, nome, celular, email, cidade };
 
             tableModel.addRow(linha);
         }
 
         tabela.setModel(tableModel);
+    }
+
+    @Override
+    protected void onDoubleClickLinha(String id) {
+        System.out.println(id);
     }
 
     @Override
