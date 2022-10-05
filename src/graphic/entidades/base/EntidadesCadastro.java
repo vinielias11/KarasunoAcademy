@@ -8,6 +8,8 @@ public abstract class EntidadesCadastro extends JDialog {
     public EntidadesCadastro(){
         setBackground(new Color(255,255,255));
         setLayout(null);
+        setTitle("Cadastro");
+        setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/resources/icons/sistemaIcon.png")));
         setModal(true);
         setSize(520,700);
         setLocationRelativeTo(null);
@@ -25,9 +27,7 @@ public abstract class EntidadesCadastro extends JDialog {
 
         JButton btnSalvar = new JButton("Salvar");
         btnSalvar.setBounds(310,580,120,30);
-        btnSalvar.addActionListener(e -> {
-            onClickSalvar();
-        });
+        btnSalvar.addActionListener(e -> onClickSalvar());
         add(btnSalvar);
     }
 

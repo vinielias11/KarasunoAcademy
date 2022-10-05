@@ -1,9 +1,9 @@
 package model;
 
 
-import java.sql.Date;
+import java.util.Date;
 
-public class AlunosModel {
+public class AlunosModel extends EntidadesModel {
     private Integer id;
     private Integer codigoAluno;
     private String nome;

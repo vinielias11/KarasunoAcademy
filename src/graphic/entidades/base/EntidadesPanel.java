@@ -94,7 +94,6 @@ public abstract class EntidadesPanel extends JPanel {
         btnCadastrar.setOpaque(false);
         btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnCadastrar.addActionListener(e -> onClickNovo());
-
         painelBaixo.add(btnCadastrar);
     }
 

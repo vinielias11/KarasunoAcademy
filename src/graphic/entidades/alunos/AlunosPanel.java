@@ -50,7 +50,15 @@ public class AlunosPanel extends EntidadesPanel {
 
     @Override
     protected void onDoubleClickLinha(String id) {
-        System.out.println(id);
+        AlunosController alunosController = new AlunosController();
+        AlunosModel alunoRecuperar = new AlunosModel();
+
+        alunoRecuperar.setId(Integer.parseInt(id));
+        alunoRecuperar = alunosController.recuperarPorId(alunoRecuperar);
+
+        AlunosCadastro alunosCadastro = new AlunosCadastro(alunoRecuperar);
+
+        alunosCadastro.setVisible(true);
     }
 
     @Override
