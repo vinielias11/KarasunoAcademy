@@ -67,8 +67,7 @@ GRADUACOES
 *********************************************/
 CREATE TABLE graduacoes (
   id serial NOT NULL,
-  id_modalidade integer not null,
-  CONSTRAINT graduacoes_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
+  id_modalidade integer not null,  CONSTRAINT graduacoes_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
   graduacao text NOT NULL,
   CONSTRAINT graduacoes_pk PRIMARY KEY(id, id_modalidade)
 );

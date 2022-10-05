@@ -114,7 +114,7 @@ public abstract class EntidadesPanel extends JPanel {
         implementaDoubleClickNasLinhas(tabela);
 
         JScrollPane jScrollPane = new JScrollPane(tabela);
-        jScrollPane.setBounds(45, 90, 1000, 400);
+        jScrollPane.setBounds(45, 90, 1000, 500);
 
         return jScrollPane;
     }
