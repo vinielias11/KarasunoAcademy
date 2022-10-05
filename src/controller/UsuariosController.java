@@ -19,13 +19,4 @@ public class UsuariosController {
             throw new RuntimeException(e);
         }
     }
-
-    public List<Object> recuperarTodos() {
-        try {
-            return usuariosDAO.select();
-        }
-        catch (SQLException e){
-            throw new RuntimeException(e);
-        }
-    }
 }

@@ -2,6 +2,7 @@ package database.dao;
 
 import database.connection.ConnectionFactory;
 import database.connection.EntidadeConexao;
+import database.util.DbUtil;
 import model.UsuarioModel;
 
 import javax.swing.*;
@@ -14,6 +15,7 @@ import java.util.List;
 
 public class UsuariosDAO extends SistemaDAO {
     private Connection conexao;
+    private DbUtil dbUtil = new DbUtil();
 
     private final String select = "SELECT * FROM public.usuarios;";
     private final String insert = "INSERT INTO public.usuarios(nome, senha, perfil) VALUES (?, ?, ?);";
@@ -107,12 +109,13 @@ public class UsuariosDAO extends SistemaDAO {
     }
 
     public boolean selectByNomeESenha(String nome, String senha) throws SQLException {
+        List<UsuarioModel> arrayListUsuarios = new ArrayList<>();
+
         pstSelectByNomeESenha.setString(1, nome);
         pstSelectByNomeESenha.setString(2, senha);
 
         try {
             ResultSet resultadoQuery = pstSelectByNomeESenha.executeQuery();
-            List<Object> arrayListUsuarios = new ArrayList<Object>();
 
             while (resultadoQuery.next()) {
                 UsuarioModel u = new UsuarioModel();
@@ -124,12 +127,13 @@ public class UsuariosDAO extends SistemaDAO {
                 arrayListUsuarios.add(u);
             }
 
-            return arrayListUsuarios.isEmpty() ? false : true;
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar o usuário!");
             e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectByNomeESenha);
         }
 
-        return false;
+        return !arrayListUsuarios.isEmpty();
     }
 }

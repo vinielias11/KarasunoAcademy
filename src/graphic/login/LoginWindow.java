@@ -7,7 +7,6 @@ import javax.swing.*;
 import java.awt.*;
 
 public class LoginWindow extends JFrame {
-    private final UsuariosController usuariosController = new UsuariosController();
 
     public LoginWindow() {
         setSize(350, 220);
@@ -73,6 +72,8 @@ public class LoginWindow extends JFrame {
     }
 
     private void onClickEntrar(String nome, String senha) {
+        UsuariosController usuariosController = new UsuariosController();
+
         if (usuariosController.logar(senha, nome)) {
             Main main = new Main();
             main.setVisible(true);

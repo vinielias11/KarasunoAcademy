@@ -18,7 +18,7 @@ public class AlunosController {
         try {
             return alunosDAO.select();
         }
-        catch (SQLException e){
+        catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar os alunos!");
             throw new RuntimeException(e);
         }
