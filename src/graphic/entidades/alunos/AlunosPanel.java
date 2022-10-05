@@ -56,14 +56,14 @@ public class AlunosPanel extends EntidadesPanel {
         alunoRecuperar.setId(Integer.parseInt(id));
         alunoRecuperar = alunosController.recuperarPorId(alunoRecuperar);
 
-        AlunosCadastro alunosCadastro = new AlunosCadastro(alunoRecuperar);
+        AlunosCadastro alunosCadastro = new AlunosCadastro(alunoRecuperar, this);
 
         alunosCadastro.setVisible(true);
     }
 
     @Override
     protected void onClickNovo() {
-        AlunosCadastro alunosCadastro = new AlunosCadastro();
+        AlunosCadastro alunosCadastro = new AlunosCadastro(this);
 
         alunosCadastro.setVisible(true);
     }

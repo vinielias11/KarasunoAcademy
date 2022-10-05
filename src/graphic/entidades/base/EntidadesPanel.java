@@ -27,7 +27,7 @@ public abstract class EntidadesPanel extends JPanel {
 
     protected abstract String getTitulo();
 
-    private void criaPainelDeCima(){
+    private void criaPainelDeCima() {
         JPanel painelCima = new JPanel();
         painelCima.setBackground(new Color(223, 129, 57));
         painelCima.setLayout(null);
@@ -116,6 +116,14 @@ public abstract class EntidadesPanel extends JPanel {
         jScrollPane.setBounds(45, 90, 1000, 500);
 
         return jScrollPane;
+    }
+
+    public void recarregaLista() {
+        this.removeAll();
+        criaPainelDeCima();
+        criaPainelDeBaixo();
+        this.revalidate();
+        this.repaint();
     }
 
     private void implementaDoubleClickNasLinhas(JTable tabela) {

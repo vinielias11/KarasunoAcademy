@@ -14,12 +14,16 @@ import java.util.Date;
 
 public class AlunosCadastro extends EntidadesCadastro {
     private AlunosModel alunosModel = new AlunosModel();
+    private AlunosPanel alunosPanel;
+
     private boolean isEditando = false;
-    public AlunosCadastro() {
+    public AlunosCadastro(AlunosPanel alunosPanel) {
+        this.alunosPanel = alunosPanel;
         criaComponentes(null);
     }
 
-    public AlunosCadastro(AlunosModel dados) {
+    public AlunosCadastro(AlunosModel dados, AlunosPanel alunosPanel) {
+        this.alunosPanel = alunosPanel;
         criaComponentes(dados);
     }
 
@@ -211,5 +215,7 @@ public class AlunosCadastro extends EntidadesCadastro {
         } else {
             alunosController.editar(alunosModel, this);
         }
+
+        alunosPanel.recarregaLista();
     }
 }
