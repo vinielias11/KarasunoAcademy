@@ -4,7 +4,9 @@ import java.sql.Timestamp;
 import java.util.Date;
 
 public class FaturasMatriculasModel {
-    private String codigoMatricula;
+
+    private Integer id;
+    private Integer codigoMatricula;
     private Date dataVencimento;
     private Double valor;
     private Timestamp dataPagamento;
@@ -14,13 +16,15 @@ public class FaturasMatriculasModel {
 
     }
 
-    public String getCodigoMatricula() {
+    public Integer getId() { return id; }
+
+    public void setId(Integer id) { this.id = id;  }
+
+    public Integer getCodigoMatricula() {
         return codigoMatricula;
     }
 
-    public void setCodigoMatricula(String codigoMatricula) {
-        this.codigoMatricula = codigoMatricula;
-    }
+    public void setCodigoMatricula(Integer codigoMatricula) { this.codigoMatricula = codigoMatricula; }
 
     public Date getDataVencimento() {
         return dataVencimento;
@@ -38,7 +42,7 @@ public class FaturasMatriculasModel {
         this.valor = valor;
     }
 
-    public Timestamp getDataPagamento() {
+    public java.sql.Date getDataPagamento() {
         return dataPagamento;
     }
 
