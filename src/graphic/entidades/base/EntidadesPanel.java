@@ -96,7 +96,28 @@ public abstract class EntidadesPanel extends JPanel {
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder());
         btnCadastrar.setOpaque(false);
         btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrar.setToolTipText("Novo");
         btnCadastrar.addActionListener(e -> onClickNovo());
+
+        ImageIcon smbDelete = new ImageIcon(this.getClass().getResource("/resources/icons/deleteIcon.png"));
+        JButton btnDelete = new JButton(smbDelete);
+        btnDelete.setBackground(Color.WHITE);
+        btnDelete.setOpaque(false);
+        btnDelete.setBorder(BorderFactory.createEmptyBorder());
+        btnDelete.setBounds(100,30,40,40);
+        btnDelete.setCursor(new Cursor((Cursor.HAND_CURSOR)));
+        btnDelete.setToolTipText("Excluir");
+        btnDelete.addActionListener(e -> {
+            try {
+                Integer linha = tabela.getSelectedRow();
+                String id = tabela.getModel().getValueAt(linha, 0).toString();
+                deletar(id);
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null,"Selecione um registro para deletar!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        painelBaixo.add(btnDelete);
         painelBaixo.add(btnCadastrar);
     }
 
@@ -104,7 +125,7 @@ public abstract class EntidadesPanel extends JPanel {
         JTable tabela = new JTable();
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setRowHeight(22);
-        
+
         String[] colunasTabela = getColunasTabela();
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -142,6 +163,8 @@ public abstract class EntidadesPanel extends JPanel {
             }
         });
     }
+
+    protected abstract void deletar(String id);
 
     protected abstract String[] getColunasTabela();
 

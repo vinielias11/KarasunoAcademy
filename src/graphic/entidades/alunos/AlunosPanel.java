@@ -20,6 +20,20 @@ public class AlunosPanel extends EntidadesPanel {
     }
 
     @Override
+    protected void deletar(String id) {
+        AlunosModel alunosModel = new AlunosModel();
+        AlunosController alunosController = new AlunosController();
+
+        Integer idDeletar = Integer.parseInt(id);
+
+        alunosModel.setId(idDeletar);
+        alunosController.deletar(alunosModel);
+
+        this.recarregaLista();
+
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[]{ "Id", "Código", "Nome", "Celular", "Email", "Cidade" };
     }
