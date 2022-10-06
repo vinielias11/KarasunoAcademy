@@ -83,8 +83,11 @@ public abstract class EntidadesPanel extends JPanel {
         painelBaixo.setBounds(0, 140, 1100, 680);
         add(painelBaixo);
 
-        JScrollPane tabela = criaTabela();
-        painelBaixo.add(tabela);
+        JTable tabela = criaTabela();
+
+        JScrollPane jScrollPane = new JScrollPane(tabela);
+        jScrollPane.setBounds(45, 90, 1000, 500);
+        painelBaixo.add(jScrollPane);
 
         ImageIcon smbMais = new ImageIcon(this.getClass().getResource("/resources/icons/plusIcon.png"));
         JButton btnCadastrar = new JButton(smbMais);
@@ -97,10 +100,11 @@ public abstract class EntidadesPanel extends JPanel {
         painelBaixo.add(btnCadastrar);
     }
 
-    private JScrollPane criaTabela() {
+    private JTable criaTabela() {
         JTable tabela = new JTable();
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setRowHeight(22);
+        
         String[] colunasTabela = getColunasTabela();
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -112,10 +116,7 @@ public abstract class EntidadesPanel extends JPanel {
         montaDadosTabela(tabela, tableModel);
         implementaDoubleClickNasLinhas(tabela);
 
-        JScrollPane jScrollPane = new JScrollPane(tabela);
-        jScrollPane.setBounds(45, 90, 1000, 500);
-
-        return jScrollPane;
+        return tabela;
     }
 
     public void recarregaLista() {
