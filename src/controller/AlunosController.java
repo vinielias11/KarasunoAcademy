@@ -52,4 +52,13 @@ public class AlunosController {
             throw new RuntimeException(e);
         }
     }
+
+    public void deletar(AlunosModel aluno){
+        try {
+            alunosDAO.delete(aluno);
+        }   catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Houve um erro ao deletar o aluno!");
+            throw new RuntimeException(e);
+        }
+    }
 }
