@@ -45,7 +45,6 @@ public class ModalidadesDAO extends SistemaDAO {
 
     @Override
     public List<Object> select() throws SQLException {
-
         List<Object> arrayListModalidades = new ArrayList<>();
 
         try {
@@ -69,6 +68,7 @@ public class ModalidadesDAO extends SistemaDAO {
 
         return arrayListModalidades;
     }
+
 
     public ModalidadesModel selectById(Object param) throws SQLException {
         ModalidadesModel modalidadesRecuperar = (ModalidadesModel) param;
@@ -123,7 +123,7 @@ public class ModalidadesDAO extends SistemaDAO {
         try {
             pstDelete.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao excluir aluno!");
+            System.out.println("Houve um erro ao excluir modalidade!");
             e.printStackTrace();
         } finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
@@ -141,12 +141,11 @@ public class ModalidadesDAO extends SistemaDAO {
         try {
             pstUpdate.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao atualizar aluno!");
+            System.out.println("Houve um erro ao atualizar modalidade!");
             e.printStackTrace();
         } finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
         }
     }
-
 
 }
