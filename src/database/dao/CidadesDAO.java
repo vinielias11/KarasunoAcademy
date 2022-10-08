@@ -18,7 +18,7 @@ public class CidadesDAO extends SistemaDAO {
     private Connection conexao;
     private DbUtil dbUtil = new DbUtil();
 
-    private final String selectCidadesByEstado = "SELECT cidade FROM public.cidades WHERE estado = ? ORDER BY cidade ASC";
+    private final String selectCidadesByEstado = "SELECT nome FROM public.cidades WHERE estado = ? ORDER BY nome ASC";
 
     private final PreparedStatement pstSelectCidadesByEstado;
 
@@ -43,7 +43,7 @@ public class CidadesDAO extends SistemaDAO {
             while (resultadoQuery.next()) {
                 String cidade = "";
 
-                cidade = resultadoQuery.getString("cidade");
+                cidade = resultadoQuery.getString("nome");
 
                 cidadesRecuperar.add(cidade);
             }
@@ -57,6 +57,11 @@ public class CidadesDAO extends SistemaDAO {
 
     @Override
     public List<Object> select() throws SQLException {
+        return null;
+    }
+
+    @Override
+    public Object selectById(Object param) throws SQLException {
         return null;
     }
 

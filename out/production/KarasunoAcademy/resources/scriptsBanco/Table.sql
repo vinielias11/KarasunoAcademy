@@ -9,10 +9,10 @@ CIDADES
 *********************************************/
 CREATE TABLE cidades (
   id serial NOT NULL,
-  cidade text NOT NULL,
+  nome text NOT NULL,
   estado char(2) NOT NULL,
   pais text NOT NULL,
-  CONSTRAINT cidades_pk PRIMARY KEY(cidade, estado, pais)
+  CONSTRAINT cidades_pk PRIMARY KEY(nome, estado, pais)
 );
 
 /*********************************************
@@ -46,7 +46,7 @@ CREATE TABLE alunos (
   cidade text,
   estado char(2),
   pais text,
-  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(cidade, estado, pais) REFERENCES cidades(cidade, estado, pais) DEFERRABLE,
+  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(nome, estado, pais) REFERENCES cidades(nome, estado, pais) DEFERRABLE,
   cep text
 );
 --
@@ -124,7 +124,7 @@ CREATE TABLE faturas_matriculas (
     codigo_matricula, data_vencimento
   ),
   valor numeric(9, 2) NOT NULL,
-  data_pagamento timestamp,
+  data_pagamento timestamp DEFAULT localtimestamp,
   data_cancelamento date
 );
 

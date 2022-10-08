@@ -79,6 +79,7 @@ public class FaturasMatriculasDAO extends SistemaDAO {
             JOptionPane.showMessageDialog(null, "ID não encontrado!");
             e.printStackTrace();
         }
+
         return faturasMatriculasModel;
     }
 
@@ -89,7 +90,7 @@ public class FaturasMatriculasDAO extends SistemaDAO {
         pstInsert.setInt(1, faturasMatriculasModel.getCodigoMatricula());
         pstInsert.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
         pstInsert.setDouble(3, faturasMatriculasModel.getValor());
-        pstInsert.setDate(4, faturasMatriculasModel.getDataPagamento());
+        pstInsert.setTimestamp(4, faturasMatriculasModel.getDataPagamento());
         pstInsert.setDate(5, (Date) faturasMatriculasModel.getDataCancelamento());
 
         try {
@@ -121,7 +122,7 @@ public class FaturasMatriculasDAO extends SistemaDAO {
         pstUpdate.setInt(1,faturasMatriculasModel.getCodigoMatricula());
         pstUpdate.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
         pstUpdate.setDouble(3, faturasMatriculasModel.getValor());
-        pstUpdate.setDate(4, faturasMatriculasModel.getDataPagamento());
+        pstUpdate.setTimestamp(4, faturasMatriculasModel.getDataPagamento());
         pstUpdate.setDate(5, (Date) faturasMatriculasModel.getDataCancelamento());
 
         try {

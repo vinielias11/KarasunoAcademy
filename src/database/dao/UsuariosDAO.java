@@ -62,6 +62,11 @@ public class UsuariosDAO extends SistemaDAO {
     }
 
     @Override
+    public Object selectById(Object param) throws SQLException {
+        return null;
+    }
+
+    @Override
     public void insert(Object param) throws SQLException {
         UsuarioModel usuarioModel = (UsuarioModel) param;
 

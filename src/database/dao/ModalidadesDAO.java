@@ -69,7 +69,7 @@ public class ModalidadesDAO extends SistemaDAO {
         return arrayListModalidades;
     }
 
-
+    @Override
     public ModalidadesModel selectById(Object param) throws SQLException {
         ModalidadesModel modalidadesRecuperar = (ModalidadesModel) param;
         List<ModalidadesModel> arrayModalidades = new ArrayList<>();

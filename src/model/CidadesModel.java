@@ -2,16 +2,16 @@ package model;
 
 public class CidadesModel {
     private Integer id;
-    private String cidade;
+    private String nome;
     private String estado;
     private String pais;
 
-    public CidadesModel(){
+    public CidadesModel() {
 
     }
 
-    public String getCidade() {
-        return cidade;
+    public String getNome() {
+        return nome;
     }
 
     public Integer getId() {
@@ -22,8 +22,8 @@ public class CidadesModel {
         this.id = id;
     }
 
-    public void setCidade(String cidade) {
-        this.cidade = cidade;
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public String getEstado() {
@@ -44,6 +44,6 @@ public class CidadesModel {
 
     @Override
     public String toString() {
-        return getCidade() + " (" + getEstado() + ")";
+        return getNome() + " (" + getEstado() + ")";
     }
 }

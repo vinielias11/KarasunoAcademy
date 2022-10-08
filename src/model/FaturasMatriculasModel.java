@@ -1,5 +1,6 @@
 package model;
 
+import java.sql.Time;
 import java.sql.Timestamp;
 import java.util.Date;
 
@@ -42,7 +43,7 @@ public class FaturasMatriculasModel {
         this.valor = valor;
     }
 
-    public java.sql.Date getDataPagamento() {
+    public Timestamp getDataPagamento() {
         return dataPagamento;
     }
 
