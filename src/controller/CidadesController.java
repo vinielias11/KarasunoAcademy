@@ -14,16 +14,6 @@ public class CidadesController {
         cidadesDAO = new CidadesDAO();
     }
 
-    public List<Object> recuperarTodos() {
-        try {
-            return cidadesDAO.select();
-        }
-        catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as cidades!");
-            throw new RuntimeException(e);
-        }
-    }
-
     public List<String> recuperarEstadosBrasileiros() {
         List<String> arrayListEstados = new ArrayList<>();
 
