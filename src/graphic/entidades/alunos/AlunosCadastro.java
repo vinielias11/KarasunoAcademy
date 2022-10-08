@@ -1,6 +1,7 @@
 package graphic.entidades.alunos;
 
 import controller.AlunosController;
+import controller.CidadesController;
 import graphic.entidades.base.BindingListener;
 import graphic.entidades.base.EntidadesCadastro;
 import model.AlunosModel;
@@ -8,9 +9,10 @@ import model.AlunosModel;
 import javax.swing.*;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.*;
 import java.text.ParseException;
-import java.util.Calendar;
-import java.util.Date;
+import java.util.*;
+import java.util.List;
 
 public class AlunosCadastro extends EntidadesCadastro {
     private AlunosModel alunosModel = new AlunosModel();
@@ -41,6 +43,8 @@ public class AlunosCadastro extends EntidadesCadastro {
             throw new RuntimeException(e);
         }
 
+        CidadesController cidadesController = new CidadesController();
+
         JLabel nome = new JLabel("Nome: ");
         JTextField nomeTxf = new JTextField(20);
         nomeTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "nome"));
@@ -59,9 +63,9 @@ public class AlunosCadastro extends EntidadesCadastro {
 
         JLabel sexo = new JLabel("Sexo: ");
         String[] sexoString = { "Masculino", "Feminino" };
-        JComboBox sexoCmbox = new JComboBox<>(sexoString);
+        JComboBox<String> sexoCmbox = new JComboBox<>(sexoString);
         sexoCmbox.addActionListener(e -> {
-            String valor = sexoCmbox.getSelectedItem().toString();
+            String valor = Objects.requireNonNull(sexoCmbox.getSelectedItem()).toString();
             if (valor.equals("Masculino")) {
                 alunosModel.setSexo("M");
             } else {
@@ -97,17 +101,42 @@ public class AlunosCadastro extends EntidadesCadastro {
         JTextField bairroTxf = new JTextField(20);
         bairroTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "bairro"));
 
-        JLabel cidade = new JLabel("Cidade: ");
-        JTextField cidadeTxf = new JTextField(20);
-        cidadeTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "cidade"));
-
-        JLabel estado = new JLabel("Estado: ");
-        JTextField estadoTxf = new JTextField(20);
-        estadoTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "estado"));
-
         JLabel pais = new JLabel("Pais: ");
         JTextField paisTxf = new JTextField(20);
         paisTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "pais"));
+        paisTxf.setText("Brasil");
+        paisTxf.setEditable(false);
+
+        JLabel estado = new JLabel("Estado: ");
+        JComboBox comboBoxEstados = new JComboBox(cidadesController.recuperarEstadosBrasileiros().toArray(new String[0]));
+        comboBoxEstados.setPreferredSize(new Dimension(224, 20));
+
+        JLabel cidade = new JLabel("Cidade: ");
+        List<String> cidadesRecuperar = cidadesController.recuperarCidadesByEstado((String) comboBoxEstados.getSelectedItem());
+        JComboBox comboBoxCidades = new JComboBox(cidadesRecuperar.toArray(new String[0]));
+        comboBoxCidades.setPreferredSize(new Dimension(224, 20));
+
+        alunosModel.setEstado((String) comboBoxEstados.getSelectedItem());
+        alunosModel.setCidade((String) comboBoxCidades.getSelectedItem());
+
+        comboBoxEstados.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                comboBoxCidades.removeAllItems();
+                List<String> cidadesDoEstado = cidadesController.recuperarCidadesByEstado(Objects.requireNonNull(comboBoxEstados.getSelectedItem()).toString());
+
+                cidadesDoEstado.forEach(cidadeDoEstado -> {
+                    comboBoxCidades.addItem(cidadeDoEstado);
+                });
+
+                alunosModel.setEstado((String) e.getItem());
+            }
+        });
+
+        comboBoxCidades.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                alunosModel.setCidade((String) e.getItem());
+            }
+        });
 
         JLabel cep = new JLabel("CEP: ");
         JFormattedTextField cepTxf = new JFormattedTextField();
@@ -144,37 +173,37 @@ public class AlunosCadastro extends EntidadesCadastro {
         c1.gridx = 1; c1.gridy = 5; c1.anchor = GridBagConstraints.WEST;
         panel.add(celularTxf, c1);
         c1.gridx = 0; c1.gridy = 6; c1.anchor = GridBagConstraints.EAST;
-        panel.add(endereco, c1);
-        c1.gridx = 1; c1.gridy = 6;
-        panel.add(enderecoTxf, c1);
-        c1.gridx = 0; c1.gridy = 7;
-        panel.add(numero, c1);
-        c1.gridx = 1; c1.gridy = 7;
-        panel.add(numeroTxf, c1);
-        c1.gridx = 0; c1.gridy = 8;
-        panel.add(complemento, c1);
-        c1.gridx = 1; c1.gridy = 8;
-        panel.add(complementoTxf, c1);
-        c1.gridx = 0; c1.gridy = 9;
-        panel.add(bairro, c1);
-        c1.gridx = 1; c1.gridy = 9;
-        panel.add(bairroTxf, c1);
-        c1.gridx = 0; c1.gridy = 10;
-        panel.add(cidade, c1);
-        c1.gridx = 1; c1.gridy = 10;
-        panel.add(cidadeTxf, c1);
-        c1.gridx = 0; c1.gridy = 11;
-        panel.add(estado, c1);
-        c1.gridx = 1; c1.gridy = 11;
-        panel.add(estadoTxf, c1);
-        c1.gridx = 0; c1.gridy = 12;
         panel.add(pais, c1);
-        c1.gridx = 1; c1.gridy = 12;
+        c1.gridx = 1; c1.gridy = 6;
         panel.add(paisTxf, c1);
-        c1.gridx = 0; c1.gridy = 13;
+        c1.gridx = 0; c1.gridy = 7;
+        panel.add(estado, c1);
+        c1.gridx = 1; c1.gridy = 7;
+        panel.add(comboBoxEstados, c1);
+        c1.gridx = 0; c1.gridy = 8;
+        panel.add(cidade, c1);
+        c1.gridx = 1; c1.gridy = 8;
+        panel.add(comboBoxCidades, c1);
+        c1.gridx = 0; c1.gridy = 9;
         panel.add(cep, c1);
-        c1.gridx = 1; c1.gridy = 13;
+        c1.gridx = 1; c1.gridy = 9;
         panel.add(cepTxf, c1);
+        c1.gridx = 0; c1.gridy = 10;
+        panel.add(bairro, c1);
+        c1.gridx = 1; c1.gridy = 10;
+        panel.add(bairroTxf, c1);
+        c1.gridx = 0; c1.gridy = 11; c1.anchor = GridBagConstraints.EAST;
+        panel.add(endereco, c1);
+        c1.gridx = 1; c1.gridy = 11;
+        panel.add(enderecoTxf, c1);
+        c1.gridx = 0; c1.gridy = 12;
+        panel.add(numero, c1);
+        c1.gridx = 1; c1.gridy = 12;
+        panel.add(numeroTxf, c1);
+        c1.gridx = 0; c1.gridy = 13;
+        panel.add(complemento, c1);
+        c1.gridx = 1; c1.gridy = 13;
+        panel.add(complementoTxf, c1);
         c1.gridx = 0; c1.gridy = 14;
         panel.add(observacao, c1);
         c1.gridx = 1; c1.gridy = 14;
@@ -196,8 +225,8 @@ public class AlunosCadastro extends EntidadesCadastro {
             numeroTxf.setText(dados.getNumero());
             complementoTxf.setText(dados.getComplemento());
             bairroTxf.setText(dados.getBairro());
-            cidadeTxf.setText(dados.getCidade());
-            estadoTxf.setText(dados.getEstado());
+            comboBoxEstados.setSelectedItem(dados.getEstado());
+            comboBoxCidades.setSelectedItem(dados.getCidade());
             paisTxf.setText(dados.getPais());
             cepTxf.setText(dados.getCep());
             observacaoTxa.setText(dados.getObservacao());

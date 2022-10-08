@@ -1,7 +1,7 @@
 package model;
 
 public class CidadesModel {
-   private Integer id;
+    private Integer id;
     private String cidade;
     private String estado;
     private String pais;
@@ -40,5 +40,10 @@ public class CidadesModel {
 
     public void setPais(String pais) {
         this.pais = pais;
+    }
+
+    @Override
+    public String toString() {
+        return getCidade() + " (" + getEstado() + ")";
     }
 }
