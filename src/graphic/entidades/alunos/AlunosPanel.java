@@ -5,6 +5,7 @@ import graphic.entidades.base.EntidadesPanel;
 import model.AlunosModel;
 
 import javax.swing.*;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
@@ -17,6 +18,20 @@ public class AlunosPanel extends EntidadesPanel {
     @Override
     protected String getTitulo() {
         return "Alunos";
+    }
+
+    @Override
+    protected void deletar(String id) {
+        AlunosModel alunosModel = new AlunosModel();
+        AlunosController alunosController = new AlunosController();
+
+        Integer idDeletar = Integer.parseInt(id);
+
+        alunosModel.setId(idDeletar);
+        alunosController.deletar(alunosModel);
+
+        this.recarregaLista();
+
     }
 
     @Override

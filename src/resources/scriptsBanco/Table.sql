@@ -29,7 +29,7 @@ ALUNOS
 *********************************************/
 CREATE TABLE alunos (
   id serial NOT NULL CONSTRAINT aluno_pk PRIMARY KEY,
-  codigo_aluno integer NOT NULL,
+  codigo_aluno integer NOT NULL DEFAULT (floor(((random() * (100000)::double precision) + (5)::double precision)))::integer,
   nome text NOT NULL,
   data_nascimento date,
   sexo char(1) CONSTRAINT alunos_sexo check (
@@ -59,7 +59,7 @@ MODALIDADES
 *********************************************/
 CREATE TABLE modalidades (
   id serial NOT NULL CONSTRAINT modalidades_pk PRIMARY KEY,
-  modalidade text NOT NULL
+  nome text NOT NULL
 );
 
 /*********************************************
@@ -68,7 +68,7 @@ GRADUACOES
 CREATE TABLE graduacoes (
   id serial NOT NULL,
   id_modalidade integer not null,  CONSTRAINT graduacoes_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
-  graduacao text NOT NULL,
+  nome text NOT NULL,
   CONSTRAINT graduacoes_pk PRIMARY KEY(id, id_modalidade)
 );
 

@@ -84,6 +84,7 @@ public abstract class EntidadesPanel extends JPanel {
         add(painelBaixo);
 
         JTable tabela = criaTabela();
+        configuraTabela(tabela);
 
         JScrollPane jScrollPane = new JScrollPane(tabela);
         jScrollPane.setBounds(45, 90, 1000, 500);
@@ -96,7 +97,28 @@ public abstract class EntidadesPanel extends JPanel {
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder());
         btnCadastrar.setOpaque(false);
         btnCadastrar.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnCadastrar.setToolTipText("Novo");
         btnCadastrar.addActionListener(e -> onClickNovo());
+
+        ImageIcon smbDelete = new ImageIcon(this.getClass().getResource("/resources/icons/deleteIcon.png"));
+        JButton btnDelete = new JButton(smbDelete);
+        btnDelete.setBackground(Color.WHITE);
+        btnDelete.setOpaque(false);
+        btnDelete.setBorder(BorderFactory.createEmptyBorder());
+        btnDelete.setBounds(100,30,40,40);
+        btnDelete.setCursor(new Cursor((Cursor.HAND_CURSOR)));
+        btnDelete.setToolTipText("Excluir");
+        btnDelete.addActionListener(e -> {
+            try {
+                Integer linha = tabela.getSelectedRow();
+                String id = tabela.getModel().getValueAt(linha, 0).toString();
+                deletar(id);
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null,"Selecione um registro para deletar!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        painelBaixo.add(btnDelete);
         painelBaixo.add(btnCadastrar);
     }
 
@@ -104,7 +126,7 @@ public abstract class EntidadesPanel extends JPanel {
         JTable tabela = new JTable();
         tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabela.setRowHeight(22);
-        
+
         String[] colunasTabela = getColunasTabela();
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -142,6 +164,18 @@ public abstract class EntidadesPanel extends JPanel {
             }
         });
     }
+
+    private void configuraTabela(JTable tabela){
+        TableColumnModel colunas = tabela.getColumnModel();
+        colunas.getColumn(0).setMaxWidth(50);
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        for(int i = 0; i < tabela.getColumnCount(); i++){
+            tabela.getColumnModel().getColumn(i).setCellRenderer( centerRender);
+        }
+    }
+
+    protected abstract void deletar(String id);
 
     protected abstract String[] getColunasTabela();
 
