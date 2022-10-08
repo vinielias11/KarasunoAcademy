@@ -14,7 +14,7 @@ public class PlanosDAO extends SistemaDAO {
     private Connection conexao;
 
     private final String select = "SELECT * from public.planos;";
-    private final String insert = "INSERT INTO public.planos(modalidade,plano,valor_mensal)" +
+    private final String insert = "INSERT INTO public.planos(modalidade, plano, valor_mensal)" +
             "VALUES (?,?,?);";
     private final String delete = "DELETE FROM public.planos WHERE id = ?;";
     private final String update = "UPDATE public.planos SET modalidade = ?, plano = ?, valor_mensal = ? WHERE id = ?;";

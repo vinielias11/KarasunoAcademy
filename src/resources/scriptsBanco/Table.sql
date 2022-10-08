@@ -46,7 +46,7 @@ CREATE TABLE alunos (
   cidade text,
   estado char(2),
   pais text,
-  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(nome, estado, pais) REFERENCES cidades(nome, estado, pais) DEFERRABLE,
+  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(cidade, estado, pais) REFERENCES cidades(nome, estado, pais) DEFERRABLE,
   cep text
 );
 --
