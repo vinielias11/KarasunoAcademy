@@ -16,6 +16,11 @@ public class SobrePanel extends EntidadesPanel {
     }
 
     @Override
+    protected void deletar(String id) {
+
+    }
+
+    @Override
     protected String[] getColunasTabela() {
         return new String[0];
     }

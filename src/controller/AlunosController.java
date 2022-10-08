@@ -30,7 +30,6 @@ public class AlunosController {
             cadastro.dispose();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao inserir o aluno!");
-            throw new RuntimeException(e);
         }
     }
 
@@ -40,7 +39,6 @@ public class AlunosController {
             cadastro.dispose();
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao editar o aluno!");
-            throw new RuntimeException(e);
         }
     }
 
@@ -50,6 +48,14 @@ public class AlunosController {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar o aluno!");
             throw new RuntimeException(e);
+        }
+    }
+
+    public void deletar(AlunosModel aluno){
+        try {
+            alunosDAO.delete(aluno);
+        }   catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Houve um erro ao deletar o aluno!");
         }
     }
 }
