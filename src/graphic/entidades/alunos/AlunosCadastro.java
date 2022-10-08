@@ -34,9 +34,11 @@ public class AlunosCadastro extends EntidadesCadastro {
 
         MaskFormatter mascaraCelular = null;
         MaskFormatter mascaraCep = null;
+        MaskFormatter mascaraNumEndereco = null;
         try {
             mascaraCelular = new MaskFormatter("(##) #####-####");
             mascaraCep = new MaskFormatter("#####-###");
+            mascaraNumEndereco = new MaskFormatter("#####");
         } catch (ParseException e) {
             throw new RuntimeException(e);
         }
@@ -86,8 +88,11 @@ public class AlunosCadastro extends EntidadesCadastro {
         enderecoTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "endereco"));
 
         JLabel numero = new JLabel("Numero: ");
-        JTextField numeroTxf = new JTextField(20);
+        JFormattedTextField numeroTxf = new JFormattedTextField();
+        mascaraNumEndereco.install(numeroTxf);
+        numeroTxf.setColumns(4);
         numeroTxf.getDocument().addDocumentListener(new BindingListener(alunosModel, "numero"));
+
 
         JLabel complemento = new JLabel("Complemento: ");
         JTextField complementoTxf = new JTextField(20);
@@ -149,9 +154,9 @@ public class AlunosCadastro extends EntidadesCadastro {
         panel.add(enderecoTxf, c1);
         c1.gridx = 0; c1.gridy = 7;
         panel.add(numero, c1);
-        c1.gridx = 1; c1.gridy = 7;
+        c1.gridx = 1; c1.gridy = 7; c1.anchor = GridBagConstraints.WEST;
         panel.add(numeroTxf, c1);
-        c1.gridx = 0; c1.gridy = 8;
+        c1.gridx = 0; c1.gridy = 8; c1.anchor = GridBagConstraints.EAST;
         panel.add(complemento, c1);
         c1.gridx = 1; c1.gridy = 8;
         panel.add(complementoTxf, c1);

@@ -84,6 +84,7 @@ public abstract class EntidadesPanel extends JPanel {
         add(painelBaixo);
 
         JTable tabela = criaTabela();
+        configuraTabela(tabela);
 
         JScrollPane jScrollPane = new JScrollPane(tabela);
         jScrollPane.setBounds(45, 90, 1000, 500);
@@ -162,6 +163,16 @@ public abstract class EntidadesPanel extends JPanel {
                 }
             }
         });
+    }
+
+    private void configuraTabela(JTable tabela){
+        TableColumnModel colunas = tabela.getColumnModel();
+        colunas.getColumn(0).setMaxWidth(50);
+        DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+        centerRender.setHorizontalAlignment(JLabel.CENTER);
+        for(int i = 0; i < tabela.getColumnCount(); i++){
+            tabela.getColumnModel().getColumn(i).setCellRenderer( centerRender);
+        }
     }
 
     protected abstract void deletar(String id);
