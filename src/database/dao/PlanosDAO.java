@@ -2,6 +2,8 @@ package database.dao;
 
 import database.connection.ConnectionFactory;
 import database.connection.EntidadeConexao;
+import database.util.DbUtil;
+import model.AlunosModel;
 import model.PlanosModel;
 
 import javax.swing.*;
@@ -12,12 +14,12 @@ import java.util.List;
 public class PlanosDAO extends SistemaDAO {
 
     private Connection conexao;
+    private DbUtil dbUtil = new DbUtil();
 
-    private final String select = "SELECT * from public.planos;";
-    private final String insert = "INSERT INTO public.planos(modalidade, plano, valor_mensal)" +
-            "VALUES (?,?,?);";
+    private final String select = "SELECT P.*, M.nome AS nome_modalidade FROM public.planos P INNER JOIN modalidades M ON P.id_modalidade = M.id ORDER BY P.id;";
+    private final String insert = "INSERT INTO public.planos(id_modalidade, nome, valor_mensal) VALUES (?, ?, ?);";
     private final String delete = "DELETE FROM public.planos WHERE id = ?;";
-    private final String update = "UPDATE public.planos SET modalidade = ?, plano = ?, valor_mensal = ? WHERE id = ?;";
+    private final String update = "UPDATE public.planos SET id_modalidade = ?, nome = ?, valor_mensal = ? WHERE id = ?;";
     private final String selectById = "SELECT * from public.planos WHERE id = ?;";
 
 
@@ -44,18 +46,28 @@ public class PlanosDAO extends SistemaDAO {
 
     @Override
     public List<Object> select() throws SQLException {
-        ResultSet resultadoQuery = pstSelect.executeQuery();
         List <Object> arrayListPlanos = new ArrayList<>();
 
-        while (resultadoQuery.next()){
-            PlanosModel planosModel = new PlanosModel();
+        try {
+            ResultSet resultadoQuery = pstSelect.executeQuery();
 
-            planosModel.setId(resultadoQuery.getInt("id"));
-            planosModel.setModalidade(resultadoQuery.getString("modalidade"));
-            planosModel.setPlano(resultadoQuery.getString("plano"));
-            planosModel.setValorMensal(resultadoQuery.getDouble("valor_mensal"));
+            while (resultadoQuery.next()){
+                PlanosModel planosModel = new PlanosModel();
 
-            arrayListPlanos.add(planosModel);
+                planosModel.setId(resultadoQuery.getInt("id"));
+                planosModel.setIdModalidade(resultadoQuery.getInt("id_modalidade"));
+                planosModel.setNomeModalidade(resultadoQuery.getString("nome_modalidade"));
+                planosModel.setNome(resultadoQuery.getString("nome"));
+                planosModel.setValorMensal(resultadoQuery.getDouble("valor_mensal"));
+
+                arrayListPlanos.add(planosModel);
+            }
+
+        } catch (SQLException e) {
+            System.out.println("Houve um erro ao recuperar os planos!");
+            e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
 
         return arrayListPlanos;
@@ -64,27 +76,36 @@ public class PlanosDAO extends SistemaDAO {
     @Override
     public Object selectById(Object param) throws SQLException {
         PlanosModel planosModel = (PlanosModel) param;
+        List<PlanosModel> arrayListPlanos = new ArrayList<>();
+
         pstSelectById.setInt(1, planosModel.getId());
 
         try {
             ResultSet resultadoQuery = pstSelectById.executeQuery();
-            planosModel.setModalidade(resultadoQuery.getString("modalidade"));
-            planosModel.setPlano(resultadoQuery.getString("plano"));
+
+            planosModel.setIdModalidade(resultadoQuery.getInt("id_modalidade"));
+            planosModel.setNome(resultadoQuery.getString("nome"));
             planosModel.setValorMensal(resultadoQuery.getDouble("valor_mensal"));
+
+            arrayListPlanos.add(planosModel);
+
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ID não encontrado!");
+            System.out.println("Houve um erro ao recuperar plano!");
             e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
         }
-        return planosModel;
+
+        return arrayListPlanos.get(0);
     }
 
     @Override
     public void insert(Object param) throws SQLException {
         PlanosModel planosModel = (PlanosModel) param;
 
-        pstInsert.setString(1, planosModel.getModalidade());
-        pstInsert.setString(2, planosModel.getPlano());
-        pstInsert.setDouble(3,planosModel.getValorMensal());
+        pstInsert.setInt(1, planosModel.getIdModalidade());
+        pstInsert.setString(2, planosModel.getNome());
+        pstInsert.setDouble(3, planosModel.getValorMensal());
 
         try {
             pstInsert.execute();
@@ -98,7 +119,7 @@ public class PlanosDAO extends SistemaDAO {
     public void delete(Object param) throws SQLException {
         PlanosModel planosModel = (PlanosModel) param;
 
-        pstDelete.setInt(1,planosModel.getId());
+        pstDelete.setInt(1, planosModel.getId());
 
         try {
             pstDelete.execute();
@@ -112,9 +133,9 @@ public class PlanosDAO extends SistemaDAO {
     public void update(Object param) throws SQLException {
         PlanosModel planosModel = (PlanosModel) param;
 
-        pstUpdate.setString(1,planosModel.getModalidade());
-        pstUpdate.setString(2,planosModel.getPlano());
-        pstUpdate.setDouble(3,planosModel.getValorMensal());
+        pstUpdate.setInt(1, planosModel.getIdModalidade());
+        pstUpdate.setString(2, planosModel.getNome());
+        pstUpdate.setDouble(3, planosModel.getValorMensal());
 
         try {
             pstUpdate.execute();

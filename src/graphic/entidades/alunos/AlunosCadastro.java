@@ -29,7 +29,7 @@ public class AlunosCadastro extends EntidadesCadastro {
         criaComponentes(dados);
     }
 
-    public void criaComponentes(AlunosModel dados) {
+    private void criaComponentes(AlunosModel dados) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c1 = new GridBagConstraints();
         panel.setSize(520,580);
