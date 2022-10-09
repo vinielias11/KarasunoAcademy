@@ -81,4 +81,5 @@ public class GraduacoesPanel extends EntidadesPanel {
 
         graduacoesCadastro.setVisible(true);
     }
+
 }

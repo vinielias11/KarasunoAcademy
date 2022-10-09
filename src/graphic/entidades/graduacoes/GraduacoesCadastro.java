@@ -14,6 +14,7 @@ import model.ModalidadesModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -62,7 +63,8 @@ public class GraduacoesCadastro extends EntidadesCadastro {
         panel.setSize(520,280);
 
         ModalidadesController modalidadesController = new ModalidadesController();
-        ModalidadesComboModel modalidadesComboModel = modalidadesController.recuperaModalidadesParaComboBox();
+        ArrayList<ModalidadesModel> modalidadesRecuperadas = modalidadesController.recuperaModalidadesParaComboBox();
+        ModalidadesComboModel modalidadesComboModel = new ModalidadesComboModel(modalidadesRecuperadas);
 
         JLabel nome = new JLabel("Nome: ");
         JTextField nomeTxf = new JTextField(20);
@@ -93,7 +95,14 @@ public class GraduacoesCadastro extends EntidadesCadastro {
 
         if (dados != null) {
             isEditando = true;
+            graduacoesModel.setId(dados.getId());
+            modalidadesRecuperadas.forEach(modalidadeRecuperada -> {
+                if (Objects.equals(modalidadeRecuperada.getId(), dados.getIdModalidade())) {
+                    comboBoxModalidades.setSelectedItem(modalidadeRecuperada);
+                }
+            });
 
+            nomeTxf.setText(dados.getNome());
         }
 
         add(panel);

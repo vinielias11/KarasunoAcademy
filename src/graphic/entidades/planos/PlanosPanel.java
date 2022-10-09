@@ -39,4 +39,5 @@ public class PlanosPanel extends EntidadesPanel {
     protected void onClickNovo() {
 
     }
+
 }

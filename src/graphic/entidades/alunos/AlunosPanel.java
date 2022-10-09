@@ -82,4 +82,5 @@ public class AlunosPanel extends EntidadesPanel {
 
         alunosCadastro.setVisible(true);
     }
+
 }
