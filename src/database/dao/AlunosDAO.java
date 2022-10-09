@@ -173,6 +173,7 @@ public class AlunosDAO extends SistemaDAO {
         }
     }
 
+    @Override
     public AlunosModel selectById(Object param) throws SQLException {
         AlunosModel alunoRecuperar = (AlunosModel) param;
         List<AlunosModel> arrayListAlunos = new ArrayList<>();

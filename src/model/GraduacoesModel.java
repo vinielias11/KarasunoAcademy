@@ -1,16 +1,13 @@
 package model;
 
-public class GraduacoesModel {
+public class GraduacoesModel extends EntidadesModel{
     private Integer id;
-    private String modalidade;
-    private String graduacao;
+    private Integer idModalidade;
+    private String nome;
+    private String nomeModalidade;
 
     public GraduacoesModel(){
 
-    }
-
-    public String getModalidade() {
-        return modalidade;
     }
 
     public Integer getId() {
@@ -21,15 +18,27 @@ public class GraduacoesModel {
         this.id = id;
     }
 
-    public void setModalidade(String modalidade) {
-        this.modalidade = modalidade;
+    public Integer getIdModalidade() {
+        return idModalidade;
     }
 
-    public String getGraduacao() {
-        return graduacao;
+    public void setIdModalidade(Integer idModalidade) {
+        this.idModalidade = idModalidade;
     }
 
-    public void setGraduacao(String graduacao) {
-        this.graduacao = graduacao;
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public String getNomeModalidade() {
+        return nomeModalidade;
+    }
+
+    public void setNomeModalidade(String nomeModalidade) {
+        this.nomeModalidade = nomeModalidade;
     }
 }
