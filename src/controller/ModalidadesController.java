@@ -61,7 +61,7 @@ public class ModalidadesController {
         }
     }
 
-    public ModalidadesComboModel recuperaModalidadesParaComboBox() {
+    public ArrayList<ModalidadesModel> recuperaModalidadesParaComboBox() {
         ArrayList<ModalidadesModel> listaModalidades = new ArrayList<>();
 
         try {
@@ -72,6 +72,6 @@ public class ModalidadesController {
             throw new RuntimeException(e);
         }
 
-        return new ModalidadesComboModel(listaModalidades);
+        return listaModalidades;
     }
 }

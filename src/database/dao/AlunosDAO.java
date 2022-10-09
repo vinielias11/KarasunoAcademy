@@ -116,8 +116,7 @@ public class AlunosDAO extends SistemaDAO {
         try {
             pstInsert.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao inserir aluno!");
-            e.printStackTrace();
+            dbUtil.trataExcecoesDeAcordoComState(e.getSQLState());
         } finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
         }
