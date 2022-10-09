@@ -88,12 +88,12 @@ public abstract class EntidadesPanel extends JPanel {
         configuraTabela(tabela);
 
         JScrollPane jScrollPane = new JScrollPane(tabela);
-        jScrollPane.setBounds(45, 90, 1000, 500);
+        jScrollPane.setBounds(45, 110, 1000, 500);
         painelBaixo.add(jScrollPane);
 
         ImageIcon smbMais = new ImageIcon(this.getClass().getResource("/resources/icons/plusIcon.png"));
         JButton btnCadastrar = new JButton(smbMais);
-        btnCadastrar.setBounds(45, 30, 40, 40);
+        btnCadastrar.setBounds(45, 60, 40, 40);
         btnCadastrar.setBackground(Color.WHITE);
         btnCadastrar.setBorder(BorderFactory.createEmptyBorder());
         btnCadastrar.setOpaque(false);
@@ -106,7 +106,7 @@ public abstract class EntidadesPanel extends JPanel {
         btnDelete.setBackground(Color.WHITE);
         btnDelete.setOpaque(false);
         btnDelete.setBorder(BorderFactory.createEmptyBorder());
-        btnDelete.setBounds(100,30,40,40);
+        btnDelete.setBounds(100,60,40,40);
         btnDelete.setCursor(new Cursor((Cursor.HAND_CURSOR)));
         btnDelete.setToolTipText("Excluir");
         btnDelete.addActionListener(e -> {

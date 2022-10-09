@@ -75,4 +75,5 @@ public class ModalidadesPanel extends EntidadesPanel {
 
         modalidadesCadastro.setVisible(true);
     }
+
 }

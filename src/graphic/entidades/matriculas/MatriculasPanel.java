@@ -39,4 +39,5 @@ public class MatriculasPanel extends EntidadesPanel {
     protected void onClickNovo() {
 
     }
+
 }
