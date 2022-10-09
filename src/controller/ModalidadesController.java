@@ -1,10 +1,12 @@
 package controller;
 
 import database.dao.ModalidadesDAO;
+import graphic.util.ModalidadesComboModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class ModalidadesController {
@@ -57,5 +59,21 @@ public class ModalidadesController {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao editar a modalidade!");
         }
+    }
+
+
+
+    public ModalidadesComboModel recuperaModalidadesParaComboBox() {
+        ArrayList<ModalidadesModel> listaModalidades = new ArrayList<>();
+
+        try {
+            List<Object> modalidadesRecuperar = modalidadesDAO.select();
+            modalidadesRecuperar.forEach(modalidade -> listaModalidades.add((ModalidadesModel) modalidade));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as modalidades!");
+            throw new RuntimeException(e);
+        }
+
+        return new ModalidadesComboModel(listaModalidades);
     }
 }
