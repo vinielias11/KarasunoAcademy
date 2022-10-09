@@ -30,7 +30,6 @@ public class ModalidadesCadastro extends EntidadesCadastro {
 
     @Override
     public void criarBotoes() {
-
         JButton btnFechar = new JButton("Cancelar");
         btnFechar.setBounds(80,100,120,30);
         btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));

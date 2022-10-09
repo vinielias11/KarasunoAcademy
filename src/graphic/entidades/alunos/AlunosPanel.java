@@ -31,7 +31,6 @@ public class AlunosPanel extends EntidadesPanel {
         alunosController.deletar(alunosModel);
 
         this.recarregaLista();
-
     }
 
     @Override

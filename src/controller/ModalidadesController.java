@@ -61,8 +61,6 @@ public class ModalidadesController {
         }
     }
 
-
-
     public ModalidadesComboModel recuperaModalidadesParaComboBox() {
         ArrayList<ModalidadesModel> listaModalidades = new ArrayList<>();
 

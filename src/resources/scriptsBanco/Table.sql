@@ -79,7 +79,7 @@ CREATE TABLE planos (
   id serial NOT NULL,
   id_modalidade integer NOT NULL,
   CONSTRAINT planos_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
-  plano text NOT NULL,
+  nome text NOT NULL,
   CONSTRAINT planos_pk PRIMARY KEY(id_modalidade, id),
   valor_mensal numeric(9, 2) NOT NULL
 );
