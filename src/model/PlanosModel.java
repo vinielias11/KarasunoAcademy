@@ -1,6 +1,6 @@
 package model;
 
-public class PlanosModel {
+public class PlanosModel extends EntidadesModel {
     private Integer id;
     private Integer idModalidade;
     private String nomeModalidade;

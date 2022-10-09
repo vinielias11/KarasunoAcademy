@@ -1,7 +1,10 @@
 package graphic.entidades.planos;
 
 import controller.PlanosController;
+import controller.PlanosController;
+import graphic.entidades.planos.PlanosCadastro;
 import graphic.entidades.base.EntidadesPanel;
+import model.AlunosModel;
 import model.PlanosModel;
 
 import javax.swing.*;
@@ -21,7 +24,15 @@ public class PlanosPanel extends EntidadesPanel {
 
     @Override
     protected void deletar(String id) {
+        PlanosModel planosModel = new PlanosModel();
+        PlanosController planosController = new PlanosController();
 
+        Integer idDeletar = Integer.parseInt(id);
+
+        planosModel.setId(idDeletar);
+        planosController.deletar(planosModel);
+
+        this.recarregaLista();
     }
 
     @Override
@@ -53,7 +64,15 @@ public class PlanosPanel extends EntidadesPanel {
 
     @Override
     protected void onDoubleClickLinha(String id) {
+        PlanosController planosController = new PlanosController();
+        PlanosModel planoRecuperar = new PlanosModel();
 
+        planoRecuperar.setId(Integer.parseInt(id));
+        planoRecuperar = planosController.recuperarPorId(planoRecuperar);
+
+        PlanosCadastro planosCadastro = new PlanosCadastro(planoRecuperar, this);
+
+        planosCadastro.setVisible(true);
     }
 
     @Override

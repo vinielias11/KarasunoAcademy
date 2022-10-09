@@ -243,6 +243,8 @@ public class AlunosCadastro extends EntidadesCadastro {
     protected void onClickSalvar() {
         AlunosController alunosController = new AlunosController();
 
+        if (!validaCamposAntesDeSalvar()) return;
+
         if (!isEditando) {
             alunosController.inserir(alunosModel, this);
         } else {
@@ -250,5 +252,14 @@ public class AlunosCadastro extends EntidadesCadastro {
         }
 
         alunosPanel.recarregaLista();
+    }
+
+    private boolean validaCamposAntesDeSalvar() {
+        if (alunosModel.getNome() == null || alunosModel.getNome().trim().length() == 0) {
+            JOptionPane.showMessageDialog(null, "Insira um nome válido.");
+            return false;
+        }
+
+        return true;
     }
 }

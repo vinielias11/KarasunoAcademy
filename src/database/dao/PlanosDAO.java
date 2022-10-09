@@ -20,7 +20,7 @@ public class PlanosDAO extends SistemaDAO {
     private final String insert = "INSERT INTO public.planos(id_modalidade, nome, valor_mensal) VALUES (?, ?, ?);";
     private final String delete = "DELETE FROM public.planos WHERE id = ?;";
     private final String update = "UPDATE public.planos SET id_modalidade = ?, nome = ?, valor_mensal = ? WHERE id = ?;";
-    private final String selectById = "SELECT * from public.planos WHERE id = ?;";
+    private final String selectById = "SELECT P.*, M.nome AS nome_modalidade FROM public.planos P INNER JOIN modalidades M ON P.id_modalidade = M.id WHERE P.id = ? ORDER BY P.id;";
 
 
     private final PreparedStatement pstSelect;
@@ -74,7 +74,7 @@ public class PlanosDAO extends SistemaDAO {
     }
 
     @Override
-    public Object selectById(Object param) throws SQLException {
+    public PlanosModel selectById(Object param) throws SQLException {
         PlanosModel planosModel = (PlanosModel) param;
         List<PlanosModel> arrayListPlanos = new ArrayList<>();
 
@@ -83,11 +83,14 @@ public class PlanosDAO extends SistemaDAO {
         try {
             ResultSet resultadoQuery = pstSelectById.executeQuery();
 
-            planosModel.setIdModalidade(resultadoQuery.getInt("id_modalidade"));
-            planosModel.setNome(resultadoQuery.getString("nome"));
-            planosModel.setValorMensal(resultadoQuery.getDouble("valor_mensal"));
+            while (resultadoQuery.next()) {
+                planosModel.setIdModalidade(resultadoQuery.getInt("id_modalidade"));
+                planosModel.setNomeModalidade(resultadoQuery.getString("nome_modalidade"));
+                planosModel.setNome(resultadoQuery.getString("nome"));
+                planosModel.setValorMensal(resultadoQuery.getDouble("valor_mensal"));
 
-            arrayListPlanos.add(planosModel);
+                arrayListPlanos.add(planosModel);
+            }
 
         } catch (SQLException e) {
             System.out.println("Houve um erro ao recuperar plano!");
@@ -112,6 +115,8 @@ public class PlanosDAO extends SistemaDAO {
         } catch (SQLException e) {
             System.out.println("Houve um erro ao inserir plano!");
             e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
         }
     }
 
@@ -124,8 +129,9 @@ public class PlanosDAO extends SistemaDAO {
         try {
             pstDelete.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao excluir plano!");
-            e.printStackTrace();
+            dbUtil.trataExcecoesDeAcordoComState(e.getSQLState());
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
         }
     }
 
@@ -136,12 +142,15 @@ public class PlanosDAO extends SistemaDAO {
         pstUpdate.setInt(1, planosModel.getIdModalidade());
         pstUpdate.setString(2, planosModel.getNome());
         pstUpdate.setDouble(3, planosModel.getValorMensal());
+        pstUpdate.setInt(4, planosModel.getId());
 
         try {
             pstUpdate.execute();
         } catch (SQLException e){
             System.out.println("Houve um erro ao atualizar plano!");
             e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstUpdate);
         }
     }
 }
