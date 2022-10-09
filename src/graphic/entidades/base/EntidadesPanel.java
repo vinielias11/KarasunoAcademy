@@ -168,10 +168,14 @@ public abstract class EntidadesPanel extends JPanel {
     private void configuraTabela(JTable tabela){
         TableColumnModel colunas = tabela.getColumnModel();
         colunas.getColumn(0).setMaxWidth(50);
+
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
         centerRender.setHorizontalAlignment(JLabel.CENTER);
-        for(int i = 0; i < tabela.getColumnCount(); i++){
-            tabela.getColumnModel().getColumn(i).setCellRenderer( centerRender);
+
+        if (tabela.getColumnModel().getColumnCount() == 0) return;
+
+        for (int i = 0; i < tabela.getColumnCount(); i++){
+            tabela.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
     }
 

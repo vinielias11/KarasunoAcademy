@@ -24,13 +24,12 @@ public class ModalidadesCadastro extends EntidadesCadastro {
 
     public ModalidadesCadastro(ModalidadesModel dados, ModalidadesPanel modalidadesPanel) {
         this.modalidadesPanel = modalidadesPanel;
-        criaComponentes(dados);
         setSize(520, 200);
+        criaComponentes(dados);
     }
 
     @Override
     public void criarBotoes() {
-
         JButton btnFechar = new JButton("Cancelar");
         btnFechar.setBounds(80,100,120,30);
         btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));
@@ -51,7 +50,7 @@ public class ModalidadesCadastro extends EntidadesCadastro {
         add(btnSalvar);
     }
 
-    public void criaComponentes(ModalidadesModel dados){
+    public void criaComponentes(ModalidadesModel dados) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c1 = new GridBagConstraints();
         panel.setSize(520, 200);
@@ -73,7 +72,6 @@ public class ModalidadesCadastro extends EntidadesCadastro {
         }
 
         add(panel);
-
     }
 
     @Override

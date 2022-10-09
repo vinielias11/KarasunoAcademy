@@ -46,7 +46,7 @@ CREATE TABLE alunos (
   cidade text,
   estado char(2),
   pais text,
-  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(nome, estado, pais) REFERENCES cidades(nome, estado, pais) DEFERRABLE,
+  CONSTRAINT alunos_enderecos_f2 FOREIGN KEY(cidade, estado, pais) REFERENCES cidades(nome, estado, pais) DEFERRABLE,
   cep text
 );
 --
@@ -79,7 +79,7 @@ CREATE TABLE planos (
   id serial NOT NULL,
   id_modalidade integer NOT NULL,
   CONSTRAINT planos_f1 FOREIGN KEY(id_modalidade) REFERENCES modalidades(id) DEFERRABLE,
-  plano text NOT NULL,
+  nome text NOT NULL,
   CONSTRAINT planos_pk PRIMARY KEY(id_modalidade, id),
   valor_mensal numeric(9, 2) NOT NULL
 );
