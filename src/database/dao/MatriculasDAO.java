@@ -2,6 +2,7 @@ package database.dao;
 
 import database.connection.ConnectionFactory;
 import database.connection.EntidadeConexao;
+import database.util.DbUtil;
 import model.MatriculasModel;
 
 import javax.swing.*;
@@ -11,14 +12,15 @@ import java.util.List;
 
 public class MatriculasDAO extends SistemaDAO {
     private Connection conexao;
+    private DbUtil dbUtil = new DbUtil();
 
-    private final String select = "SELECT * from public.matriculas;";
-    private final String insert = "INSERT INTO public.matriculas(codigo_matricula,codigo_aluno,data_matricula,dia_vencimento,data_encerramento)" +
+    private final String select = "SELECT * from public.matriculas ;";
+    private final String insert = "INSERT INTO public.matriculas(codigo_matricula,id_aluno,data_matricula,dia_vencimento,data_encerramento)" +
             "VALUES (?,?,?,?,?);";
-    private final String delete = "DELETE FROM public.matriculas WHERE id = ?;";
-    private final String update = "UPDATE public.matriculas SET codigo_matricula = ?, codigo_aluno = ?, data_matricula = ?, dia_vencimento = ? data_encerramento = ? " +
+    private final String delete = "DELETE FROM public.matriculas WHERE codigo_matricula = ?;";
+    private final String update = "UPDATE public.matriculas SET id_aluno = ?, data_matricula = ?, dia_vencimento = ? data_encerramento = ? " +
             "WHERE id = ?;";
-    private final String selectById = "SELECT * from public.matriculas WHERE id = ?;";
+    private final String selectById = "SELECT * from public.matriculas WHERE codigo_matricula = ?;";
 
 
     private final PreparedStatement pstSelect;
@@ -44,39 +46,56 @@ public class MatriculasDAO extends SistemaDAO {
 
     @Override
     public List<Object> select() throws SQLException {
-        ResultSet resultadoQuery = pstSelect.executeQuery();
         List <Object> arrayListMatriculas = new ArrayList<>();
 
-        while (resultadoQuery.next()){
-            MatriculasModel matriculasModel = new MatriculasModel();
+        try {
+            ResultSet resultadoQuery = pstSelect.executeQuery();
+            while (resultadoQuery.next()){
+                MatriculasModel matriculasModel = new MatriculasModel();
 
-            matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
-            matriculasModel.setCodigoAluno(resultadoQuery.getInt("codigo_aluno"));
-            matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
-            matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
-            matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+                matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
+                matriculasModel.setCodigoAluno(resultadoQuery.getInt("id_aluno"));
+                matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
+                matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
+                matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
 
-            arrayListMatriculas.add(matriculasModel);
+                arrayListMatriculas.add(matriculasModel);
+            }
+        } catch (SQLException e){
+            System.out.println("Houve um erro ao recuperar as matriculas!");
+        }   finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
+
 
         return arrayListMatriculas;
     }
 
     @Override
-    public Object selectById(Object param) throws SQLException {
+    public MatriculasModel selectById(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
-        pstSelectById.setInt(1, matriculasModel.getId());
+        List<MatriculasModel> arrayListMatriculas = new ArrayList<>();
+
+        pstSelectById.setInt(1, matriculasModel.getCodigoMatricula());
 
         try {
             ResultSet resultadoQuery = pstSelectById.executeQuery();
-            matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
-            matriculasModel.setCodigoAluno(resultadoQuery.getInt("codigo_aluno"));
-            matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
-            matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
-            matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+
+            while(resultadoQuery.next()){
+                matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
+                matriculasModel.setCodigoAluno(resultadoQuery.getInt("codigo_aluno"));
+                matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
+                matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
+                matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+
+                arrayListMatriculas.add(matriculasModel);
+            }
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "ID não encontrado!");
             e.printStackTrace();
+        }finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
         return matriculasModel;
     }
@@ -96,6 +115,8 @@ public class MatriculasDAO extends SistemaDAO {
         } catch (SQLException e) {
             System.out.println("Houve um erro ao inserir matrícula!");
             e.printStackTrace();
+        }finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
     }
 
@@ -103,13 +124,15 @@ public class MatriculasDAO extends SistemaDAO {
     public void delete(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
 
-        pstDelete.setInt(1,matriculasModel.getId());
+        pstDelete.setInt(1,matriculasModel.getCodigoMatricula());
 
         try {
             pstDelete.execute();
         } catch (SQLException e) {
             System.out.println("Houve um erro ao excluir matrícula!");
             e.printStackTrace();
+        }finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
     }
 
@@ -128,6 +151,8 @@ public class MatriculasDAO extends SistemaDAO {
         } catch (SQLException e){
             System.out.println("Houve um erro ao atualizar matrícula!");
             e.printStackTrace();
+        }finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
     }
 }
