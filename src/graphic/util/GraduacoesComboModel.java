@@ -1,21 +1,22 @@
 package graphic.util;
 
-import model.AlunosModel;
+
+import model.GraduacoesModel;
 
 import javax.swing.*;
 import java.util.ArrayList;
 
-public class AlunosComboModel extends AbstractListModel implements ComboBoxModel {
-    private ArrayList<AlunosModel> lista;
-    private AlunosModel selecionado;
+public class GraduacoesComboModel extends AbstractListModel implements ComboBoxModel {
+    private ArrayList<GraduacoesModel> lista;
+    private GraduacoesModel selecionado;
 
-    public AlunosComboModel(ArrayList<AlunosModel> lista) {
+    public GraduacoesComboModel(ArrayList<GraduacoesModel> lista) {
         this.lista = lista;
     }
 
     @Override
     public void setSelectedItem(Object anItem) {
-        this.selecionado = (AlunosModel) anItem;
+        this.selecionado = (GraduacoesModel) anItem;
     }
 
     @Override
