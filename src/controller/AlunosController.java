@@ -2,9 +2,11 @@ package controller;
 
 import database.dao.AlunosDAO;
 import model.AlunosModel;
+import model.AlunosModel;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AlunosController {
@@ -57,5 +59,19 @@ public class AlunosController {
         }   catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Houve um erro ao deletar o aluno!");
         }
+    }
+
+    public ArrayList<AlunosModel> recuperaAlunosParaComboBox() {
+        ArrayList<AlunosModel> listaAlunos= new ArrayList<>();
+
+        try {
+            List<Object> alunosRecuperar = alunosDAO.select();
+            alunosRecuperar.forEach(aluno -> listaAlunos.add((AlunosModel) aluno));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar os alunos!");
+            throw new RuntimeException(e);
+        }
+
+        return listaAlunos;
     }
 }

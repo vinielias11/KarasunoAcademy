@@ -5,7 +5,6 @@ import graphic.entidades.base.EntidadesPanel;
 import model.AlunosModel;
 
 import javax.swing.*;
-import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import java.util.ArrayList;
 import java.util.List;
