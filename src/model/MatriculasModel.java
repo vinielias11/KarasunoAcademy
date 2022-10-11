@@ -2,15 +2,24 @@ package model;
 
 import java.util.Date;
 
-public class MatriculasModel {
+public class MatriculasModel extends EntidadesModel{
     private Integer codigoMatricula;
     private Integer codigoAluno;
     private Date dataMatricula;
     private Integer diaVencimento;
     private Date dataEncerramento;
+    private String nomeAluno;
 
     public MatriculasModel(){
 
+    }
+
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
     }
 
     public Integer getCodigoMatricula() {

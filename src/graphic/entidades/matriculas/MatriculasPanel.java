@@ -47,12 +47,16 @@ public class MatriculasPanel extends EntidadesPanel {
 
         for (int i = 0; i < listaMatriculas.size(); i++) {
             Integer codigoMatricula = listaMatriculas.get(i).getCodigoMatricula();
-            Integer codigoAluno = listaMatriculas.get(i).getCodigoAluno();
+            String nomeAluno = listaMatriculas.get(i).getNomeAluno();
             Integer diaVencimento = listaMatriculas.get(i).getDiaVencimento();
             String dataMatricula = listaMatriculas.get(i).getDataMatricula().toString();
-            String dataEncerramento = listaMatriculas.get(i).getDataEncerramento().toString();
+            String dataEncerramento = "";
 
-            Object[] linha = { codigoMatricula, codigoAluno, dataMatricula, diaVencimento, dataEncerramento};
+            if(listaMatriculas.get(i).getDataEncerramento() != null){
+                dataEncerramento = listaMatriculas.get(i).getDataEncerramento().toString();
+            }
+
+            Object[] linha = { codigoMatricula, nomeAluno, dataMatricula, diaVencimento, dataEncerramento};
 
             tableModel.addRow(linha);
         }

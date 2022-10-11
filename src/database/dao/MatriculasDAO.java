@@ -14,13 +14,12 @@ public class MatriculasDAO extends SistemaDAO {
     private Connection conexao;
     private DbUtil dbUtil = new DbUtil();
 
-    private final String select = "SELECT * from public.matriculas ;";
-    private final String insert = "INSERT INTO public.matriculas(codigo_matricula,id_aluno,data_matricula,dia_vencimento,data_encerramento)" +
-            "VALUES (?,?,?,?,?);";
+    private final String select = "SELECT M.*, A.nome AS nome_aluno FROM public.matriculas M INNER JOIN alunos A ON M.id_aluno = A.id ORDER BY M.codigo_matricula;";;
+    private final String insert = "INSERT INTO public.matriculas(id_aluno,dia_vencimento,data_encerramento)" +
+            "VALUES (?,?,?);";
     private final String delete = "DELETE FROM public.matriculas WHERE codigo_matricula = ?;";
-    private final String update = "UPDATE public.matriculas SET id_aluno = ?, data_matricula = ?, dia_vencimento = ? data_encerramento = ? " +
-            "WHERE id = ?;";
-    private final String selectById = "SELECT * from public.matriculas WHERE codigo_matricula = ?;";
+    private final String update = "UPDATE public.matriculas SET id_aluno = ?, dia_vencimento = ? WHERE codigo_matricula = ?";
+    private final String selectById = "SELECT M.*, A.nome AS nome_aluno FROM public.matriculas M INNER JOIN alunos A ON M.id_aluno = A.id WHERE codigo_matricula = ? ORDER BY M.codigo_matricula;";
 
 
     private final PreparedStatement pstSelect;
@@ -58,6 +57,7 @@ public class MatriculasDAO extends SistemaDAO {
                 matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
                 matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
                 matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+                matriculasModel.setNomeAluno(resultadoQuery.getString("nome_aluno"));
 
                 arrayListMatriculas.add(matriculasModel);
             }
@@ -83,10 +83,11 @@ public class MatriculasDAO extends SistemaDAO {
 
             while(resultadoQuery.next()){
                 matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
-                matriculasModel.setCodigoAluno(resultadoQuery.getInt("codigo_aluno"));
+                matriculasModel.setCodigoAluno(resultadoQuery.getInt("id_aluno"));
                 matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
                 matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
                 matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+                matriculasModel.setNomeAluno(resultadoQuery.getString("nome_aluno"));
 
                 arrayListMatriculas.add(matriculasModel);
             }
@@ -104,16 +105,14 @@ public class MatriculasDAO extends SistemaDAO {
     public void insert(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
 
-        pstInsert.setInt(1, matriculasModel.getCodigoMatricula());
-        pstInsert.setInt(2, matriculasModel.getCodigoAluno());
-        pstInsert.setDate(3, (Date) matriculasModel.getDataMatricula());
-        pstInsert.setInt(4, matriculasModel.getDiaVencimento());
-        pstInsert.setDate(5, (Date) matriculasModel.getDataEncerramento());
+        pstInsert.setInt(1, matriculasModel.getCodigoAluno());;
+        pstInsert.setInt(2, matriculasModel.getDiaVencimento());
+        pstInsert.setDate(3, (Date) matriculasModel.getDataEncerramento());
 
         try {
             pstInsert.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao inserir matrícula!");
+            System.out.println("Houve um erro ao inserir a matrícula!");
             e.printStackTrace();
         }finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
@@ -140,11 +139,10 @@ public class MatriculasDAO extends SistemaDAO {
     public void update(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
 
-        pstUpdate.setInt(1, matriculasModel.getCodigoMatricula());
-        pstUpdate.setInt(2, matriculasModel.getCodigoAluno());
-        pstUpdate.setDate(3, (Date) matriculasModel.getDataMatricula());
-        pstUpdate.setInt(4, matriculasModel.getDiaVencimento());
-        pstUpdate.setDate(5, (Date) matriculasModel.getDataEncerramento());
+
+        pstUpdate.setInt(1, matriculasModel.getCodigoAluno());
+        pstUpdate.setInt(2, matriculasModel.getDiaVencimento());
+        pstUpdate.setInt(3, matriculasModel.getCodigoMatricula());
 
         try {
             pstUpdate.execute();
