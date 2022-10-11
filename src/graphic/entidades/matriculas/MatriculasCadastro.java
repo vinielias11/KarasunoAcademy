@@ -21,6 +21,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
     private MatriculasPanel matriculasPanel;
 
     private boolean isEditando = false;
+    private Integer alunoEditando = 0;
     public MatriculasCadastro(MatriculasPanel matriculasPanel) {
         this.matriculasPanel = matriculasPanel;
         setSize(520,280);
@@ -99,6 +100,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
         if (dados != null) {
             isEditando = true;
             matriculasModel.setCodigoMatricula(dados.getCodigoMatricula());
+            alunoEditando = dados.getCodigoAluno();
             diaVencimentoSpn.setValue(dados.getDiaVencimento());
             alunosRecuperados.forEach(alunoRecuperado -> {
                 if (Objects.equals(alunoRecuperado.getId(), dados.getCodigoAluno())) {
@@ -128,25 +130,25 @@ public class MatriculasCadastro extends EntidadesCadastro {
     private boolean validaCamposAntesDeSalvar(){
         MatriculasController matriculasController = new MatriculasController();
         List<Object> matriculasBanco = matriculasController.recuperarTodos();
-
         List<MatriculasModel> matriculasRecuperadas = new ArrayList<>();
 
         matriculasBanco.forEach(matricula -> matriculasRecuperadas.add((MatriculasModel) matricula));
 
-        boolean validacao = true;
-
-        if(matriculasModel.getCodigoAluno() == null){
+        if (matriculasModel.getCodigoAluno() == null) {
             JOptionPane.showMessageDialog(null, "Insira um aluno!");
-            validacao = false;
-            return validacao;
+            return false;
         }
 
+        boolean validacao = true;
         for (int i = 0; i < matriculasRecuperadas.size(); i++) {
-            if(matriculasRecuperadas.get(i).getCodigoAluno() == matriculasModel.getCodigoAluno()){
+            Integer codigoAtual = matriculasRecuperadas.get(i).getCodigoAluno();
+
+            if (codigoAtual == matriculasModel.getCodigoAluno() && codigoAtual != alunoEditando) {
                 JOptionPane.showMessageDialog(null, "Aluno já possui matricula!");
                 validacao = false;
             }
         }
+
         return validacao;
     }
 

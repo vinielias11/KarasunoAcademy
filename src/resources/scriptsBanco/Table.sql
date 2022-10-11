@@ -91,7 +91,7 @@ CREATE TABLE matriculas (
   codigo_matricula serial CONSTRAINT matriculas_pk PRIMARY KEY,
   id_aluno integer NOT NULL,
   CONSTRAINT matriculas_f1 FOREIGN KEY(id_aluno) REFERENCES alunos(id) DEFERRABLE,
-  data_matricula date NOT NULL,
+  data_matricula date NOT NULL DEFAULT localtimestamp,
   dia_vencimento integer NOT NULL,
   data_encerramento date
 );

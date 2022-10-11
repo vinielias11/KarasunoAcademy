@@ -34,7 +34,7 @@ public class MatriculasPanel extends EntidadesPanel {
 
     @Override
     protected String[] getColunasTabela() {
-    return new String[]{"Id", "Aluno", "Data da Matrícula", "Dia de vencimento", "Data de Encerramento" };
+        return new String[]{ "Id", "Aluno", "Data da Matrícula", "Dia de vencimento", "Data de Encerramento" };
     }
 
     @Override
