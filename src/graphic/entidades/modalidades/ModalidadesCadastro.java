@@ -1,11 +1,8 @@
 package graphic.entidades.modalidades;
 
-import controller.AlunosController;
 import controller.ModalidadesController;
-import graphic.entidades.alunos.AlunosPanel;
 import graphic.entidades.base.BindingListener;
 import graphic.entidades.base.EntidadesCadastro;
-import model.AlunosModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;
@@ -24,13 +21,12 @@ public class ModalidadesCadastro extends EntidadesCadastro {
 
     public ModalidadesCadastro(ModalidadesModel dados, ModalidadesPanel modalidadesPanel) {
         this.modalidadesPanel = modalidadesPanel;
-        criaComponentes(dados);
         setSize(520, 200);
+        criaComponentes(dados);
     }
 
     @Override
     public void criarBotoes() {
-
         JButton btnFechar = new JButton("Cancelar");
         btnFechar.setBounds(80,100,120,30);
         btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));
@@ -73,7 +69,6 @@ public class ModalidadesCadastro extends EntidadesCadastro {
         }
 
         add(panel);
-
     }
 
     @Override

@@ -15,7 +15,7 @@ public class ModalidadesComboRenderer extends DefaultListCellRenderer {
 
             setText(modalidadesModel.getNome());
         } else if (value == null) {
-            setText("Selecione uma modalidade:");
+            setText("Selecione uma modalidade...");
         }
 
         return this;

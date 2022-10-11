@@ -44,8 +44,7 @@ public class BindingListener implements DocumentListener {
                     e.getDocument().getStartPosition().getOffset(),
                     e.getDocument().getEndPosition().getOffset() - 1);
 
-            Method method = model.getClass().getDeclaredMethod(
-                    "set" + nomeCampo, String.class);
+            Method method = model.getClass().getDeclaredMethod("set" + nomeCampo, String.class);
             method.invoke(model, text);
 
         } catch (BadLocationException | InvocationTargetException | NoSuchMethodException | SecurityException |

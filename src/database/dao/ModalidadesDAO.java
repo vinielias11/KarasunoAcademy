@@ -123,8 +123,7 @@ public class ModalidadesDAO extends SistemaDAO {
         try {
             pstDelete.execute();
         } catch (SQLException e) {
-            System.out.println("Houve um erro ao excluir modalidade!");
-            e.printStackTrace();
+            dbUtil.trataExcecoesDeAcordoComState(e.getSQLState());
         } finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
         }

@@ -11,7 +11,7 @@ public abstract class EntidadesCadastro extends JDialog {
         setTitle("Cadastro");
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/resources/icons/sistemaIcon.png")));
         setModal(true);
-        setSize(520,700);
+        setSize(520, 700);
         setResizable(false);
         setLocationRelativeTo(null);
         criarBotoes();

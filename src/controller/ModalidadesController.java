@@ -1,7 +1,6 @@
 package controller;
 
 import database.dao.ModalidadesDAO;
-import graphic.util.ModalidadesComboModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;
@@ -60,8 +59,6 @@ public class ModalidadesController {
             JOptionPane.showMessageDialog(null, "Houve um erro ao editar a modalidade!");
         }
     }
-
-
 
     public ArrayList<ModalidadesModel> recuperaModalidadesParaComboBox() {
         ArrayList<ModalidadesModel> listaModalidades = new ArrayList<>();

@@ -1,17 +1,14 @@
 package model;
 
-public class PlanosModel {
+public class PlanosModel extends EntidadesModel {
     private Integer id;
-    private String modalidade;
-    private String plano;
+    private Integer idModalidade;
+    private String nomeModalidade;
+    private String nome;
     private Double valorMensal;
 
-    public PlanosModel(){
+    public PlanosModel() {
 
-    }
-
-    public String getModalidade() {
-        return modalidade;
     }
 
     public Integer getId() {
@@ -22,16 +19,28 @@ public class PlanosModel {
         this.id = id;
     }
 
-    public void setModalidade(String modalidade) {
-        this.modalidade = modalidade;
+    public Integer getIdModalidade() {
+        return idModalidade;
     }
 
-    public String getPlano() {
-        return plano;
+    public void setIdModalidade(Integer idModalidade) {
+        this.idModalidade = idModalidade;
     }
 
-    public void setPlano(String plano) {
-        this.plano = plano;
+    public String getNomeModalidade() {
+        return nomeModalidade;
+    }
+
+    public void setNomeModalidade(String nomeModalidade) {
+        this.nomeModalidade = nomeModalidade;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
     public Double getValorMensal() {
