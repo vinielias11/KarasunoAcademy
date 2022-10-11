@@ -2,21 +2,18 @@ package graphic.entidades.matriculas;
 
 import controller.AlunosController;
 import controller.MatriculasController;
-import graphic.entidades.base.BindingListener;
 import graphic.entidades.base.EntidadesCadastro;
 import graphic.util.AlunosComboModel;
 import graphic.util.AlunosComboRender;
 import model.AlunosModel;
 import model.MatriculasModel;
+import model.ModalidadesModel;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 public class MatriculasCadastro extends EntidadesCadastro {
@@ -88,7 +85,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
 
         diaVencimentoSpn.addChangeListener(e -> matriculasModel.setDiaVencimento((Integer) diaVencimentoSpn.getValue()));
 
-        c1.insets = new Insets(0, 0, 30, 35);
+        c1.insets = new Insets(0, 0, 20, 35);
         c1.gridx = 0; c1.gridy = 0; c1.anchor = GridBagConstraints.EAST;
         panel.add(alunos, c1);
         c1.gridx = 1;
@@ -117,6 +114,8 @@ public class MatriculasCadastro extends EntidadesCadastro {
     protected void onClickSalvar() {
         MatriculasController matriculasController = new MatriculasController();
 
+        if(!validaCamposAntesDeSalvar()) return;
+
         if (!isEditando) {
             matriculasController.inserir(matriculasModel, this);
         } else {
@@ -125,4 +124,30 @@ public class MatriculasCadastro extends EntidadesCadastro {
 
         matriculasPanel.recarregaLista();
     }
+
+    private boolean validaCamposAntesDeSalvar(){
+        MatriculasController matriculasController = new MatriculasController();
+        List<Object> matriculasBanco = matriculasController.recuperarTodos();
+
+        List<MatriculasModel> matriculasRecuperadas = new ArrayList<>();
+
+        matriculasBanco.forEach(matricula -> matriculasRecuperadas.add((MatriculasModel) matricula));
+
+        boolean validacao = true;
+
+        if(matriculasModel.getCodigoAluno() == null){
+            JOptionPane.showMessageDialog(null, "Insira um aluno!");
+            validacao = false;
+            return validacao;
+        }
+
+        for (int i = 0; i < matriculasRecuperadas.size(); i++) {
+            if(matriculasRecuperadas.get(i).getCodigoAluno() == matriculasModel.getCodigoAluno()){
+                JOptionPane.showMessageDialog(null, "Aluno já possui matricula!");
+                validacao = false;
+            }
+        }
+        return validacao;
+    }
+
 }

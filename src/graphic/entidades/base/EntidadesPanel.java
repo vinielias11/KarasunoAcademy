@@ -187,6 +187,4 @@ public abstract class EntidadesPanel extends JPanel {
 
     protected abstract void onClickNovo();
 
-//    protected abstract void criaFiltros();
-
 }
