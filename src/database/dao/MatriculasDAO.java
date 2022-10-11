@@ -20,13 +20,14 @@ public class MatriculasDAO extends SistemaDAO {
     private final String delete = "DELETE FROM public.matriculas WHERE codigo_matricula = ?;";
     private final String update = "UPDATE public.matriculas SET id_aluno = ?, dia_vencimento = ? WHERE codigo_matricula = ?";
     private final String selectById = "SELECT M.*, A.nome AS nome_aluno FROM public.matriculas M INNER JOIN alunos A ON M.id_aluno = A.id WHERE codigo_matricula = ? ORDER BY M.codigo_matricula;";
-
+    private final String encerrarMatricula = "UPDATE public.matriculas SET data_encerramento = ? WHERE codigo_matricula = ?";
 
     private final PreparedStatement pstSelect;
     private final PreparedStatement pstInsert;
     private final PreparedStatement pstDelete;
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectById;
+    private final PreparedStatement pstEncerrarMatricula;
 
 
     public MatriculasDAO() {
@@ -37,6 +38,7 @@ public class MatriculasDAO extends SistemaDAO {
             pstDelete = this.conexao.prepareStatement(delete);
             pstUpdate = this.conexao.prepareStatement(update);
             pstSelectById = this.conexao.prepareStatement(selectById);
+            pstEncerrarMatricula = this.conexao.prepareStatement(encerrarMatricula);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao inicializar os comandos SQL.");
             throw new RuntimeException(e);
@@ -63,7 +65,8 @@ public class MatriculasDAO extends SistemaDAO {
             }
         } catch (SQLException e){
             System.out.println("Houve um erro ao recuperar as matriculas!");
-        }   finally {
+        }
+        finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
         }
 
@@ -151,6 +154,25 @@ public class MatriculasDAO extends SistemaDAO {
             e.printStackTrace();
         }finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+        }
+    }
+
+    public void encerrarMatricula(Object param) throws SQLException{
+        MatriculasModel matriculasModel = (MatriculasModel) param;
+
+        java.util.Date utilDate = matriculasModel.getDataEncerramento();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+        pstEncerrarMatricula.setDate(1, sqlDate);
+        pstEncerrarMatricula.setInt(2, matriculasModel.getCodigoMatricula());
+
+        try {
+            pstEncerrarMatricula.execute();
+        } catch (SQLException e){
+            System.out.println("Houve um erro ao atualizar matrícula!");
+            e.printStackTrace();
+        }finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstEncerrarMatricula);
         }
     }
 }

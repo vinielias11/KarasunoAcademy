@@ -32,5 +32,4 @@ public class ModalidadesComboModel extends AbstractListModel implements ComboBox
     public Object getElementAt(int index) {
         return this.lista.get(index);
     }
-
 }
