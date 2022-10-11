@@ -82,7 +82,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
         SpinnerNumberModel numberModel = new SpinnerNumberModel(value, min, max, stepSize);
         JSpinner diaVencimentoSpn = new JSpinner(numberModel);
         diaVencimentoSpn.setPreferredSize(new Dimension(50,20));
-
+        matriculasModel.setDiaVencimento((Integer) diaVencimentoSpn.getValue());
         diaVencimentoSpn.addChangeListener(e -> matriculasModel.setDiaVencimento((Integer) diaVencimentoSpn.getValue()));
 
         c1.insets = new Insets(0, 0, 20, 35);

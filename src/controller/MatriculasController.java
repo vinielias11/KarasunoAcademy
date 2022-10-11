@@ -58,4 +58,12 @@ public class MatriculasController {
             JOptionPane.showMessageDialog(null, "Houve um erro ao deletar a matricula!");
         }
     }
+
+    public void encerrar(MatriculasModel matriculasModel){
+        try{
+            matriculasDAO.encerrarMatricula(matriculasModel);
+        } catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Houve um erro ao encerrar a matricula!");
+        }
+    }
 }

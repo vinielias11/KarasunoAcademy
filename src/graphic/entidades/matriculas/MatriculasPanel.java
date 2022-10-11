@@ -6,12 +6,40 @@ import model.MatriculasModel;
 
 import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MatriculasPanel extends EntidadesPanel {
     public MatriculasPanel(JFrame cmpPai) {
         super(cmpPai);
+    }
+
+    @Override
+    protected void criarBotoes(JPanel panel, JTable tabela) {
+        super.criarBotoes(panel, tabela);
+
+        ImageIcon smbEncerrarMatricula = new ImageIcon(this.getClass().getResource("/resources/icons/encerrarMatriculaIcon.png"));
+        JButton btnEncerrarMatricula = new JButton(smbEncerrarMatricula);
+        btnEncerrarMatricula.setBounds(155, 33, 40, 40);
+        btnEncerrarMatricula.setBackground(Color.WHITE);
+        btnEncerrarMatricula.setBorder(BorderFactory.createEmptyBorder());
+        btnEncerrarMatricula.setOpaque(false);
+        btnEncerrarMatricula.setCursor(new Cursor(Cursor.HAND_CURSOR));
+        btnEncerrarMatricula.setToolTipText("Encerrar Matricula");
+        btnEncerrarMatricula.addActionListener(e -> {
+            try {
+                Integer linha = tabela.getSelectedRow();
+                String id = tabela.getModel().getValueAt(linha, 0).toString();
+                String data = tabela.getModel().getValueAt(linha, 4).toString();
+                onClickEncerrarMatricula(id, data);
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null,"Selecione um registro para encerrar a matricula!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
+
+        panel.add(btnEncerrarMatricula);
     }
 
     @Override
@@ -82,6 +110,24 @@ public class MatriculasPanel extends EntidadesPanel {
         MatriculasCadastro matriculasCadastro = new MatriculasCadastro(this);
 
         matriculasCadastro.setVisible(true);
+    }
+
+    private void onClickEncerrarMatricula(String id, String data){
+        if(!"".equals(data)){
+            JOptionPane.showMessageDialog(null, "Matricula já encerrada!");
+            return;
+        }
+
+        MatriculasController matriculasController = new MatriculasController();
+        MatriculasModel matriculaRecuperar = new MatriculasModel();
+
+        matriculaRecuperar.setCodigoMatricula(Integer.parseInt(id));;
+
+        matriculaRecuperar.setDataEncerramento(new Date());
+
+        matriculasController.encerrar(matriculaRecuperar);
+
+        recarregaLista();
     }
 
 }

@@ -87,10 +87,15 @@ public abstract class EntidadesPanel extends JPanel {
         JTable tabela = criaTabela();
         configuraTabela(tabela);
 
+        criarBotoes(painelBaixo, tabela);
+
         JScrollPane jScrollPane = new JScrollPane(tabela);
         jScrollPane.setBounds(45, 90, 1000, 500);
         painelBaixo.add(jScrollPane);
 
+    }
+
+    protected void criarBotoes(JPanel panel, JTable tabela){
         ImageIcon smbMais = new ImageIcon(this.getClass().getResource("/resources/icons/plusIcon.png"));
         JButton btnCadastrar = new JButton(smbMais);
         btnCadastrar.setBounds(45, 30, 40, 40);
@@ -119,8 +124,8 @@ public abstract class EntidadesPanel extends JPanel {
             }
         });
 
-        painelBaixo.add(btnDelete);
-        painelBaixo.add(btnCadastrar);
+        panel.add(btnDelete);
+        panel.add(btnCadastrar);
     }
 
     private JTable criaTabela() {
