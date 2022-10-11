@@ -1,7 +1,6 @@
 package controller;
 
 import database.dao.ModalidadesDAO;
-import graphic.util.ModalidadesComboModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;

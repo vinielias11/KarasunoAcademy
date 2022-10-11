@@ -89,7 +89,7 @@ public class ModalidadesDAO extends SistemaDAO {
             }
 
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ID não encontrado!");
+            System.out.println("Houve um erro ao selecionar o id!");
             e.printStackTrace();
         } finally {
             dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);

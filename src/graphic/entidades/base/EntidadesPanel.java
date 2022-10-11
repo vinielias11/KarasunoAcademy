@@ -11,6 +11,7 @@ import javax.swing.table.TableColumnModel;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.sql.SQLException;
 
 // Painel base para todos os outros. Por padrão virá com o botão voltar, que reiniciará o JFrame Main, recolocando os paineis padrão.
 public abstract class EntidadesPanel extends JPanel {
@@ -177,6 +178,7 @@ public abstract class EntidadesPanel extends JPanel {
         for (int i = 0; i < tabela.getColumnCount(); i++){
             tabela.getColumnModel().getColumn(i).setCellRenderer(centerRender);
         }
+
     }
 
     protected abstract void deletar(String id);

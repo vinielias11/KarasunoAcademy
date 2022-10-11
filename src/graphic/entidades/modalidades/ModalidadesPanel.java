@@ -1,10 +1,7 @@
 package graphic.entidades.modalidades;
 
-import controller.AlunosController;
 import controller.ModalidadesController;
-import graphic.entidades.alunos.AlunosCadastro;
 import graphic.entidades.base.EntidadesPanel;
-import model.AlunosModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;
@@ -78,4 +75,5 @@ public class ModalidadesPanel extends EntidadesPanel {
 
         modalidadesCadastro.setVisible(true);
     }
+
 }

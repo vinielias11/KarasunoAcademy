@@ -1,11 +1,8 @@
 package graphic.entidades.modalidades;
 
-import controller.AlunosController;
 import controller.ModalidadesController;
-import graphic.entidades.alunos.AlunosPanel;
 import graphic.entidades.base.BindingListener;
 import graphic.entidades.base.EntidadesCadastro;
-import model.AlunosModel;
 import model.ModalidadesModel;
 
 import javax.swing.*;
@@ -50,7 +47,7 @@ public class ModalidadesCadastro extends EntidadesCadastro {
         add(btnSalvar);
     }
 
-    public void criaComponentes(ModalidadesModel dados) {
+    private void criaComponentes(ModalidadesModel dados){
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c1 = new GridBagConstraints();
         panel.setSize(520, 200);

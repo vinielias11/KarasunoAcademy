@@ -81,4 +81,5 @@ public class PlanosPanel extends EntidadesPanel {
 
         planosCadastro.setVisible(true);
     }
+
 }

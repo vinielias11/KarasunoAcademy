@@ -2,16 +2,24 @@ package model;
 
 import java.util.Date;
 
-public class MatriculasModel {
-    private Integer id;
+public class MatriculasModel extends EntidadesModel{
     private Integer codigoMatricula;
     private Integer codigoAluno;
     private Date dataMatricula;
     private Integer diaVencimento;
     private Date dataEncerramento;
+    private String nomeAluno;
 
     public MatriculasModel(){
 
+    }
+
+    public String getNomeAluno() {
+        return nomeAluno;
+    }
+
+    public void setNomeAluno(String nomeAluno) {
+        this.nomeAluno = nomeAluno;
     }
 
     public Integer getCodigoMatricula() {
@@ -22,13 +30,6 @@ public class MatriculasModel {
         this.codigoMatricula = codigoMatricula;
     }
 
-    public Integer getId() {
-        return id;
-    }
-
-    public void setId(Integer id) {
-        this.id = id;
-    }
 
     public Integer getCodigoAluno() {
         return codigoAluno;

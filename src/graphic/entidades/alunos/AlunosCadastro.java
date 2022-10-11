@@ -202,9 +202,9 @@ public class AlunosCadastro extends EntidadesCadastro {
         panel.add(enderecoTxf, c1);
         c1.gridx = 0; c1.gridy = 12;
         panel.add(numero, c1);
-        c1.gridx = 1; c1.gridy = 12;
+        c1.gridx = 1; c1.gridy = 12; c1.anchor = GridBagConstraints.WEST;
         panel.add(numeroTxf, c1);
-        c1.gridx = 0; c1.gridy = 13;
+        c1.gridx = 0; c1.gridy = 13;  c1.anchor = GridBagConstraints.EAST;
         panel.add(complemento, c1);
         c1.gridx = 1; c1.gridy = 13;
         panel.add(complementoTxf, c1);
