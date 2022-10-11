@@ -15,7 +15,7 @@ public class AlunosComboRender extends DefaultListCellRenderer {
 
             setText(alunosModel.getNome());
         } else if (value == null) {
-            setText("Selecione um aluno:");
+            setText("Selecione um aluno...");
         }
 
         return this;

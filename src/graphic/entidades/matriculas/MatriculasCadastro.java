@@ -58,7 +58,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
     private void criaComponentes(MatriculasModel dados) {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c1 = new GridBagConstraints();
-        panel.setSize(520,280);
+        panel.setSize(520,210);
 
         AlunosController alunosController = new AlunosController();
         ArrayList<AlunosModel> alunosRecuperados = alunosController.recuperaAlunosParaComboBox();
