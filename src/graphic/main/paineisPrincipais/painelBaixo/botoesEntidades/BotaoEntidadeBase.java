@@ -11,7 +11,7 @@ public abstract class BotaoEntidadeBase extends JPanel {
     private JLabel tituloPainel;
 
     public BotaoEntidadeBase(int x, int y, String titulo, String caminhoImagem, JFrame cmpPai) {
-        setBounds(x, y, 180, 180);
+        setBounds(x, y, 170, 170);
         setBackground(new Color(234, 229, 229));
 
         // O GridBagLayout centraliza os elementos vertical e horizontalmente automaticamente.
@@ -28,7 +28,7 @@ public abstract class BotaoEntidadeBase extends JPanel {
         gbc.gridx = 0;
 
         tituloPainel = new JLabel(titulo);
-        tituloPainel.setFont(new Font("Arial", Font.BOLD, 20));
+        tituloPainel.setFont(new Font("Arial", Font.BOLD, 18));
         add(tituloPainel, gbc);
 
         setCursor(new Cursor(Cursor.HAND_CURSOR));
