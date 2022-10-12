@@ -4,9 +4,11 @@ import database.dao.AlunosDAO;
 import database.dao.GraduacoesDAO;
 import model.AlunosModel;
 import model.GraduacoesModel;
+import model.ModalidadesModel;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class GraduacoesController {
@@ -57,6 +59,20 @@ public class GraduacoesController {
         }   catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Houve um erro ao deletar a graduação!");
         }
+    }
+
+    public ArrayList<GraduacoesModel> recuperaModalidadesParaComboBox() {
+        ArrayList<GraduacoesModel> listaGraduacoes = new ArrayList<>();
+
+        try {
+            List<Object> graduacoesRecuperar = graduacoesDAO.select();
+            graduacoesRecuperar.forEach(modalidade -> listaGraduacoes.add((GraduacoesModel) modalidade));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as graduações!");
+            throw new RuntimeException(e);
+        }
+
+        return listaGraduacoes;
     }
 }
 
