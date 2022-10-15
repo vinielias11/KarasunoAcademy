@@ -49,13 +49,13 @@ public class MatriculasModalidadesPanel extends EntidadesPanel {
 
         for (int i = 0; i < listaMatriculasModalidades.size(); i++) {
             Integer codigoMatricula = listaMatriculasModalidades.get(i).getCodigoMatricula();
-            String nomeModalidade = listaMatriculasModalidades.get(i).getNomeModalidade();
-            String nomeGraduacao = listaMatriculasModalidades.get(i).getNomeGraduacao();
-            String nomePlano = listaMatriculasModalidades.get(i).getNomePlano();
+            Integer modalidade = listaMatriculasModalidades.get(i).getModalidade();
+            Integer graduacao = listaMatriculasModalidades.get(i).getGraduacao();
+            Integer plano = listaMatriculasModalidades.get(i).getPlano();
             Date dataInicio = listaMatriculasModalidades.get(i).getDataInicio();
             Date dataFim = listaMatriculasModalidades.get(i).getDataFim();
 
-            Object[] linha = { codigoMatricula, nomeModalidade, nomeGraduacao, nomePlano, dataInicio, dataFim };
+            Object[] linha = { codigoMatricula, modalidade, graduacao, plano, dataInicio, dataFim };
 
             tableModel.addRow(linha);
         }

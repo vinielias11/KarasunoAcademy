@@ -4,9 +4,9 @@ import java.util.Date;
 
 public class MatriculasModalidadesModel {
     private Integer codigoMatricula;
-    private String modalidade;
-    private String graduacao;
-    private String plano;
+    private Integer modalidade;
+    private Integer graduacao;
+    private Integer plano;
     private Date dataInicio;
     private Date dataFim;
 
@@ -22,27 +22,27 @@ public class MatriculasModalidadesModel {
         this.codigoMatricula = codigoMatricula;
     }
 
-    public String getModalidade() {
+    public Integer getModalidade() {
         return modalidade;
     }
 
-    public void setModalidade(String modalidade) {
+    public void setModalidade(Integer modalidade) {
         this.modalidade = modalidade;
     }
 
-    public String getGraduacao() {
+    public Integer getGraduacao() {
         return graduacao;
     }
 
-    public void setGraduacao(String graduacao) {
+    public void setGraduacao(Integer graduacao) {
         this.graduacao = graduacao;
     }
 
-    public String getPlano() {
+    public Integer getPlano() {
         return plano;
     }
 
-    public void setPlano(String plano) {
+    public void setPlano(Integer plano) {
         this.plano = plano;
     }
 
@@ -61,4 +61,6 @@ public class MatriculasModalidadesModel {
     public void setDataFim(Date dataFim) {
         this.dataFim = dataFim;
     }
+
+
 }

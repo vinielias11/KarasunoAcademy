@@ -25,6 +25,15 @@ public class MatriculasModalidadesController {
         }
     }
 
+    public List<Object> recuperarMatriculasAluno(Integer codigoMatricula){
+        try{
+            return matriculasModalidadesDAO.selectFromAluno(codigoMatricula);
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as matrículas!");
+            throw new RuntimeException(e);
+        }
+    }
+
     public void inserir(Object matriculaModalidade, JDialog cadastro) {
         try {
             matriculasModalidadesDAO.insert(matriculaModalidade);

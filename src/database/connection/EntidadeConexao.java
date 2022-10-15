@@ -3,7 +3,7 @@ package database.connection;
 public class EntidadeConexao {
     private String endereco = "localhost";
     private String porta = "5432";
-    private String nomeBanco = "KarasunoAcademy";
+    private String nomeBanco = "karasuno";
     private String usuario = "postgres";
     private String senha = "postgres";
 

@@ -14,7 +14,8 @@ public class MatriculasModalidadesDAO extends SistemaDAO {
     private Connection conexao;
     private DbUtil dbUtil = new DbUtil();
 
-    private final String select = "SELECT MM.* G.nome as nome_graduacao FROM public.matriculas_modalidades MM INNER JOIN matriculas M ON MM.codigo_matricula = M.codigo_matricula ORDER BY MM.codigo_matricula;";
+    private final String select = "SELECT * FROM public.matriculas_modalidades;";
+    private final String selectFromMatricula = "SELECT * FROM public.matriculas_modalidades WHERE codigo_matricula = ?;";
     private final String insert = "INSERT INTO public.matriculas_modalidades(nome) VALUES (?);";
     private final String delete = "DELETE FROM public.matriculas_modalidades WHERE id = ?;";
     private final String update = "UPDATE public.matriculas_modalidades SET nome = ? WHERE id = ?;";
@@ -25,6 +26,7 @@ public class MatriculasModalidadesDAO extends SistemaDAO {
     private final PreparedStatement pstDelete;
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectById;
+    private final PreparedStatement pstSelectFromMatricula;
 
 
     public MatriculasModalidadesDAO(){
@@ -35,6 +37,7 @@ public class MatriculasModalidadesDAO extends SistemaDAO {
             pstDelete = this.conexao.prepareStatement(delete);
             pstUpdate = this.conexao.prepareStatement(update);
             pstSelectById = this.conexao.prepareStatement(selectById);
+            pstSelectFromMatricula = this.conexao.prepareStatement(selectFromMatricula);
         } catch (SQLException e){
             JOptionPane.showMessageDialog(null, "Houve um erro ao inicializar os comandos SQL.");
             throw new RuntimeException(e);
@@ -70,6 +73,38 @@ public class MatriculasModalidadesDAO extends SistemaDAO {
 
         return arrayListMatriculasModalidades;
     }
+
+    public List<Object> selectFromAluno(Integer param) throws SQLException {
+        //MatriculasModalidadesModel matriculasModalidadesRecuperar = (MatriculasModalidadesModel) param;
+        List<Object> arrayListMatriculasModalidades = new ArrayList<>();
+
+        try {
+            pstSelectFromMatricula.setInt(1, param);
+            ResultSet resultadoQuery = pstSelectFromMatricula.executeQuery();
+            while (resultadoQuery.next()){
+                MatriculasModalidadesModel matriculasModalidadesModel = new MatriculasModalidadesModel();
+
+                matriculasModalidadesModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
+                matriculasModalidadesModel.setModalidade(resultadoQuery.getInt("id_modalidade"));
+                matriculasModalidadesModel.setGraduacao(resultadoQuery.getInt("id_graduacao"));
+                matriculasModalidadesModel.setPlano(resultadoQuery.getInt("id_plano"));
+                matriculasModalidadesModel.setDataInicio(resultadoQuery.getDate("data_inicio"));
+                matriculasModalidadesModel.setDataFim(resultadoQuery.getDate("data_fim"));
+
+                arrayListMatriculasModalidades.add(matriculasModalidadesModel);
+            }
+
+
+        } catch (SQLException e) {
+            System.out.println("Houve um erro ao recuperar as matrículas!");
+            e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+        }
+
+        return arrayListMatriculasModalidades;
+    }
+
 
     @Override
     public MatriculasModalidadesModel selectById(Object param) throws SQLException {
