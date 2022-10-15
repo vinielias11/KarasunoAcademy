@@ -38,11 +38,10 @@ public class AlunosPanel extends EntidadesPanel {
     }
 
     @Override
-    protected void montaDadosTabela(JTable tabela, DefaultTableModel tableModel) {
+    protected void  montaDadosTabela(JTable tabela, DefaultTableModel tableModel) {
         AlunosController alunosController = new AlunosController();
         List<Object> alunosBanco = alunosController.recuperarTodos();
         List<AlunosModel> listaAlunos = new ArrayList<>();
-
         alunosBanco.forEach(aluno -> listaAlunos.add((AlunosModel) aluno));
 
         for (int i = 0; i < listaAlunos.size(); i++) {
@@ -52,12 +51,9 @@ public class AlunosPanel extends EntidadesPanel {
             String celular = listaAlunos.get(i).getCelular();
             String email = listaAlunos.get(i).getEmail();
             String cidade = listaAlunos.get(i).getCidade();
-
             Object[] linha = { id, codigoAluno, nome, celular, email, cidade };
-
             tableModel.addRow(linha);
         }
-
         tabela.setModel(tableModel);
     }
 

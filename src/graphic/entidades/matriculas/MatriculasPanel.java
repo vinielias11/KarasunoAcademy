@@ -100,16 +100,16 @@ public class MatriculasPanel extends EntidadesPanel {
         matriculaRecuperar.setCodigoMatricula(Integer.parseInt(id));
         matriculaRecuperar = matriculasController.recuperarPorId(matriculaRecuperar);
 
-        MatriculasCadastro matriculasCadastro = new MatriculasCadastro(matriculaRecuperar, this);
+        MatriculasCadastroOnFire matriculasCadastro = new MatriculasCadastroOnFire(matriculaRecuperar, this);
 
         matriculasCadastro.setVisible(true);
     }
 
     @Override
     protected void onClickNovo() {
-        MatriculasCadastro matriculasCadastro = new MatriculasCadastro(this);
-
-        matriculasCadastro.setVisible(true);
+        //MatriculasCadastro matriculasCadastro = new MatriculasCadastro(this);
+        MatriculasCadastroOnFire matriculasCadastroOnFire = new MatriculasCadastroOnFire(null, this);
+        matriculasCadastroOnFire.setVisible(true);
     }
 
     private void onClickEncerrarMatricula(String id, String data){
