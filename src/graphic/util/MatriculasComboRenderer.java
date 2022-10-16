@@ -14,7 +14,7 @@ public class MatriculasComboRenderer extends DefaultListCellRenderer {
         if (value instanceof MatriculasModel) {
             MatriculasModel matriculasModel = (MatriculasModel) value;
 
-//            setText(String.valueOf(MatriculasModel.getCodigoMatricula()));
+            setText(String.valueOf(matriculasModel.getCodigoMatricula()));
         } else if (value == null) {
             setText("Selecione uma matrícula...");
         }

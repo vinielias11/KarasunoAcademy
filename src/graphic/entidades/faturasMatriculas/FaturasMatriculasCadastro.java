@@ -11,8 +11,9 @@ import model.MatriculasModel;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ItemEvent;
-import java.util.ArrayList;
-import java.util.Objects;
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
+import java.util.*;
 
 public class FaturasMatriculasCadastro extends EntidadesCadastro {
 
@@ -63,7 +64,7 @@ public class FaturasMatriculasCadastro extends EntidadesCadastro {
         ArrayList<MatriculasModel> matriculasRecuperadas = matriculasController.recuperaMatriculasParaComboBox();
         MatriculasComboModel matriculasComboModel = new MatriculasComboModel(matriculasRecuperadas);
 
-        JLabel matriculas = new JLabel("Código de Matrícula");
+        JLabel matriculas = new JLabel("Código de Matrícula: ");
         JComboBox comboBoxMatriculas = new JComboBox(matriculasComboModel);
         comboBoxMatriculas.setRenderer(new MatriculasComboRenderer());
         comboBoxMatriculas.setPreferredSize(new Dimension(224, 20));
@@ -76,11 +77,46 @@ public class FaturasMatriculasCadastro extends EntidadesCadastro {
             }
         });
 
+        JLabel dataVencimento = new JLabel("Data de Vencimento: ");
+        SpinnerDateModel dateModel = new SpinnerDateModel(new Date(), null, null, Calendar.DAY_OF_MONTH);
+        JSpinner dateSpinner = new JSpinner(dateModel);
+        dateSpinner.setEditor(new JSpinner.DateEditor(dateSpinner, "dd/MM/yyyy"));
+        JComponent editor = dateSpinner.getEditor();
+        JSpinner.DefaultEditor spinnerEditor = (JSpinner.DefaultEditor)editor;
+        spinnerEditor.getTextField().setHorizontalAlignment(JTextField.CENTER);
+        Dimension d = new Dimension(120,20);
+        dateSpinner.setPreferredSize(d);
+        dateSpinner.addChangeListener(e -> faturasMatriculasModel.setDataVencimento((Date) dateSpinner.getValue()));
+        faturasMatriculasModel.setDataVencimento(new Date());
+
+        JLabel valor = new JLabel("Valor: ");
+        double min = 0000.00, value = 50.00, max = 1000.00, stepSize = 1.00;
+        SpinnerNumberModel numberModel = new SpinnerNumberModel(value, min, max, stepSize);
+        JSpinner valorSpinner = new JSpinner(numberModel);
+        JSpinner.NumberEditor editor2 = (JSpinner.NumberEditor)valorSpinner.getEditor();
+        DecimalFormat format = editor2.getFormat();
+        format.setMinimumFractionDigits(2);
+        format.setDecimalFormatSymbols(new DecimalFormatSymbols(new Locale("pt-BR")));
+        editor2.getTextField().setHorizontalAlignment(SwingConstants.CENTER);
+        valorSpinner.setPreferredSize(new Dimension(120, 20));
+        valorSpinner.addChangeListener(e -> faturasMatriculasModel.setValor((Double) valorSpinner.getValue()));
+        faturasMatriculasModel.setValor((Double) valorSpinner.getValue());
+
+
         c1.insets = new Insets(0, 0, 30, 35);
         c1.gridx = 0; c1.gridy = 0;
         panel.add(matriculas,c1);
         c1.gridx = 1; c1.gridy = 0;
         panel.add(comboBoxMatriculas,c1);
+        c1.gridx = 0; c1.gridy = 1;
+        panel.add(dataVencimento,c1);
+        c1.gridx = 1; c1.gridy = 1;
+        panel.add(dateSpinner,c1);
+        c1.gridx = 0; c1.gridy = 2;
+        panel.add(valor,c1);
+        c1.gridx = 1; c1.gridy = 2;
+        panel.add(valorSpinner,c1);
+
 
         if (dados != null) {
             isEditando = true;

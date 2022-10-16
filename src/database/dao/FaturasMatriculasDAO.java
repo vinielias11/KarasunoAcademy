@@ -20,14 +20,14 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     private final String update = "UPDATE public.faturas_matriculas SET codigo_matricula = ?, data_vencimento = ?, valor = ?, data_pagamento = ? data_cancelamento = ? " +
             "WHERE id = ?;";
     private final String selectById = "SELECT * from public.faturas_matriculas WHERE codigo_matricula = ?, data_vencimento = ?;";
-
+    private final String updateDataCancelamento = "UPDATE public.faturas_matriculas SET data_cancelamento = ? WHERE codigo_matricula = ?;";
 
     private final PreparedStatement pstSelect;
     private final PreparedStatement pstInsert;
     private final PreparedStatement pstDelete;
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectById;
-
+    private final PreparedStatement pstUpdateDataCancelamento;
 
     public FaturasMatriculasDAO() {
         try {
@@ -36,6 +36,7 @@ public class FaturasMatriculasDAO extends SistemaDAO {
             pstInsert = this.conexao.prepareStatement(insert);
             pstDelete = this.conexao.prepareStatement(delete);
             pstUpdate = this.conexao.prepareStatement(update);
+            pstUpdateDataCancelamento = this.conexao.prepareStatement(updateDataCancelamento);
             pstSelectById = this.conexao.prepareStatement(selectById);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao inicializar os comandos SQL.");
@@ -134,6 +135,20 @@ public class FaturasMatriculasDAO extends SistemaDAO {
 
         try {
             pstUpdate.execute();
+        } catch (SQLException e){
+            System.out.println("Houve um erro ao atualizar fatura!");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateDataCancelamento(Object param) throws SQLException {
+        FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
+
+        pstUpdateDataCancelamento.setDate(1, (Date) faturasMatriculasModel.getDataCancelamento());
+        pstUpdateDataCancelamento.setInt(2,faturasMatriculasModel.getCodigoMatricula());
+
+        try {
+            pstUpdateDataCancelamento.execute();
         } catch (SQLException e){
             System.out.println("Houve um erro ao atualizar fatura!");
             e.printStackTrace();

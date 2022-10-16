@@ -38,24 +38,7 @@ public class MatriculasCadastro extends EntidadesCadastro {
     }
 
     public void criarBotoes() {
-//        JButton btnFechar = new JButton("Cancelar");
-//        btnFechar.setBounds(80,180,120,30);
-//        btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));
-//        btnFechar.setBackground(new Color(255,92,92));
-//        btnFechar.setBorder(BorderFactory.createLineBorder(new Color(255, 92, 92)));
-//        add(btnFechar);
-//
-//        btnFechar.addActionListener(e -> {
-//            dispose();
-//        });
-//
-//        JButton btnSalvar = new JButton("Salvar");
-//        btnSalvar.setBounds(290,180,120,30);;
-//        btnSalvar.addActionListener(e -> onClickSalvar());
-//        btnSalvar.setFont(new Font("Helvetica", Font.BOLD, 16));
-//        btnSalvar.setBackground(new Color(87, 241, 87, 210));
-//        btnSalvar.setBorder(BorderFactory.createLineBorder(new Color(87, 241, 87, 210)));
-//        add(btnSalvar);
+
     }
 
     private void criaComponentes(MatriculasModel dados) {

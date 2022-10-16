@@ -29,7 +29,6 @@ public class MatriculasDAO extends SistemaDAO {
     private final PreparedStatement pstSelectById;
     private final PreparedStatement pstEncerrarMatricula;
 
-
     public MatriculasDAO() {
         try {
             this.conexao = ConnectionFactory.getConection(new EntidadeConexao());
@@ -142,7 +141,6 @@ public class MatriculasDAO extends SistemaDAO {
     @Override
     public void update(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
-
 
         pstUpdate.setInt(1, matriculasModel.getCodigoAluno());
         pstUpdate.setInt(2, matriculasModel.getDiaVencimento());

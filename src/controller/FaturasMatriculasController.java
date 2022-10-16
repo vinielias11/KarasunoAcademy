@@ -57,4 +57,13 @@ public class FaturasMatriculasController {
             JOptionPane.showMessageDialog(null, "Houve um erro ao deletar a fatura!");
         }
     }
+
+    public void encerrarPorMatricula(FaturasMatriculasModel faturasMatriculas){
+        try {
+            faturasMatriculasDAO.updateDataCancelamento(faturasMatriculas);
+        }   catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "Houve um erro ao deletar a fatura!");
+        }
+    }
+
 }

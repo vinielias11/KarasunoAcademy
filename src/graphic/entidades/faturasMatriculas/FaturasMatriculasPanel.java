@@ -76,6 +76,7 @@ public class FaturasMatriculasPanel extends EntidadesPanel {
             }
         });
 
+
         panel.add(btnDelete);
         panel.add(btnCadastrar);
     }
