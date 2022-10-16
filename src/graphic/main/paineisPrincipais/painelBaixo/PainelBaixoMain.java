@@ -27,7 +27,7 @@ public class PainelBaixoMain extends JPanel {
         BotaoMatriculas botaoMatriculas = new BotaoMatriculas(450, 280, "Matrículas", "/resources/icons/matriculasIcon.png", cmpPai);
         add(botaoMatriculas);
 
-        BotaoSobre botaoSobre = new BotaoSobre(780, 280, "Sobre", "/resources/icons/sobreIcon.png", cmpPai);
-        add(botaoSobre);
+        BotaoFaturasMatriculas botaoFaturasMatriculas = new BotaoFaturasMatriculas(780, 280, "Financeiro", "/resources/icons/faturasIcon.png", cmpPai);
+        add(botaoFaturasMatriculas);
     }
 }

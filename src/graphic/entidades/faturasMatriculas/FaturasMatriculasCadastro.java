@@ -58,39 +58,39 @@ public class FaturasMatriculasCadastro extends EntidadesCadastro {
         JPanel panel = new JPanel(new GridBagLayout());
         GridBagConstraints c1 = new GridBagConstraints();
         panel.setSize(520,230);
-//
-//        MatriculasController matriculasController = new MatriculasController();
-//        ArrayList<MatriculasModel> matriculasRecuperadas = matriculasController.recuperaMatriculasParaComboBox();
-//        MatriculasComboModel matriculasComboModel = new MatriculasComboModel(matriculasRecuperadas);
-//
-//        JLabel matriculas = new JLabel("Código de Matrícula");
-//        JComboBox comboBoxMatriculas = new JComboBox(matriculasComboModel);
-//        comboBoxMatriculas.setRenderer(new MatriculasComboRenderer());
-//        comboBoxMatriculas.setPreferredSize(new Dimension(224, 20));
-//
-//        comboBoxMatriculas.addItemListener(e -> {
-//            if (e.getStateChange() == ItemEvent.SELECTED) {
-//                MatriculasModel item = (MatriculasModel) comboBoxMatriculas.getSelectedItem();
-//
-//                faturasMatriculasModel.setCodigoMatricula(item.getCodigoMatricula());
-//            }
-//        });
-//
-//        c1.insets = new Insets(0, 0, 30, 35);
-//        c1.gridx = 0; c1.gridy = 0;
-//        panel.add(matriculas,c1);
-//        c1.gridx = 1; c1.gridy = 0;
-//        panel.add(comboBoxMatriculas,c1);
-//
-//        if (dados != null) {
-//            isEditando = true;
-//            faturasMatriculasModel.setId(dados.getId());
-//            matriculasRecuperadas.forEach(matriculaRecuperada -> {
-//                if (Objects.equals(matriculaRecuperada.getCodigoMatricula(), dados.getCodigoMatricula())) {
-//                    comboBoxMatriculas.setSelectedItem(matriculaRecuperada);
-//                }
-//            });
-//        }
+
+        MatriculasController matriculasController = new MatriculasController();
+        ArrayList<MatriculasModel> matriculasRecuperadas = matriculasController.recuperaMatriculasParaComboBox();
+        MatriculasComboModel matriculasComboModel = new MatriculasComboModel(matriculasRecuperadas);
+
+        JLabel matriculas = new JLabel("Código de Matrícula");
+        JComboBox comboBoxMatriculas = new JComboBox(matriculasComboModel);
+        comboBoxMatriculas.setRenderer(new MatriculasComboRenderer());
+        comboBoxMatriculas.setPreferredSize(new Dimension(224, 20));
+
+        comboBoxMatriculas.addItemListener(e -> {
+            if (e.getStateChange() == ItemEvent.SELECTED) {
+                MatriculasModel item = (MatriculasModel) comboBoxMatriculas.getSelectedItem();
+
+                faturasMatriculasModel.setCodigoMatricula(item.getCodigoMatricula());
+            }
+        });
+
+        c1.insets = new Insets(0, 0, 30, 35);
+        c1.gridx = 0; c1.gridy = 0;
+        panel.add(matriculas,c1);
+        c1.gridx = 1; c1.gridy = 0;
+        panel.add(comboBoxMatriculas,c1);
+
+        if (dados != null) {
+            isEditando = true;
+            faturasMatriculasModel.setId(dados.getId());
+            matriculasRecuperadas.forEach(matriculaRecuperada -> {
+                if (Objects.equals(matriculaRecuperada.getCodigoMatricula(), dados.getCodigoMatricula())) {
+                    comboBoxMatriculas.setSelectedItem(matriculaRecuperada);
+                }
+            });
+        }
 
         add(panel);
     }

@@ -61,12 +61,12 @@ public class GraduacoesController {
         }
     }
 
-    public ArrayList<GraduacoesModel> recuperaModalidadesParaComboBox() {
+    public ArrayList<GraduacoesModel> recuperaGraduacoesParaComboBox() {
         ArrayList<GraduacoesModel> listaGraduacoes = new ArrayList<>();
 
         try {
             List<Object> graduacoesRecuperar = graduacoesDAO.select();
-            graduacoesRecuperar.forEach(modalidade -> listaGraduacoes.add((GraduacoesModel) modalidade));
+            graduacoesRecuperar.forEach(graduacao -> listaGraduacoes.add((GraduacoesModel) graduacao));
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as graduações!");
             throw new RuntimeException(e);
@@ -74,5 +74,22 @@ public class GraduacoesController {
 
         return listaGraduacoes;
     }
+
+    public ArrayList<GraduacoesModel> recuperaGraduacoesParaComboBoxPorModalidade(Integer idModalidade) {
+        ArrayList<GraduacoesModel> listaGraduacoes = new ArrayList<>();
+
+        try {
+            List<Object> graduacoesRecuperar = graduacoesDAO.selectByModalidade(idModalidade);
+            graduacoesRecuperar.forEach(graduacao -> listaGraduacoes.add((GraduacoesModel) graduacao));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as graduações!");
+            throw new RuntimeException(e);
+        }
+
+        return listaGraduacoes;
+    }
+
+
+
 }
 

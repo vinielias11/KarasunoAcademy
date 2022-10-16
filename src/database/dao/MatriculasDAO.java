@@ -99,7 +99,7 @@ public class MatriculasDAO extends SistemaDAO {
             JOptionPane.showMessageDialog(null, "ID não encontrado!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
         }
         return matriculasModel;
     }
@@ -119,7 +119,7 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao inserir a matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
         }
     }
 
@@ -135,7 +135,7 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao excluir matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
         }
     }
 
@@ -154,7 +154,7 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao atualizar matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstUpdate);
         }
     }
 

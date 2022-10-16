@@ -107,7 +107,6 @@ public class MatriculasPanel extends EntidadesPanel {
 
     @Override
     protected void onClickNovo() {
-        //MatriculasCadastro matriculasCadastro = new MatriculasCadastro(this);
         MatriculasCadastroOnFire matriculasCadastroOnFire = new MatriculasCadastroOnFire(null, this);
         matriculasCadastroOnFire.setVisible(true);
     }
@@ -122,9 +121,7 @@ public class MatriculasPanel extends EntidadesPanel {
         MatriculasModel matriculaRecuperar = new MatriculasModel();
 
         matriculaRecuperar.setCodigoMatricula(Integer.parseInt(id));;
-
         matriculaRecuperar.setDataEncerramento(new Date());
-
         matriculasController.encerrar(matriculaRecuperar);
 
         recarregaLista();

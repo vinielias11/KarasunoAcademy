@@ -69,17 +69,4 @@ public class MatriculasModalidadesController {
         }
     }
 
-//    public ArrayList<MatriculasModalidadesModel> recuperaMatriculasParaComboBox() {
-//        ArrayList<MatriculasModalidadesModel> listaMatriculasModalidades = new ArrayList<>();
-//
-//        try {
-//            List<Object> matriculasModalidadesRecuperar = matriculasModalidadesDAO.select();
-//            matriculasModalidadesRecuperar.forEach(matriculasModalidades -> listaMatriculasModalidades.add((MatriculasModalidadesModel) matriculasModalidades));
-//        } catch (SQLException e) {
-//            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as matrículas!");
-//            throw new RuntimeException(e);
-//        }
-//
-//        return listaMatriculasModalidades;
-//    }
 }

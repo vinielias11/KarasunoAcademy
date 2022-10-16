@@ -4,6 +4,8 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class EntidadesCadastro extends JDialog {
+    private JButton btnFechar = new JButton("Cancelar");
+    private JButton btnSalvar = new JButton("Salvar");
 
     public EntidadesCadastro(){
         setBackground(new Color(255,255,255));
@@ -18,10 +20,10 @@ public abstract class EntidadesCadastro extends JDialog {
     }
 
     public void criarBotoes(){
-        JButton btnFechar = new JButton("Cancelar");
         btnFechar.setBounds(100,580,120,30);
         btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));
         btnFechar.setBackground(new Color(255,92,92));
+        btnFechar.setName("btnFechar");
         btnFechar.setBorder(BorderFactory.createLineBorder(new Color(255, 92, 92)));
         add(btnFechar);
 
@@ -29,13 +31,18 @@ public abstract class EntidadesCadastro extends JDialog {
             dispose();
         });
 
-        JButton btnSalvar = new JButton("Salvar");
         btnSalvar.setBounds(310,580,120,30);
         btnSalvar.addActionListener(e -> onClickSalvar());
         btnSalvar.setFont(new Font("Helvetica", Font.BOLD, 16));
         btnSalvar.setBackground(new Color(87, 241, 87, 210));
+        btnSalvar.setName("btnSalvar");
         btnSalvar.setBorder(BorderFactory.createLineBorder(new Color(87, 241, 87, 210)));
         add(btnSalvar);
+    }
+
+    public void removerBotoes(){
+        remove(btnFechar);
+        remove(btnSalvar);
     }
 
     protected abstract void onClickSalvar();

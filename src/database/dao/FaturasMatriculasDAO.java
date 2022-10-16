@@ -16,10 +16,10 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     private final String select = "SELECT * from public.faturas_matriculas;";
     private final String insert = "INSERT INTO public.faturas_matriculas(codigo_matricula,data_vencimento,valor,data_pagamento,data_cancelamento)" +
             "VALUES (?,?,?,?,?);";
-    private final String delete = "DELETE FROM public.faturas_matriculas WHERE id = ?;";
+    private final String delete = "DELETE FROM public.faturas_matriculas WHERE codigo_matricula = ? AND data_vencimento = ?;";
     private final String update = "UPDATE public.faturas_matriculas SET codigo_matricula = ?, data_vencimento = ?, valor = ?, data_pagamento = ? data_cancelamento = ? " +
             "WHERE id = ?;";
-    private final String selectById = "SELECT * from public.faturas_matriculas WHERE id = ?;";
+    private final String selectById = "SELECT * from public.faturas_matriculas WHERE codigo_matricula = ?, data_vencimento = ?;";
 
 
     private final PreparedStatement pstSelect;
@@ -66,7 +66,8 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     @Override
     public Object selectById(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
-        pstSelectById.setInt(1, faturasMatriculasModel.getId());
+        pstSelectById.setInt(1, faturasMatriculasModel.getCodigoMatricula());
+        pstSelectById.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
 
         try {
             ResultSet resultadoQuery = pstSelectById.executeQuery();
@@ -76,12 +77,14 @@ public class FaturasMatriculasDAO extends SistemaDAO {
             faturasMatriculasModel.setDataPagamento(resultadoQuery.getTimestamp("data_pagamento"));
             faturasMatriculasModel.setDataCancelamento(resultadoQuery.getDate("data_cancelamento"));
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ID não encontrado!");
+            JOptionPane.showMessageDialog(null, "Código não encontrado!");
             e.printStackTrace();
         }
 
         return faturasMatriculasModel;
     }
+
+
 
     @Override
     public void insert(Object param) throws SQLException {
@@ -105,7 +108,11 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     public void delete(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
 
-        pstDelete.setInt(1,faturasMatriculasModel.getId());
+        java.util.Date utilDate = faturasMatriculasModel.getDataVencimento();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+        pstDelete.setInt(1,faturasMatriculasModel.getCodigoMatricula());
+        pstDelete.setDate(2, sqlDate);
 
         try {
             pstDelete.execute();

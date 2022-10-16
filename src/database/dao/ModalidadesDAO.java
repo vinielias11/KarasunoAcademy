@@ -110,7 +110,7 @@ public class ModalidadesDAO extends SistemaDAO {
             System.out.println("Houve um erro ao inserir modalidade!");
             e.printStackTrace();
         } finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
         }
     }
 
@@ -143,7 +143,7 @@ public class ModalidadesDAO extends SistemaDAO {
             System.out.println("Houve um erro ao atualizar modalidade!");
             e.printStackTrace();
         } finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstUpdate);
         }
     }
 

@@ -1,10 +1,12 @@
 package controller;
 
 import database.dao.PlanosDAO;
+import model.ModalidadesModel;
 import model.PlanosModel;
 
 import javax.swing.*;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlanosController {
@@ -57,5 +59,19 @@ public class PlanosController {
             JOptionPane.showMessageDialog(null, "Houve um erro ao excluir o plano!");
             throw new RuntimeException(e);
         }
+    }
+
+    public ArrayList<PlanosModel> recuperaPlanosParaComboBox() {
+        ArrayList<PlanosModel> listaPlanos = new ArrayList<>();
+
+        try {
+            List<Object> planosRecuperar = planosDAO.select();
+            planosRecuperar.forEach(plano -> listaPlanos.add((PlanosModel) plano));
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar os planos!");
+            throw new RuntimeException(e);
+        }
+
+        return listaPlanos;
     }
 }

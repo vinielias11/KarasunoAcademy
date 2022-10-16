@@ -21,13 +21,14 @@ public class GraduacoesDAO extends SistemaDAO {
     private final String delete = "DELETE FROM public.graduacoes WHERE id = ?;";
     private final String update = "UPDATE public.graduacoes SET id_modalidade = ?, nome = ? WHERE id = ?;";
     private final String selectById = "SELECT G.*, M.nome AS nome_modalidade FROM graduacoes G INNER JOIN modalidades M ON G.id_modalidade = M.id WHERE G.id = ? ORDER BY G.id;";
-
+    private final String selectByModalidade = "SELECT * FROM public.graduacoes WHERE id_modalidade = ?;";
 
     private final PreparedStatement pstSelect;
     private final PreparedStatement pstInsert;
     private final PreparedStatement pstDelete;
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectById;
+    private final PreparedStatement pstSelectByModalidade;
 
 
     public GraduacoesDAO() {
@@ -38,6 +39,7 @@ public class GraduacoesDAO extends SistemaDAO {
             pstDelete = this.conexao.prepareStatement(delete);
             pstUpdate = this.conexao.prepareStatement(update);
             pstSelectById = this.conexao.prepareStatement(selectById);
+            pstSelectByModalidade = this.conexao.prepareStatement(selectByModalidade);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao inicializar os comandos SQL.");
             throw new RuntimeException(e);
@@ -70,6 +72,30 @@ public class GraduacoesDAO extends SistemaDAO {
         return arrayListGraduacoes;
     }
 
+    public List<Object> selectByModalidade(Integer idModalidade) throws SQLException {
+        List <Object> arrayListGraduacoes = new ArrayList<>();
+
+        try {
+            ResultSet resultadoQuery = pstSelectByModalidade.executeQuery();
+            while (resultadoQuery.next()){
+                GraduacoesModel graduacoesModel = new GraduacoesModel();
+
+                graduacoesModel.setId(resultadoQuery.getInt("id"));
+                graduacoesModel.setIdModalidade(resultadoQuery.getInt("id_modalidade"));
+                graduacoesModel.setNome(resultadoQuery.getString("nome"));
+                graduacoesModel.setNomeModalidade(resultadoQuery.getString("nome_modalidade"));
+
+                arrayListGraduacoes.add(graduacoesModel);
+            }
+        }catch (SQLException e){
+            System.out.println("Houve um erro ao recuperar as graduações!");
+            e.printStackTrace();
+        } finally {
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectByModalidade);
+        }
+        return arrayListGraduacoes;
+    }
+
     @Override
     public GraduacoesModel selectById(Object param) throws SQLException {
         GraduacoesModel graduacoesModel = (GraduacoesModel) param;
@@ -90,7 +116,7 @@ public class GraduacoesDAO extends SistemaDAO {
             System.out.println("Houve um erro ao selecionar o id!");
             e.printStackTrace();
         } finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
         }
 
         return graduacoesModel;
@@ -125,7 +151,7 @@ public class GraduacoesDAO extends SistemaDAO {
             System.out.println("Houve um erro ao excluir graduação!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
         }
     }
 
@@ -143,7 +169,7 @@ public class GraduacoesDAO extends SistemaDAO {
             System.out.println("Houve um erro ao atualizar a graduação!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstUpdate);
         }
     }
 
