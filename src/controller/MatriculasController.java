@@ -82,26 +82,26 @@ public class MatriculasController {
         return listaMatriculas;
     }
 
-    public Integer recuperaCodigoPorCodigoAluno(Integer idAluno) {
-        List<Object> matriculasRecuperar = new ArrayList<>();
-        List<MatriculasModel> listaMatriculas = new ArrayList<>();
-
-        try {
-            matriculasRecuperar = matriculasDAO.select();
-            matriculasRecuperar.forEach(matricula -> listaMatriculas.add((MatriculasModel) matricula));
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar matriculas!");
-        }
-
-        Integer codigoRecuperado = 0;
-        for (int i = 0; i < listaMatriculas.size(); i++) {
-            Integer codigoAluno = listaMatriculas.get(i).getCodigoAluno();
-
-            if (codigoAluno == idAluno) {
-                codigoRecuperado = codigoAluno;
-            }
-        };
-
-        return codigoRecuperado;
-    }
+//    public Integer recuperaCodigoPorCodigoAluno(Integer idAluno) {
+//        List<Object> matriculasRecuperar = new ArrayList<>();
+//        List<MatriculasModel> listaMatriculas = new ArrayList<>();
+//
+//        try {
+//            matriculasRecuperar = matriculasDAO.select();
+//            matriculasRecuperar.forEach(matricula -> listaMatriculas.add((MatriculasModel) matricula));
+//        } catch (SQLException e) {
+//            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar matriculas!");
+//        }
+//
+//        Integer codigoRecuperado = 0;
+//        for (int i = 0; i < listaMatriculas.size(); i++) {
+//            Integer codigoAluno = listaMatriculas.get(i).getCodigoAluno();
+//
+//            if (codigoAluno == idAluno) {
+//                codigoRecuperado = codigoAluno;
+//            }
+//        };
+//
+//        return codigoRecuperado;
+//    }
 }

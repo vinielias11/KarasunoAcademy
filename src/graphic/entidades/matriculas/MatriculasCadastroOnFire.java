@@ -68,7 +68,6 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
             return;
         }
 
-        //Botão adicionar nova modalidade na matrícula
         ImageIcon smbMais = new ImageIcon(this.getClass().getResource("/resources/icons/plusIcon.png"));
         JButton btnCadastrar = new JButton(smbMais);
         btnCadastrar.setBounds(0, 30, 40, 40);
@@ -81,14 +80,13 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
         setGridLayout(0,2, GridBagConstraints.WEST);
         panel.add(btnCadastrar, this.c);
 
-        // Botão remover modalidade na matrícula
         ImageIcon smbDelete = new ImageIcon(this.getClass().getResource("/resources/icons/deleteIcon.png"));
         JButton btnDelete = new JButton(smbDelete);
         btnDelete.setBackground(Color.WHITE);
         btnDelete.setOpaque(false);
         btnDelete.setBorder(BorderFactory.createEmptyBorder());
         btnDelete.setBounds(0,30,40,40);
-        btnDelete.setMargin(new Insets(0,20,0,0));
+        //btnDelete.setMargin(new Insets(0,20,0,0));
         btnDelete.setCursor(new Cursor((Cursor.HAND_CURSOR)));
         btnDelete.addActionListener(e -> {
             try {

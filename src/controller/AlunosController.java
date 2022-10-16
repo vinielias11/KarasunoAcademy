@@ -2,7 +2,6 @@ package controller;
 
 import database.dao.AlunosDAO;
 import model.AlunosModel;
-import model.AlunosModel;
 
 import javax.swing.*;
 import java.sql.SQLException;

@@ -1,10 +1,7 @@
 package controller;
 
-import database.dao.AlunosDAO;
 import database.dao.GraduacoesDAO;
-import model.AlunosModel;
 import model.GraduacoesModel;
-import model.ModalidadesModel;
 
 import javax.swing.*;
 import java.sql.SQLException;
@@ -74,22 +71,6 @@ public class GraduacoesController {
 
         return listaGraduacoes;
     }
-
-    public ArrayList<GraduacoesModel> recuperaGraduacoesParaComboBoxPorModalidade(Integer idModalidade) {
-        ArrayList<GraduacoesModel> listaGraduacoes = new ArrayList<>();
-
-        try {
-            List<Object> graduacoesRecuperar = graduacoesDAO.selectByModalidade(idModalidade);
-            graduacoesRecuperar.forEach(graduacao -> listaGraduacoes.add((GraduacoesModel) graduacao));
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "Houve um erro ao recuperar as graduações!");
-            throw new RuntimeException(e);
-        }
-
-        return listaGraduacoes;
-    }
-
-
 
 }
 

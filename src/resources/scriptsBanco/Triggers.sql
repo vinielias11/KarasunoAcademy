@@ -30,15 +30,11 @@ begin
 			aux_mes = aux_mes - 12;
 			aux_ano = aux_ano + 1;
 		end if;
-		--raise notice 'dia_vencimento: % | aux_ano: % | aux_mes: %', dia_vencimento, aux_ano, aux_mes;
 
 		aux_existeFatura = (select 1 from public.faturas_matriculas fm where fm.codigo_matricula = old.codigo_matricula and fm.data_vencimento = (aux_ano || '-' || aux_mes || '-' || dia_vencimento)::date and data_pagamento is null and data_cancelamento is null limit 1);
-		--raise notice 'aux_existeFatura: % | old.codigo_matricula: % | data_vencimento: %', aux_existeFatura, old.codigo_matricula, (aux_ano || '-' || aux_mes || '-' || dia_vencimento);
 		if(aux_existeFatura = 1) then
 			valor_fatura_existente = (select valor from public.faturas_matriculas fm where fm.codigo_matricula = old.codigo_matricula and fm.data_vencimento = (aux_ano || '-' || aux_mes || '-' || dia_vencimento)::date limit 1);
-			raise notice 'DEBUG -> valor_plano: | valor_fatura_existente: %', valor_plano, valor_fatura_existente;
 			if(valor_fatura_existente > valor_plano) then
-				raise notice 'a) Atualizando | valor_plano: %valor_plano | valor_fatura_existente: %', valor_plano, valor_fatura_existente;
 				update public.faturas_matriculas
 				set valor = (valor - valor_plano)
 				where codigo_matricula = old.codigo_matricula
@@ -46,7 +42,6 @@ begin
 				and data_pagamento is null
 				and data_cancelamento is null;
 			else
-				raise notice 'b) Excluindo |';
 				delete from public.faturas_matriculas
 				where codigo_matricula = old.codigo_matricula
 				and data_vencimento = (aux_ano || '-' || aux_mes || '-' || dia_vencimento)::date
@@ -58,8 +53,6 @@ begin
 	return new;
 end;
 $atualizar_faturas$ LANGUAGE plpgsql;
-
-
 
 create or replace function gerar_faturas()
 returns trigger AS $gerar_faturas$
@@ -95,10 +88,8 @@ begin
 		end if;
 
 		aux_existeFatura = (select 1 from public.faturas_matriculas fm where fm.codigo_matricula = new.codigo_matricula and fm.data_vencimento = (aux_ano || '-' || aux_mes || '-' || dia_vencimento)::date limit 1);
-		raise notice 'aux_existeFatura: %', aux_existeFatura;
 		if(aux_existeFatura = 1) then
 			valorAnterior = (select valor from public.faturas_matriculas fm where fm.codigo_matricula = new.codigo_matricula and fm.data_vencimento = (aux_ano || '-' || aux_mes || '-' || dia_vencimento)::date limit 1);
-			raise notice 'valorAnterior: %', valorAnterior;
 			update public.faturas_matriculas
 			set valor = valorAnterior + valor_plano
 			where codigo_matricula = new.codigo_matricula

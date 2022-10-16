@@ -3,7 +3,6 @@ package controller;
 import database.dao.UsuariosDAO;
 
 import java.sql.SQLException;
-import java.util.List;
 
 public class UsuariosController {
     private UsuariosDAO usuariosDAO;

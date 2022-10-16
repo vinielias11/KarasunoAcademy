@@ -1,7 +1,6 @@
 package controller;
 
 import database.dao.PlanosDAO;
-import model.ModalidadesModel;
 import model.PlanosModel;
 
 import javax.swing.*;

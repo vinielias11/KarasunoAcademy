@@ -91,8 +91,11 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     public void insert(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
 
+        java.util.Date utilDate = faturasMatriculasModel.getDataVencimento();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
         pstInsert.setInt(1, faturasMatriculasModel.getCodigoMatricula());
-        pstInsert.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
+        pstInsert.setDate(2, sqlDate);
         pstInsert.setDouble(3, faturasMatriculasModel.getValor());
         pstInsert.setTimestamp(4, faturasMatriculasModel.getDataPagamento());
         pstInsert.setDate(5, (Date) faturasMatriculasModel.getDataCancelamento());
