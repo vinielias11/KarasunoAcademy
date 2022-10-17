@@ -32,7 +32,12 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
     private JPanel panel = new JPanel(new GridBagLayout());
     private GridBagConstraints c = new GridBagConstraints();
     private JTable tabela = new JTable();
-    private DefaultTableModel tableModel = new DefaultTableModel();
+    private DefaultTableModel tableModel = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     private boolean isEditando = false;
     private Integer alunoEditando = 0;
 
@@ -164,6 +169,7 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
         if(!isEditando){
             return;
         }
+
         this.tabela.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         this.tabela.setRowHeight(22);
         this.tabela.setBackground(Color.white);
@@ -182,8 +188,8 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
         colunas.getColumn(0).setMaxWidth(860);
 
         DefaultTableCellRenderer centerRender = new DefaultTableCellRenderer();
+
         centerRender.setHorizontalAlignment(JLabel.CENTER);
-        centerRender.setBackground(Color.pink);
 
         for (int i = 0; i < tabela.getColumnCount(); i++){
             tabela.getColumnModel().getColumn(i).setCellRenderer(centerRender);
@@ -214,6 +220,7 @@ public class MatriculasCadastroOnFire extends EntidadesCadastro {
             this.tableModel.addRow(linha);
         }
         this.tabela.setModel(this.tableModel);
+        this.tabela.revalidate();
         this.tabela.repaint();
     }
 
