@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<eclipse-userlibraries>
+  <library name="postgresql-42.4.2">
+    <archive path="C:/Users/kaioc/Documents/projetos/KarasunoAcademy.git/postgresql-42.4.2.jar" />
+  </library>
+</eclipse-userlibraries>
+
