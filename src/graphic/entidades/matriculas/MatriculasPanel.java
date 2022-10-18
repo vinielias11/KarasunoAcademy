@@ -1,7 +1,9 @@
 package graphic.entidades.matriculas;
 
+import controller.FaturasMatriculasController;
 import controller.MatriculasController;
 import graphic.entidades.base.EntidadesPanel;
+import model.FaturasMatriculasModel;
 import model.MatriculasModel;
 
 import javax.swing.*;
@@ -12,6 +14,8 @@ import java.util.Date;
 import java.util.List;
 
 public class MatriculasPanel extends EntidadesPanel {
+    FaturasMatriculasController faturasMatriculasController = new FaturasMatriculasController();
+
     public MatriculasPanel(JFrame cmpPai) {
         super(cmpPai);
     }
@@ -53,6 +57,17 @@ public class MatriculasPanel extends EntidadesPanel {
         MatriculasController matriculasController = new MatriculasController();
 
         Integer idDeletar = Integer.parseInt(id);
+
+        List<Object> faturasBanco = faturasMatriculasController.recuperarTodos();
+        List<FaturasMatriculasModel> listaFaturas = new ArrayList<>();
+
+        faturasBanco.forEach(fatura -> listaFaturas.add((FaturasMatriculasModel) fatura));
+
+        for (int i = 0; i < listaFaturas.size(); i++) {
+            if(listaFaturas.get(i).getCodigoMatricula() == idDeletar){
+                faturasMatriculasController.deletar(listaFaturas.get(i));
+            }
+        }
 
         matriculasModel.setCodigoMatricula(idDeletar);
         matriculasController.deletar(matriculasModel);
@@ -107,8 +122,7 @@ public class MatriculasPanel extends EntidadesPanel {
 
     @Override
     protected void onClickNovo() {
-        MatriculasCadastro matriculasCadastro = new MatriculasCadastro(this);
-
+        MatriculasCadastro matriculasCadastro = new MatriculasCadastro(null, this);
         matriculasCadastro.setVisible(true);
     }
 
@@ -121,10 +135,24 @@ public class MatriculasPanel extends EntidadesPanel {
         MatriculasController matriculasController = new MatriculasController();
         MatriculasModel matriculaRecuperar = new MatriculasModel();
 
+        List<Object> faturasBanco = faturasMatriculasController.recuperarTodos();
+        List<FaturasMatriculasModel> listaFaturas = new ArrayList<>();
+
+        faturasBanco.forEach(fatura -> listaFaturas.add((FaturasMatriculasModel) fatura));
+
+        for (int i = 0; i < listaFaturas.size(); i++) {
+            if(listaFaturas.get(i).getCodigoMatricula() == Integer.parseInt(id)){
+                FaturasMatriculasModel faturaRecuperar = new FaturasMatriculasModel();
+                java.util.Date utilDate = new Date();
+                java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+                faturaRecuperar.setDataCancelamento(sqlDate);
+                faturaRecuperar.setCodigoMatricula(Integer.parseInt(id));
+                faturasMatriculasController.encerrarPorMatricula(faturaRecuperar);
+            }
+        }
+
         matriculaRecuperar.setCodigoMatricula(Integer.parseInt(id));;
-
         matriculaRecuperar.setDataEncerramento(new Date());
-
         matriculasController.encerrar(matriculaRecuperar);
 
         recarregaLista();

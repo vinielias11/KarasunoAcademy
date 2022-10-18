@@ -16,18 +16,18 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     private final String select = "SELECT * from public.faturas_matriculas;";
     private final String insert = "INSERT INTO public.faturas_matriculas(codigo_matricula,data_vencimento,valor,data_pagamento,data_cancelamento)" +
             "VALUES (?,?,?,?,?);";
-    private final String delete = "DELETE FROM public.faturas_matriculas WHERE id = ?;";
+    private final String delete = "DELETE FROM public.faturas_matriculas WHERE codigo_matricula = ? AND data_vencimento = ?;";
     private final String update = "UPDATE public.faturas_matriculas SET codigo_matricula = ?, data_vencimento = ?, valor = ?, data_pagamento = ? data_cancelamento = ? " +
             "WHERE id = ?;";
-    private final String selectById = "SELECT * from public.faturas_matriculas WHERE id = ?;";
-
+    private final String selectById = "SELECT * from public.faturas_matriculas WHERE codigo_matricula = ?, data_vencimento = ?;";
+    private final String updateDataCancelamento = "UPDATE public.faturas_matriculas SET data_cancelamento = ? WHERE codigo_matricula = ?;";
 
     private final PreparedStatement pstSelect;
     private final PreparedStatement pstInsert;
     private final PreparedStatement pstDelete;
     private final PreparedStatement pstUpdate;
     private final PreparedStatement pstSelectById;
-
+    private final PreparedStatement pstUpdateDataCancelamento;
 
     public FaturasMatriculasDAO() {
         try {
@@ -36,6 +36,7 @@ public class FaturasMatriculasDAO extends SistemaDAO {
             pstInsert = this.conexao.prepareStatement(insert);
             pstDelete = this.conexao.prepareStatement(delete);
             pstUpdate = this.conexao.prepareStatement(update);
+            pstUpdateDataCancelamento = this.conexao.prepareStatement(updateDataCancelamento);
             pstSelectById = this.conexao.prepareStatement(selectById);
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "Houve um erro ao inicializar os comandos SQL.");
@@ -66,7 +67,8 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     @Override
     public Object selectById(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
-        pstSelectById.setInt(1, faturasMatriculasModel.getId());
+        pstSelectById.setInt(1, faturasMatriculasModel.getCodigoMatricula());
+        pstSelectById.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
 
         try {
             ResultSet resultadoQuery = pstSelectById.executeQuery();
@@ -76,19 +78,24 @@ public class FaturasMatriculasDAO extends SistemaDAO {
             faturasMatriculasModel.setDataPagamento(resultadoQuery.getTimestamp("data_pagamento"));
             faturasMatriculasModel.setDataCancelamento(resultadoQuery.getDate("data_cancelamento"));
         } catch (SQLException e) {
-            JOptionPane.showMessageDialog(null, "ID não encontrado!");
+            JOptionPane.showMessageDialog(null, "Código não encontrado!");
             e.printStackTrace();
         }
 
         return faturasMatriculasModel;
     }
 
+
+
     @Override
     public void insert(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
 
+        java.util.Date utilDate = faturasMatriculasModel.getDataVencimento();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
         pstInsert.setInt(1, faturasMatriculasModel.getCodigoMatricula());
-        pstInsert.setDate(2, (Date) faturasMatriculasModel.getDataVencimento());
+        pstInsert.setDate(2, sqlDate);
         pstInsert.setDouble(3, faturasMatriculasModel.getValor());
         pstInsert.setTimestamp(4, faturasMatriculasModel.getDataPagamento());
         pstInsert.setDate(5, (Date) faturasMatriculasModel.getDataCancelamento());
@@ -105,7 +112,11 @@ public class FaturasMatriculasDAO extends SistemaDAO {
     public void delete(Object param) throws SQLException {
         FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
 
-        pstDelete.setInt(1,faturasMatriculasModel.getId());
+        java.util.Date utilDate = faturasMatriculasModel.getDataVencimento();
+        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+
+        pstDelete.setInt(1,faturasMatriculasModel.getCodigoMatricula());
+        pstDelete.setDate(2, sqlDate);
 
         try {
             pstDelete.execute();
@@ -127,6 +138,20 @@ public class FaturasMatriculasDAO extends SistemaDAO {
 
         try {
             pstUpdate.execute();
+        } catch (SQLException e){
+            System.out.println("Houve um erro ao atualizar fatura!");
+            e.printStackTrace();
+        }
+    }
+
+    public void updateDataCancelamento(Object param) throws SQLException {
+        FaturasMatriculasModel faturasMatriculasModel = (FaturasMatriculasModel) param;
+
+        pstUpdateDataCancelamento.setDate(1, (Date) faturasMatriculasModel.getDataCancelamento());
+        pstUpdateDataCancelamento.setInt(2,faturasMatriculasModel.getCodigoMatricula());
+
+        try {
+            pstUpdateDataCancelamento.execute();
         } catch (SQLException e){
             System.out.println("Houve um erro ao atualizar fatura!");
             e.printStackTrace();

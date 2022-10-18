@@ -19,6 +19,5 @@ public class DbUtil {
         if (sqlState.equals("23503")) {
             JOptionPane.showMessageDialog(null, "Não é possível deletar o registro pois ele é referenciado por outra tabela.");
         }
-        System.out.println(sqlState);
     }
 }
