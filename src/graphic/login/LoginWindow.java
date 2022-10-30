@@ -1,6 +1,7 @@
 package graphic.login;
 
 import controller.UsuariosController;
+import graphic.controle.ControleGeralWindow;
 import graphic.main.Main;
 
 import javax.swing.*;
@@ -76,6 +77,8 @@ public class LoginWindow extends JFrame {
 
         if (usuariosController.logar(senha, nome)) {
             Main main = new Main();
+            ControleGeralWindow controleGeralWindow = new ControleGeralWindow();
+            controleGeralWindow.setVisible(true);
             main.setVisible(true);
             dispose();
         } else {
