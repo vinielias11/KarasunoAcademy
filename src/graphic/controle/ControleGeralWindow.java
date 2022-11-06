@@ -1,12 +1,25 @@
 package graphic.controle;
 
+import controller.ControleGeralController;
+import model.AlunosModel;
+import model.MatriculasModalidadesModel;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
 
 public class ControleGeralWindow extends JDialog {
-    public ControleGeralWindow(){
+    private JTable tabelaMatriculas, tabelaFaturas, tabelaAssiduidade;
+    private final ControleGeralController controleGeralController = new ControleGeralController();
+    private AlunosModel alunosModel;
+
+    public ControleGeralWindow() {
         setSize(900, 680);
         setLayout(null);
         setTitle("Controle Geral");
@@ -16,7 +29,7 @@ public class ControleGeralWindow extends JDialog {
         criaComponentes();
     }
 
-    private void criaComponentes(){
+    private void criaComponentes() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel subPanel = new JPanel(new GridBagLayout());
         JPanel subPanel2 = new JPanel(new GridBagLayout());
@@ -24,7 +37,17 @@ public class ControleGeralWindow extends JDialog {
         GridBagConstraints gbcPanelPrincipal = new GridBagConstraints();
         panel.setSize(900,680);
 
-        JTextField codigoAlunoTxf = new JTextField(10);
+        MaskFormatter mascaraNumero;
+
+        try {
+            mascaraNumero = new MaskFormatter("#####");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        JFormattedTextField codigoAlunoTxf = new JFormattedTextField();
+        codigoAlunoTxf.setColumns(10);
+        mascaraNumero.install(codigoAlunoTxf);
 
         JTextField showNomeAlunoTxf = new JTextField(40);
         showNomeAlunoTxf.setEditable(false);
@@ -61,7 +84,7 @@ public class ControleGeralWindow extends JDialog {
         btnDadosMatricula.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosMatricula.setPreferredSize(new Dimension(280, 25));
 
-        JButton btnteste= new JButton("INSERIR BOX DE MES");
+        JButton btnteste = new JButton("INSERIR BOX DE MES");
         btnteste.setPreferredSize(new Dimension(200, 25));
 
         JTable tabelaAssiduidade = criaTabelaAssiduidade();
@@ -71,6 +94,27 @@ public class ControleGeralWindow extends JDialog {
         JTable tabelaFaturas = criaTabelaFaturas();
         JScrollPane scrollPaneFaturas = new JScrollPane(tabelaFaturas);
         scrollPaneFaturas.setPreferredSize(new Dimension(0,310));
+
+        this.tabelaMatriculas = tabelaMatriculas;
+        this.tabelaFaturas = tabelaFaturas;
+        this.tabelaAssiduidade = tabelaAssiduidade;
+
+        codigoAlunoTxf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String valorTxtField = codigoAlunoTxf.getText().trim();
+
+                if (valorTxtField.length() < 5) return;
+
+                Integer codigoDigitado = Integer.parseInt(valorTxtField);
+                alunosModel = controleGeralController.recuperarAlunoPorCodigo(codigoDigitado);
+
+                if (alunosModel != null) {
+                    showNomeAlunoTxf.setText(alunosModel.getNome());
+                    carregaDadosTabelaMatriculas();
+                }
+            }
+        });
 
         gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 0; gbcSubPanel.anchor = GridBagConstraints.NORTH; gbcSubPanel.insets = new Insets(0,0,25,0);
         subPanel.add(fotoAlunoTesteTxf, gbcSubPanel);
@@ -107,18 +151,26 @@ public class ControleGeralWindow extends JDialog {
         add(panel);
     }
 
-    private JTable criaTabelaMatriculas(){
+    private JTable criaTabelaMatriculas() {
 
         JTable tabelaMatriculas = new JTable();
         tabelaMatriculas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabelaMatriculas.setRowHeight(22);
 
-        String[] colunasTabela = {"Modalidade", "Graduação", "Plano", "Data Início", "Data Fim"};
+        String[] colunasTabela = { "Modalidade", "Graduação", "Plano", "Data Início", "Data Fim" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex > 2) {
+                    return java.util.Date.class;
+                }
+                return super.getColumnClass(columnIndex);
             }
         };
 
@@ -127,13 +179,13 @@ public class ControleGeralWindow extends JDialog {
         return tabelaMatriculas;
     }
 
-    private JTable criaTabelaAssiduidade(){
+    private JTable criaTabelaAssiduidade() {
 
         JTable tabelaAssiduidade = new JTable();
         tabelaAssiduidade.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabelaAssiduidade.setRowHeight(22);
 
-        String[] colunasTabela = {"Assiduidade"};
+        String[] colunasTabela = { "Assiduidade" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -147,13 +199,13 @@ public class ControleGeralWindow extends JDialog {
         return tabelaAssiduidade;
     }
 
-    private JTable criaTabelaFaturas(){
+    private JTable criaTabelaFaturas() {
 
         JTable tabelaFaturas = new JTable();
         tabelaFaturas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabelaFaturas.setRowHeight(22);
 
-        String[] colunasTabela = {"Vencimento", "Valor", "Pagamento", "Cancelamento"};
+        String[] colunasTabela = { "Vencimento", "Valor", "Pagamento", "Cancelamento" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -165,6 +217,20 @@ public class ControleGeralWindow extends JDialog {
         tabelaFaturas.setModel(tableModel);
 
         return tabelaFaturas;
+    }
+
+    private void carregaDadosTabelaMatriculas() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaMatriculas.getModel();
+        List<MatriculasModalidadesModel> matriculasModalidadesBanco = controleGeralController.recuperarMatriculasModalidadesPorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (matriculasModalidadesBanco.isEmpty()) return;
+
+        matriculasModalidadesBanco.forEach(mm -> {
+            Object[] linha = { mm.getNomeModalidade(), mm.getNomeGraduacao(), mm.getNomePlano(), mm.getDataInicio(), mm.getDataFim() };
+            tableModel.addRow(linha);
+        });
     }
 
     public static void main(String[] args) {
