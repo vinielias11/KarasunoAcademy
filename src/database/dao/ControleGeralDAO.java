@@ -3,6 +3,7 @@ package database.dao;
 import database.connection.ConnectionFactory;
 import database.connection.EntidadeConexao;
 import model.AlunosModel;
+import model.AssiduidadeModel;
 import model.FaturasMatriculasModel;
 import model.MatriculasModalidadesModel;
 
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class ControleGeralDAO {
@@ -25,11 +27,21 @@ public class ControleGeralDAO {
     private final String selectFaturasMatriculasByIdAluno = "SELECT FM.DATA_VENCIMENTO, FM.VALOR, FM.DATA_PAGAMENTO, FM.DATA_CANCELAMENTO FROM ALUNOS A \n" +
             "INNER JOIN MATRICULAS M ON (M.ID_ALUNO = A.ID) " +
             "INNER JOIN FATURAS_MATRICULAS FM ON (FM.CODIGO_MATRICULA = M.CODIGO_MATRICULA) " +
-            "WHERE A.ID = ?;";
+            "WHERE A.ID = ? ORDER BY DATA_VENCIMENTO;";
+
+    private final String updateDataPagamentoFatura = "UPDATE FATURAS_MATRICULAS SET DATA_PAGAMENTO = CURRENT_DATE " +
+            "WHERE CODIGO_MATRICULA = (SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?) AND DATA_VENCIMENTO = ?;";
+
+    private final String insertAssiduidade = "INSERT INTO ASSIDUIDADE(CODIGO_MATRICULA) VALUES ((SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?))";
+
+    private final String selectAssiduidadeByIdAluno = "SELECT DATA_ENTRADA FROM ASSIDUIDADE WHERE CODIGO_MATRICULA = ((SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?))";
 
     private final PreparedStatement pstSelectAlunoByCodigo;
     private final PreparedStatement pstSelectMatriculasModalidadesByIdAluno;
     private final PreparedStatement pstSelectFaturasMatriculasByIdAluno;
+    private final PreparedStatement pstUpdateDataPagamentoFatura;
+    private final PreparedStatement pstInsertAssiduidade;
+    private final PreparedStatement pstSelectAssiduidadeByIdAluno;
 
     public ControleGeralDAO() {
         try {
@@ -37,6 +49,9 @@ public class ControleGeralDAO {
             pstSelectAlunoByCodigo = this.conexao.prepareStatement(selectAlunoByCodigo);
             pstSelectMatriculasModalidadesByIdAluno = this.conexao.prepareStatement(selectMatriculasModalidadesByIdAluno);
             pstSelectFaturasMatriculasByIdAluno = this.conexao.prepareStatement(selectFaturasMatriculasByIdAluno);
+            pstUpdateDataPagamentoFatura = this.conexao.prepareStatement(updateDataPagamentoFatura);
+            pstInsertAssiduidade = this.conexao.prepareStatement(insertAssiduidade);
+            pstSelectAssiduidadeByIdAluno = this.conexao.prepareStatement(selectAssiduidadeByIdAluno);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -115,5 +130,50 @@ public class ControleGeralDAO {
         }
 
         return arrayListFaturasMatriculas;
+    }
+
+    public void updateDataPagamentoFatura(Date dataVencimento, Integer idAluno) throws SQLException {
+        java.sql.Date dataVencimentoSql = new java.sql.Date(dataVencimento.getTime());
+
+        pstUpdateDataPagamentoFatura.setInt(1, idAluno);
+        pstUpdateDataPagamentoFatura.setDate(2, dataVencimentoSql);
+
+        try {
+            pstUpdateDataPagamentoFatura.execute();
+        } catch (SQLException e) {
+            System.out.println("Houve um problema ao pagar fatura");
+        }
+    }
+
+    public void insertAssiduidade(Integer idAluno) throws SQLException {
+        pstInsertAssiduidade.setInt(1, idAluno);
+
+        try {
+            pstInsertAssiduidade.execute();
+        } catch (SQLException e) {
+            System.out.println("Houve um problema ao inserir dia na assiduidade!");
+        }
+    }
+
+    public List<AssiduidadeModel> selectAssiduidadeByIdAluno(Integer idAluno) throws SQLException {
+        List<AssiduidadeModel> arrayListAssiduidade = new ArrayList<>();
+
+        pstSelectAssiduidadeByIdAluno.setInt(1, idAluno);
+
+        try {
+            ResultSet resultadoQuery = pstSelectAssiduidadeByIdAluno.executeQuery();
+
+            while (resultadoQuery.next()) {
+                AssiduidadeModel assiduidadeModel = new AssiduidadeModel();
+
+                assiduidadeModel.setDataEntrada(resultadoQuery.getTimestamp("data_entrada"));
+
+                arrayListAssiduidade.add(assiduidadeModel);
+            }
+        } catch (SQLException e) {
+            System.out.println("Houve um erro ao recuperar as assiduidades!");
+        }
+
+        return arrayListAssiduidade;
     }
 }

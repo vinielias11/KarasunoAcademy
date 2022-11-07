@@ -2,14 +2,19 @@ package graphic.controle;
 
 import controller.ControleGeralController;
 import model.AlunosModel;
+import model.AssiduidadeModel;
 import model.FaturasMatriculasModel;
 import model.MatriculasModalidadesModel;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
 import java.util.List;
 import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
@@ -114,6 +119,8 @@ public class ControleGeralWindow extends JDialog {
                     showNomeAlunoTxf.setText(alunosModel.getNome());
                     carregaDadosTabelaMatriculas();
                     carregaDadosTabelaFaturas();
+                    marcaPresencaHoje();
+                    carregaDadosTabelaAssiduidade();
                 } else {
                     showNomeAlunoTxf.setText("Aluno não encontrado!");
                     limpaDadosDeTodasAsTabelas();
@@ -210,18 +217,84 @@ public class ControleGeralWindow extends JDialog {
         tabelaFaturas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         tabelaFaturas.setRowHeight(20);
 
-        String[] colunasTabela = { "Vencimento", "Valor", "Pagamento", "Cancelamento" };
+        String[] colunasTabela = { "Vencimento", "Valor (R$)", "Pagamento", "Cancelamento" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0 || columnIndex > 1) {
+                    return java.util.Date.class;
+                }
+
+                return super.getColumnClass(columnIndex);
+            }
         };
 
         tabelaFaturas.setModel(tableModel);
 
+        tabelaFaturas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (tabelaFaturas.getValueAt(row, 2) == null) {
+                    setBackground(Color.red);
+                    setForeground(Color.white);
+                } else {
+                    setBackground(Color.green);
+                    setForeground(Color.black);
+                }
+
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
+        tabelaFaturas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = tabelaFaturas.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < tabelaFaturas.getRowCount()) {
+                    tabelaFaturas.setRowSelectionInterval(r, r);
+                } else {
+                    tabelaFaturas.clearSelection();
+                }
+
+                int linhaSelecionada = tabelaFaturas.getSelectedRow();
+                Date dataVencimento = (Date) tabelaFaturas.getValueAt(linhaSelecionada, 0),
+                        dataPagamento = (Date) tabelaFaturas.getValueAt(linhaSelecionada, 2);
+
+                if (linhaSelecionada < 0) return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+                    JPopupMenu popup = criaMenuTabelaFaturas(dataVencimento, dataPagamento);
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+
         return tabelaFaturas;
+    }
+
+    private JPopupMenu criaMenuTabelaFaturas(Date dataVencimento, Date dataPagamento) {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItem = new JMenuItem("Pagar fatura");
+
+        jMenuItem.addActionListener(e -> {
+            if (dataPagamento != null) {
+                JOptionPane.showMessageDialog(null, "Fatura já está paga!");
+                return;
+            }
+
+            controleGeralController.pagarFatura(dataVencimento, alunosModel.getId());
+            carregaDadosTabelaFaturas();
+        });
+
+        jPopupMenu.add(jMenuItem);
+
+        return jPopupMenu;
     }
 
     private void carregaDadosTabelaMatriculas() {
@@ -250,6 +323,24 @@ public class ControleGeralWindow extends JDialog {
            Object[] linha = { fm.getDataVencimento(), fm.getValor(), fm.getDataPagamento(), fm.getDataCancelamento() };
            tableModel.addRow(linha);
         });
+    }
+
+    private void carregaDadosTabelaAssiduidade() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaAssiduidade.getModel();
+        List<AssiduidadeModel> assiduidadesBanco = controleGeralController.recuperarAssiduidadePorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (assiduidadesBanco.isEmpty()) return;
+
+        assiduidadesBanco.forEach(a -> {
+            Object[] linha = { a.getDataEntradaFormatada() };
+            tableModel.addRow(linha);
+        });
+    }
+
+    private void marcaPresencaHoje() {
+        controleGeralController.marcarPresenca(alunosModel.getId());
     }
 
     private void limpaDadosDeTodasAsTabelas() {
