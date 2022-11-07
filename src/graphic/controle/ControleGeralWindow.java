@@ -1,12 +1,31 @@
 package graphic.controle;
 
+import controller.ControleGeralController;
+import model.AlunosModel;
+import model.AssiduidadeModel;
+import model.FaturasMatriculasModel;
+import model.MatriculasModalidadesModel;
+
 import javax.swing.*;
 import javax.swing.border.LineBorder;
+import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.text.MaskFormatter;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.util.Date;
+import java.util.List;
+import java.awt.event.KeyAdapter;
+import java.awt.event.KeyEvent;
+import java.text.ParseException;
 
 public class ControleGeralWindow extends JDialog {
-    public ControleGeralWindow(){
+    private JTable tabelaMatriculas, tabelaFaturas, tabelaAssiduidade;
+    private final ControleGeralController controleGeralController = new ControleGeralController();
+    private AlunosModel alunosModel;
+
+    public ControleGeralWindow() {
         setSize(900, 680);
         setLayout(null);
         setTitle("Controle Geral");
@@ -16,7 +35,7 @@ public class ControleGeralWindow extends JDialog {
         criaComponentes();
     }
 
-    private void criaComponentes(){
+    private void criaComponentes() {
         JPanel panel = new JPanel(new GridBagLayout());
         JPanel subPanel = new JPanel(new GridBagLayout());
         JPanel subPanel2 = new JPanel(new GridBagLayout());
@@ -24,7 +43,17 @@ public class ControleGeralWindow extends JDialog {
         GridBagConstraints gbcPanelPrincipal = new GridBagConstraints();
         panel.setSize(900,680);
 
-        JTextField codigoAlunoTxf = new JTextField(10);
+        MaskFormatter mascaraNumero;
+
+        try {
+            mascaraNumero = new MaskFormatter("#####");
+        } catch (ParseException e) {
+            throw new RuntimeException(e);
+        }
+
+        JFormattedTextField codigoAlunoTxf = new JFormattedTextField();
+        codigoAlunoTxf.setColumns(10);
+        mascaraNumero.install(codigoAlunoTxf);
 
         JTextField showNomeAlunoTxf = new JTextField(40);
         showNomeAlunoTxf.setEditable(false);
@@ -61,7 +90,7 @@ public class ControleGeralWindow extends JDialog {
         btnDadosMatricula.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosMatricula.setPreferredSize(new Dimension(280, 25));
 
-        JButton btnteste= new JButton("INSERIR BOX DE MES");
+        JButton btnteste = new JButton("INSERIR BOX DE MES");
         btnteste.setPreferredSize(new Dimension(200, 25));
 
         JTable tabelaAssiduidade = criaTabelaAssiduidade();
@@ -71,6 +100,33 @@ public class ControleGeralWindow extends JDialog {
         JTable tabelaFaturas = criaTabelaFaturas();
         JScrollPane scrollPaneFaturas = new JScrollPane(tabelaFaturas);
         scrollPaneFaturas.setPreferredSize(new Dimension(0,310));
+
+        this.tabelaMatriculas = tabelaMatriculas;
+        this.tabelaFaturas = tabelaFaturas;
+        this.tabelaAssiduidade = tabelaAssiduidade;
+
+        codigoAlunoTxf.addKeyListener(new KeyAdapter() {
+            @Override
+            public void keyReleased(KeyEvent e) {
+                String valorTxtField = codigoAlunoTxf.getText().trim();
+
+                if (valorTxtField.length() < 5) return;
+
+                Integer codigoDigitado = Integer.parseInt(valorTxtField);
+                alunosModel = controleGeralController.recuperarAlunoPorCodigo(codigoDigitado);
+
+                if (alunosModel != null) {
+                    showNomeAlunoTxf.setText(alunosModel.getNome());
+                    carregaDadosTabelaMatriculas();
+                    carregaDadosTabelaFaturas();
+                    marcaPresencaHoje();
+                    carregaDadosTabelaAssiduidade();
+                } else {
+                    showNomeAlunoTxf.setText("Aluno não encontrado!");
+                    limpaDadosDeTodasAsTabelas();
+                }
+            }
+        });
 
         gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 0; gbcSubPanel.anchor = GridBagConstraints.NORTH; gbcSubPanel.insets = new Insets(0,0,25,0);
         subPanel.add(fotoAlunoTesteTxf, gbcSubPanel);
@@ -107,18 +163,26 @@ public class ControleGeralWindow extends JDialog {
         add(panel);
     }
 
-    private JTable criaTabelaMatriculas(){
+    private JTable criaTabelaMatriculas() {
 
         JTable tabelaMatriculas = new JTable();
         tabelaMatriculas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaMatriculas.setRowHeight(22);
+        tabelaMatriculas.setRowHeight(20);
 
-        String[] colunasTabela = {"Modalidade", "Graduação", "Plano", "Data Início", "Data Fim"};
+        String[] colunasTabela = { "Modalidade", "Graduação", "Plano", "Data Início", "Data Fim" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
+            }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex > 2) {
+                    return java.util.Date.class;
+                }
+                return super.getColumnClass(columnIndex);
             }
         };
 
@@ -127,13 +191,13 @@ public class ControleGeralWindow extends JDialog {
         return tabelaMatriculas;
     }
 
-    private JTable criaTabelaAssiduidade(){
+    private JTable criaTabelaAssiduidade() {
 
         JTable tabelaAssiduidade = new JTable();
         tabelaAssiduidade.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaAssiduidade.setRowHeight(22);
+        tabelaAssiduidade.setRowHeight(20);
 
-        String[] colunasTabela = {"Assiduidade"};
+        String[] colunasTabela = { "Assiduidade" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
@@ -147,24 +211,146 @@ public class ControleGeralWindow extends JDialog {
         return tabelaAssiduidade;
     }
 
-    private JTable criaTabelaFaturas(){
+    private JTable criaTabelaFaturas() {
 
         JTable tabelaFaturas = new JTable();
         tabelaFaturas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaFaturas.setRowHeight(22);
+        tabelaFaturas.setRowHeight(20);
 
-        String[] colunasTabela = {"Vencimento", "Valor", "Pagamento", "Cancelamento"};
+        String[] colunasTabela = { "Vencimento", "Valor (R$)", "Pagamento", "Cancelamento" };
 
         DefaultTableModel tableModel = new DefaultTableModel(colunasTabela, 0) {
             @Override
             public boolean isCellEditable(int row, int column) {
                 return false;
             }
+
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                if (columnIndex == 0 || columnIndex > 1) {
+                    return java.util.Date.class;
+                }
+
+                return super.getColumnClass(columnIndex);
+            }
         };
 
         tabelaFaturas.setModel(tableModel);
 
+        tabelaFaturas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
+            @Override
+            public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
+                if (tabelaFaturas.getValueAt(row, 2) == null) {
+                    setBackground(Color.red);
+                    setForeground(Color.white);
+                } else {
+                    setBackground(Color.green);
+                    setForeground(Color.black);
+                }
+
+                return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
+            }
+        });
+
+        tabelaFaturas.addMouseListener(new MouseAdapter() {
+            @Override
+            public void mouseReleased(MouseEvent e) {
+                int r = tabelaFaturas.rowAtPoint(e.getPoint());
+                if (r >= 0 && r < tabelaFaturas.getRowCount()) {
+                    tabelaFaturas.setRowSelectionInterval(r, r);
+                } else {
+                    tabelaFaturas.clearSelection();
+                }
+
+                int linhaSelecionada = tabelaFaturas.getSelectedRow();
+                Date dataVencimento = (Date) tabelaFaturas.getValueAt(linhaSelecionada, 0),
+                        dataPagamento = (Date) tabelaFaturas.getValueAt(linhaSelecionada, 2);
+
+                if (linhaSelecionada < 0) return;
+
+                if (e.isPopupTrigger() && e.getComponent() instanceof JTable ) {
+                    JPopupMenu popup = criaMenuTabelaFaturas(dataVencimento, dataPagamento);
+                    popup.show(e.getComponent(), e.getX(), e.getY());
+                }
+            }
+        });
+
         return tabelaFaturas;
+    }
+
+    private JPopupMenu criaMenuTabelaFaturas(Date dataVencimento, Date dataPagamento) {
+        JPopupMenu jPopupMenu = new JPopupMenu();
+        JMenuItem jMenuItem = new JMenuItem("Pagar fatura");
+
+        jMenuItem.addActionListener(e -> {
+            if (dataPagamento != null) {
+                JOptionPane.showMessageDialog(null, "Fatura já está paga!");
+                return;
+            }
+
+            controleGeralController.pagarFatura(dataVencimento, alunosModel.getId());
+            carregaDadosTabelaFaturas();
+        });
+
+        jPopupMenu.add(jMenuItem);
+
+        return jPopupMenu;
+    }
+
+    private void carregaDadosTabelaMatriculas() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaMatriculas.getModel();
+        List<MatriculasModalidadesModel> matriculasModalidadesBanco = controleGeralController.recuperarMatriculasModalidadesPorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (matriculasModalidadesBanco.isEmpty()) return;
+
+        matriculasModalidadesBanco.forEach(mm -> {
+            Object[] linha = { mm.getNomeModalidade(), mm.getNomeGraduacao(), mm.getNomePlano(), mm.getDataInicio(), mm.getDataFim() };
+            tableModel.addRow(linha);
+        });
+    }
+
+    private void carregaDadosTabelaFaturas() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaFaturas.getModel();
+        List<FaturasMatriculasModel> faturasMatriculasBanco = controleGeralController.recuperarFaturasMatriculasPorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (faturasMatriculasBanco.isEmpty()) return;
+
+        faturasMatriculasBanco.forEach(fm -> {
+           Object[] linha = { fm.getDataVencimento(), fm.getValor(), fm.getDataPagamento(), fm.getDataCancelamento() };
+           tableModel.addRow(linha);
+        });
+    }
+
+    private void carregaDadosTabelaAssiduidade() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaAssiduidade.getModel();
+        List<AssiduidadeModel> assiduidadesBanco = controleGeralController.recuperarAssiduidadePorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (assiduidadesBanco.isEmpty()) return;
+
+        assiduidadesBanco.forEach(a -> {
+            Object[] linha = { a.getDataEntradaFormatada() };
+            tableModel.addRow(linha);
+        });
+    }
+
+    private void marcaPresencaHoje() {
+        controleGeralController.marcarPresenca(alunosModel.getId());
+    }
+
+    private void limpaDadosDeTodasAsTabelas() {
+        DefaultTableModel tableModelMatriculas = (DefaultTableModel) tabelaMatriculas.getModel(),
+                tableModelFaturas = (DefaultTableModel) tabelaFaturas.getModel(),
+                tableModelAssiduidade = (DefaultTableModel) tabelaAssiduidade.getModel();
+
+        tableModelMatriculas.setRowCount(0);
+        tableModelFaturas.setRowCount(0);
+        tableModelAssiduidade.setRowCount(0);
     }
 
     public static void main(String[] args) {

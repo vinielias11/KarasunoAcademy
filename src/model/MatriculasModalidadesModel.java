@@ -9,6 +9,9 @@ public class MatriculasModalidadesModel {
     private Integer plano;
     private Date dataInicio;
     private Date dataFim;
+    private String nomeModalidade;
+    private String nomeGraduacao;
+    private String nomePlano;
 
     public MatriculasModalidadesModel() {
 
@@ -62,5 +65,27 @@ public class MatriculasModalidadesModel {
         this.dataFim = dataFim;
     }
 
+    public String getNomeModalidade() {
+        return nomeModalidade;
+    }
 
+    public void setNomeModalidade(String nomeModalidade) {
+        this.nomeModalidade = nomeModalidade;
+    }
+
+    public String getNomeGraduacao() {
+        return nomeGraduacao;
+    }
+
+    public void setNomeGraduacao(String nomeGraduacao) {
+        this.nomeGraduacao = nomeGraduacao;
+    }
+
+    public String getNomePlano() {
+        return nomePlano;
+    }
+
+    public void setNomePlano(String nomePlano) {
+        this.nomePlano = nomePlano;
+    }
 }
