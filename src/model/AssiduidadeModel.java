@@ -28,7 +28,7 @@ public class AssiduidadeModel {
         Date date = new Date();
         date.setTime(getDataEntrada().getTime());
 
-        return new SimpleDateFormat("dd/MM/yyyy H:m").format(date);
+        return new SimpleDateFormat("dd/MM/yyyy HH:mm").format(date);
     }
 
     public void setDataEntrada(Timestamp dataEntrada) {
