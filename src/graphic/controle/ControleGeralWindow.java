@@ -2,6 +2,7 @@ package graphic.controle;
 
 import controller.ControleGeralController;
 import model.AlunosModel;
+import model.FaturasMatriculasModel;
 import model.MatriculasModalidadesModel;
 
 import javax.swing.*;
@@ -112,6 +113,10 @@ public class ControleGeralWindow extends JDialog {
                 if (alunosModel != null) {
                     showNomeAlunoTxf.setText(alunosModel.getNome());
                     carregaDadosTabelaMatriculas();
+                    carregaDadosTabelaFaturas();
+                } else {
+                    showNomeAlunoTxf.setText("Aluno não encontrado!");
+                    limpaDadosDeTodasAsTabelas();
                 }
             }
         });
@@ -155,7 +160,7 @@ public class ControleGeralWindow extends JDialog {
 
         JTable tabelaMatriculas = new JTable();
         tabelaMatriculas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaMatriculas.setRowHeight(22);
+        tabelaMatriculas.setRowHeight(20);
 
         String[] colunasTabela = { "Modalidade", "Graduação", "Plano", "Data Início", "Data Fim" };
 
@@ -183,7 +188,7 @@ public class ControleGeralWindow extends JDialog {
 
         JTable tabelaAssiduidade = new JTable();
         tabelaAssiduidade.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaAssiduidade.setRowHeight(22);
+        tabelaAssiduidade.setRowHeight(20);
 
         String[] colunasTabela = { "Assiduidade" };
 
@@ -203,7 +208,7 @@ public class ControleGeralWindow extends JDialog {
 
         JTable tabelaFaturas = new JTable();
         tabelaFaturas.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        tabelaFaturas.setRowHeight(22);
+        tabelaFaturas.setRowHeight(20);
 
         String[] colunasTabela = { "Vencimento", "Valor", "Pagamento", "Cancelamento" };
 
@@ -231,6 +236,30 @@ public class ControleGeralWindow extends JDialog {
             Object[] linha = { mm.getNomeModalidade(), mm.getNomeGraduacao(), mm.getNomePlano(), mm.getDataInicio(), mm.getDataFim() };
             tableModel.addRow(linha);
         });
+    }
+
+    private void carregaDadosTabelaFaturas() {
+        DefaultTableModel tableModel = (DefaultTableModel) tabelaFaturas.getModel();
+        List<FaturasMatriculasModel> faturasMatriculasBanco = controleGeralController.recuperarFaturasMatriculasPorCodigoAluno(alunosModel.getId());
+
+        tableModel.setRowCount(0);
+
+        if (faturasMatriculasBanco.isEmpty()) return;
+
+        faturasMatriculasBanco.forEach(fm -> {
+           Object[] linha = { fm.getDataVencimento(), fm.getValor(), fm.getDataPagamento(), fm.getDataCancelamento() };
+           tableModel.addRow(linha);
+        });
+    }
+
+    private void limpaDadosDeTodasAsTabelas() {
+        DefaultTableModel tableModelMatriculas = (DefaultTableModel) tabelaMatriculas.getModel(),
+                tableModelFaturas = (DefaultTableModel) tabelaFaturas.getModel(),
+                tableModelAssiduidade = (DefaultTableModel) tabelaAssiduidade.getModel();
+
+        tableModelMatriculas.setRowCount(0);
+        tableModelFaturas.setRowCount(0);
+        tableModelAssiduidade.setRowCount(0);
     }
 
     public static void main(String[] args) {
