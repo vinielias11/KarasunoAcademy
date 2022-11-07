@@ -22,13 +22,16 @@ import java.text.ParseException;
 
 public class ControleGeralWindow extends JDialog {
     private JTable tabelaMatriculas, tabelaFaturas, tabelaAssiduidade;
+    private JTextField showSituacaoTxf;
     private final ControleGeralController controleGeralController = new ControleGeralController();
     private AlunosModel alunosModel;
 
     public ControleGeralWindow() {
+        super((Dialog) null);
         setSize(900, 680);
         setLayout(null);
         setTitle("Controle Geral");
+        setName("ControleGeral");
         setIconImage(Toolkit.getDefaultToolkit().getImage(this.getClass().getResource("/resources/icons/sistemaIcon.png")));
         setResizable(false);
         setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -68,7 +71,7 @@ public class ControleGeralWindow extends JDialog {
         JScrollPane scrollPaneMatriculas = new JScrollPane(tabelaMatriculas);
         scrollPaneMatriculas.setPreferredSize(new Dimension(0,100));
 
-        JTextField showSituacaoTxf = new JTextField("SITUAÇÃO REGULAR");
+        JTextField showSituacaoTxf = new JTextField();
         showSituacaoTxf.setEditable(false);
         showSituacaoTxf.setBorder(new LineBorder(Color.black));
         showSituacaoTxf.setPreferredSize(new Dimension(400,80));
@@ -104,6 +107,7 @@ public class ControleGeralWindow extends JDialog {
         this.tabelaMatriculas = tabelaMatriculas;
         this.tabelaFaturas = tabelaFaturas;
         this.tabelaAssiduidade = tabelaAssiduidade;
+        this.showSituacaoTxf = showSituacaoTxf;
 
         codigoAlunoTxf.addKeyListener(new KeyAdapter() {
             @Override
@@ -124,6 +128,8 @@ public class ControleGeralWindow extends JDialog {
                 } else {
                     showNomeAlunoTxf.setText("Aluno não encontrado!");
                     limpaDadosDeTodasAsTabelas();
+                    showSituacaoTxf.setText("");
+                    showSituacaoTxf.setBackground(null);
                 }
             }
         });
@@ -323,6 +329,23 @@ public class ControleGeralWindow extends JDialog {
            Object[] linha = { fm.getDataVencimento(), fm.getValor(), fm.getDataPagamento(), fm.getDataCancelamento() };
            tableModel.addRow(linha);
         });
+
+        pintaTxfSituacaoDeAcordoComFatura(faturasMatriculasBanco);
+    }
+
+    private void pintaTxfSituacaoDeAcordoComFatura(List<FaturasMatriculasModel> faturasMatriculas) {
+        for (int i = 0; i < faturasMatriculas.size(); i ++) {
+            if (faturasMatriculas.get(i).getDataVencimento().getTime() < new Date().getTime() && faturasMatriculas.get(i).getDataPagamento() == null) {
+                showSituacaoTxf.setText("DÉBITOS PENDENTES");
+                showSituacaoTxf.setBackground(Color.red);
+                showSituacaoTxf.setForeground(Color.white);
+                break;
+            } else {
+                showSituacaoTxf.setText("SITUAÇÃO REGULAR");
+                showSituacaoTxf.setBackground(Color.green);
+                showSituacaoTxf.setForeground(Color.black);
+            }
+        }
     }
 
     private void carregaDadosTabelaAssiduidade() {
@@ -353,7 +376,7 @@ public class ControleGeralWindow extends JDialog {
         tableModelAssiduidade.setRowCount(0);
     }
 
-    public static void main(String[] args) {
-        new ControleGeralWindow().setVisible(true);
-    }
+//    public static void main(String[] args) {
+//        new ControleGeralWindow().setVisible(true);
+//    }
 }
