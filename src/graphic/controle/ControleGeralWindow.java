@@ -375,8 +375,4 @@ public class ControleGeralWindow extends JDialog {
         tableModelFaturas.setRowCount(0);
         tableModelAssiduidade.setRowCount(0);
     }
-
-//    public static void main(String[] args) {
-//        new ControleGeralWindow().setVisible(true);
-//    }
 }

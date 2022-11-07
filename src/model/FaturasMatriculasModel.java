@@ -1,12 +1,6 @@
 package model;
 
-import java.sql.Time;
 import java.sql.Timestamp;
-import java.text.DateFormat;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.TemporalAccessor;
 import java.util.Date;
 
 public class FaturasMatriculasModel {
