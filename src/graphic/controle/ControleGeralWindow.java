@@ -1,10 +1,11 @@
 package graphic.controle;
 
 import controller.ControleGeralController;
-import model.AlunosModel;
-import model.AssiduidadeModel;
-import model.FaturasMatriculasModel;
-import model.MatriculasModalidadesModel;
+import graphic.entidades.alunos.AlunosCadastro;
+import graphic.entidades.alunos.AlunosPanel;
+import graphic.entidades.matriculas.MatriculasCadastro;
+import graphic.entidades.matriculas.MatriculasPanel;
+import model.*;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
@@ -25,6 +26,12 @@ public class ControleGeralWindow extends JDialog {
     private JTextField showSituacaoTxf;
     private final ControleGeralController controleGeralController = new ControleGeralController();
     private AlunosModel alunosModel;
+    private AlunosPanel alunosPanel;
+    private MatriculasModel matriculasModel;
+    private MatriculasPanel matriculasPanel;
+
+    private MatriculasModalidadesModel matriculasModalidadesModel;
+
 
     public ControleGeralWindow() {
         super((Dialog) null);
@@ -84,6 +91,24 @@ public class ControleGeralWindow extends JDialog {
         btnDadosAluno.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDadosAluno.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosAluno.setPreferredSize(new Dimension(280, 25));
+        btnDadosAluno.addActionListener(e -> {
+            try {
+                String valorTxtField = codigoAlunoTxf.getText().trim();
+
+                if (valorTxtField.length() < 5) {
+                    JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                Integer codigoDigitado = Integer.parseInt(valorTxtField);
+                alunosModel = controleGeralController.recuperarAlunoPorCodigo(codigoDigitado);
+
+                AlunosCadastro alunosCadastro = new AlunosCadastro(alunosModel, alunosPanel);
+
+                alunosCadastro.setVisible(true);
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         JButton btnDadosMatricula = new JButton("Acessar dados da matrícula");
         btnDadosMatricula.setFont(new Font("Helvetica", Font.BOLD, 16));
@@ -92,6 +117,26 @@ public class ControleGeralWindow extends JDialog {
         btnDadosMatricula.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDadosMatricula.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosMatricula.setPreferredSize(new Dimension(280, 25));
+        btnDadosMatricula.addActionListener(e -> {
+
+            try {
+                String valorTxtField = codigoAlunoTxf.getText().trim();
+
+                if (valorTxtField.length() < 5) {
+                    JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+                }
+
+                Integer codigoDigitado = Integer.parseInt(valorTxtField);
+                matriculasModel = controleGeralController.recuperarMatriculasPorCodigoAluno(codigoDigitado);
+                System.out.println(matriculasModel.getDataMatricula());
+
+                MatriculasCadastro matriculasCadastro = new MatriculasCadastro(matriculasModel, matriculasPanel);
+
+                matriculasCadastro.setVisible(true);
+            }catch (ArrayIndexOutOfBoundsException ex){
+                JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            }
+        });
 
         JButton btnteste = new JButton("INSERIR BOX DE MES");
         btnteste.setPreferredSize(new Dimension(200, 25));

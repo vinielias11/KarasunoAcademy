@@ -2,10 +2,7 @@ package database.dao;
 
 import database.connection.ConnectionFactory;
 import database.connection.EntidadeConexao;
-import model.AlunosModel;
-import model.AssiduidadeModel;
-import model.FaturasMatriculasModel;
-import model.MatriculasModalidadesModel;
+import model.*;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -23,6 +20,8 @@ public class ControleGeralDAO {
     private final String selectMatriculasModalidadesByIdAluno = "SELECT MO.NOME AS modalidade, G.NOME AS graduacao, P.NOME AS plano, MM.DATA_INICIO, MM.DATA_FIM FROM ALUNOS A INNER JOIN MATRICULAS M ON (M.ID_ALUNO = A.ID) " +
             "INNER JOIN MATRICULAS_MODALIDADES MM ON (MM.CODIGO_MATRICULA = M.CODIGO_MATRICULA) INNER JOIN MODALIDADES MO ON (MO.ID = MM.ID_MODALIDADE) " +
             "INNER JOIN GRADUACOES G ON (G.ID = MM.ID_GRADUACAO) INNER JOIN PLANOS P ON (P.ID = MM.ID_PLANO) WHERE A.ID = ?;";
+
+    private final String selectMatriculasByCodigo = "SELECT M.*, A.nome AS nome_aluno FROM public.matriculas M INNER JOIN alunos A ON M.id_aluno = A.id WHERE M.id_aluno = (SELECT ID FROM ALUNOS WHERE CODIGO_ALUNO = ?) ORDER BY M.codigo_matricula;";
 
     private final String selectFaturasMatriculasByIdAluno = "SELECT FM.DATA_VENCIMENTO, FM.VALOR, FM.DATA_PAGAMENTO, FM.DATA_CANCELAMENTO FROM ALUNOS A \n" +
             "INNER JOIN MATRICULAS M ON (M.ID_ALUNO = A.ID) " +
@@ -42,6 +41,7 @@ public class ControleGeralDAO {
     private final PreparedStatement pstUpdateDataPagamentoFatura;
     private final PreparedStatement pstInsertAssiduidade;
     private final PreparedStatement pstSelectAssiduidadeByIdAluno;
+    private final PreparedStatement pstSelectMatriculasByCodigo;
 
     public ControleGeralDAO() {
         try {
@@ -52,6 +52,7 @@ public class ControleGeralDAO {
             pstUpdateDataPagamentoFatura = this.conexao.prepareStatement(updateDataPagamentoFatura);
             pstInsertAssiduidade = this.conexao.prepareStatement(insertAssiduidade);
             pstSelectAssiduidadeByIdAluno = this.conexao.prepareStatement(selectAssiduidadeByIdAluno);
+            pstSelectMatriculasByCodigo = this.conexao.prepareStatement(selectMatriculasByCodigo);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -71,6 +72,20 @@ public class ControleGeralDAO {
                 alunosModel.setId(resultadoQuery.getInt("id"));
                 alunosModel.setCodigoAluno(resultadoQuery.getInt("codigo_aluno"));
                 alunosModel.setNome(resultadoQuery.getString("nome"));
+                alunosModel.setDataNascimento(resultadoQuery.getDate("data_nascimento"));
+                alunosModel.setSexo(resultadoQuery.getString("sexo"));
+                alunosModel.setTelefone(resultadoQuery.getString("telefone"));
+                alunosModel.setCelular(resultadoQuery.getString("celular"));
+                alunosModel.setEmail(resultadoQuery.getString("email"));
+                alunosModel.setObservacao(resultadoQuery.getString("observacao"));
+                alunosModel.setEndereco(resultadoQuery.getString("endereco"));
+                alunosModel.setNumero(resultadoQuery.getString("numero"));
+                alunosModel.setComplemento(resultadoQuery.getString("complemento"));
+                alunosModel.setBairro(resultadoQuery.getString("bairro"));
+                alunosModel.setCidade(resultadoQuery.getString("cidade"));
+                alunosModel.setEstado(resultadoQuery.getString("estado"));
+                alunosModel.setPais(resultadoQuery.getString("pais"));
+                alunosModel.setCep(resultadoQuery.getString("cep"));
 
                 arrayListAlunos.add(alunosModel);
             }
@@ -79,6 +94,33 @@ public class ControleGeralDAO {
         }
 
         return !arrayListAlunos.isEmpty() ? arrayListAlunos.get(0) : null;
+    }
+
+    public MatriculasModel selectMatriculasByCodigo(Integer codigo) throws SQLException {
+        List<MatriculasModel> arrayListMatriculas = new ArrayList<>();
+
+        pstSelectMatriculasByCodigo.setInt(1, codigo);
+
+        try {
+            ResultSet resultadoQuery = pstSelectMatriculasByCodigo.executeQuery();
+
+            while (resultadoQuery.next()) {
+                MatriculasModel matriculasModel = new MatriculasModel();
+
+                matriculasModel.setCodigoMatricula(resultadoQuery.getInt("codigo_matricula"));
+                matriculasModel.setCodigoAluno(resultadoQuery.getInt("id_aluno"));
+                matriculasModel.setNomeAluno(resultadoQuery.getString("nome_aluno"));
+                matriculasModel.setDataMatricula(resultadoQuery.getDate("data_matricula"));
+                matriculasModel.setDiaVencimento(resultadoQuery.getInt("dia_vencimento"));
+                matriculasModel.setDataEncerramento(resultadoQuery.getDate("data_encerramento"));
+
+                arrayListMatriculas.add(matriculasModel);
+            }
+        } catch (SQLException e) {
+            System.out.println("Houve um erro ao recuperar matrícula!");
+        }
+
+        return !arrayListMatriculas.isEmpty() ? arrayListMatriculas.get(0) : null;
     }
 
     public List<MatriculasModalidadesModel> selectMatriculasModalidadesByIdAluno(Integer idAluno) throws SQLException {

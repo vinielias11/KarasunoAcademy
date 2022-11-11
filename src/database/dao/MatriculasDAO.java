@@ -15,7 +15,7 @@ public class MatriculasDAO extends SistemaDAO {
     private DbUtil dbUtil = new DbUtil();
 
     private final String select = "SELECT M.*, A.nome AS nome_aluno FROM public.matriculas M INNER JOIN alunos A ON M.id_aluno = A.id ORDER BY M.codigo_matricula;";;
-    private final String insert = "INSERT INTO public.matriculas(id_aluno,dia_vencimento,data_encerramento)" +
+    private final String insert = "INSERT INTO public.matriculas(id_aluno,data_matricula,dia_vencimento)" +
             "VALUES (?,?,?);";
     private final String delete = "DELETE FROM public.matriculas WHERE codigo_matricula = ?;";
     private final String update = "UPDATE public.matriculas SET id_aluno = ?, dia_vencimento = ? WHERE codigo_matricula = ?";
@@ -99,7 +99,7 @@ public class MatriculasDAO extends SistemaDAO {
             JOptionPane.showMessageDialog(null, "ID não encontrado!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelectById);
         }
         return matriculasModel;
     }
@@ -109,8 +109,9 @@ public class MatriculasDAO extends SistemaDAO {
         MatriculasModel matriculasModel = (MatriculasModel) param;
 
         pstInsert.setInt(1, matriculasModel.getCodigoAluno());;
-        pstInsert.setInt(2, matriculasModel.getDiaVencimento());
-        pstInsert.setDate(3, (Date) matriculasModel.getDataEncerramento());
+        pstInsert.setDate(2, (Date) matriculasModel.getDataMatricula());
+        pstInsert.setInt(3, matriculasModel.getDiaVencimento());
+
 
         try {
             pstInsert.execute();
@@ -118,7 +119,7 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao inserir a matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstInsert);
         }
     }
 
@@ -134,14 +135,13 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao excluir matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstDelete);
         }
     }
 
     @Override
     public void update(Object param) throws SQLException {
         MatriculasModel matriculasModel = (MatriculasModel) param;
-
 
         pstUpdate.setInt(1, matriculasModel.getCodigoAluno());
         pstUpdate.setInt(2, matriculasModel.getDiaVencimento());
@@ -153,7 +153,7 @@ public class MatriculasDAO extends SistemaDAO {
             System.out.println("Houve um erro ao atualizar matrícula!");
             e.printStackTrace();
         }finally {
-            dbUtil.fecharConexaoEPrpdStatement(conexao, pstSelect);
+            dbUtil.fecharConexaoEPrpdStatement(conexao, pstUpdate);
         }
     }
 

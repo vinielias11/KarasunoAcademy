@@ -1,10 +1,7 @@
 package controller;
 
 import database.dao.ControleGeralDAO;
-import model.AlunosModel;
-import model.AssiduidadeModel;
-import model.FaturasMatriculasModel;
-import model.MatriculasModalidadesModel;
+import model.*;
 
 import java.sql.SQLException;
 import java.util.Date;
@@ -20,6 +17,14 @@ public class ControleGeralController {
     public AlunosModel recuperarAlunoPorCodigo(Integer codigo) {
         try {
             return controleGeralDAO.selectAlunoByCodigo(codigo);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public MatriculasModel recuperarMatriculasPorCodigoAluno(Integer codigo) {
+        try {
+            return controleGeralDAO.selectMatriculasByCodigo(codigo);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
