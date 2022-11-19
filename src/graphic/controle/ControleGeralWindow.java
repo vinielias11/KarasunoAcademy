@@ -2,9 +2,6 @@ package graphic.controle;
 
 import controller.ControleGeralController;
 import graphic.entidades.alunos.AlunosCadastro;
-import graphic.entidades.alunos.AlunosPanel;
-import graphic.entidades.matriculas.MatriculasCadastro;
-import graphic.entidades.matriculas.MatriculasPanel;
 import model.*;
 
 import javax.swing.*;
@@ -13,12 +10,9 @@ import javax.swing.table.DefaultTableCellRenderer;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
+import java.awt.event.*;
 import java.util.Date;
 import java.util.List;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.text.ParseException;
 
 public class ControleGeralWindow extends JDialog {
@@ -26,12 +20,6 @@ public class ControleGeralWindow extends JDialog {
     private JTextField showSituacaoTxf;
     private final ControleGeralController controleGeralController = new ControleGeralController();
     private AlunosModel alunosModel;
-    private AlunosPanel alunosPanel;
-    private MatriculasModel matriculasModel;
-    private MatriculasPanel matriculasPanel;
-
-    private MatriculasModalidadesModel matriculasModalidadesModel;
-
 
     public ControleGeralWindow() {
         super((Dialog) null);
@@ -68,21 +56,25 @@ public class ControleGeralWindow extends JDialog {
         JTextField showNomeAlunoTxf = new JTextField(40);
         showNomeAlunoTxf.setEditable(false);
         showNomeAlunoTxf.setBorder(new LineBorder(Color.black));
+        showNomeAlunoTxf.setRequestFocusEnabled(false);
 
         JTextField fotoAlunoTesteTxf = new JTextField();
         fotoAlunoTesteTxf.setEditable(false);
         fotoAlunoTesteTxf.setPreferredSize(new Dimension(220,220));
         fotoAlunoTesteTxf.setBorder(new LineBorder(Color.black));
+        fotoAlunoTesteTxf.setRequestFocusEnabled(false);
 
         JTable tabelaMatriculas = criaTabelaMatriculas();
         JScrollPane scrollPaneMatriculas = new JScrollPane(tabelaMatriculas);
         scrollPaneMatriculas.setPreferredSize(new Dimension(0,100));
+        tabelaMatriculas.setRequestFocusEnabled(false);
 
         JTextField showSituacaoTxf = new JTextField();
         showSituacaoTxf.setEditable(false);
         showSituacaoTxf.setBorder(new LineBorder(Color.black));
         showSituacaoTxf.setPreferredSize(new Dimension(400,80));
         showSituacaoTxf.setHorizontalAlignment(JTextField.CENTER);
+        showSituacaoTxf.setRequestFocusEnabled(false);
 
         JButton btnDadosAluno = new JButton("Acessar dados do aluno");
         btnDadosAluno.setFont(new Font("Helvetica", Font.BOLD, 16));
@@ -91,23 +83,16 @@ public class ControleGeralWindow extends JDialog {
         btnDadosAluno.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDadosAluno.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosAluno.setPreferredSize(new Dimension(280, 25));
+        btnDadosAluno.setRequestFocusEnabled(false);
         btnDadosAluno.addActionListener(e -> {
-            try {
-                String valorTxtField = codigoAlunoTxf.getText().trim();
-
-                if (valorTxtField.length() < 5) {
-                    JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
-                }
-
-                Integer codigoDigitado = Integer.parseInt(valorTxtField);
-                alunosModel = controleGeralController.recuperarAlunoPorCodigo(codigoDigitado);
-
-                AlunosCadastro alunosCadastro = new AlunosCadastro(alunosModel, alunosPanel);
-
-                alunosCadastro.setVisible(true);
-            }catch (ArrayIndexOutOfBoundsException ex){
-                JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            if(alunosModel == null){
+                JOptionPane.showMessageDialog(null, "Aluno não encontrado");
+                return;
             }
+
+            AlunosCadastro alunosCadastro = new AlunosCadastro(alunosModel);
+            alunosCadastro.setVisible(true);
+
         });
 
         JButton btnDadosMatricula = new JButton("Acessar dados da matrícula");
@@ -117,25 +102,18 @@ public class ControleGeralWindow extends JDialog {
         btnDadosMatricula.setCursor(new Cursor(Cursor.HAND_CURSOR));
         btnDadosMatricula.setBorder(BorderFactory.createLineBorder(Color.black));
         btnDadosMatricula.setPreferredSize(new Dimension(280, 25));
+        btnDadosMatricula.setRequestFocusEnabled(false);
         btnDadosMatricula.addActionListener(e -> {
-
-            try {
-                String valorTxtField = codigoAlunoTxf.getText().trim();
-
-                if (valorTxtField.length() < 5) {
-                    JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
-                }
-
-                Integer codigoDigitado = Integer.parseInt(valorTxtField);
-                matriculasModel = controleGeralController.recuperarMatriculasPorCodigoAluno(codigoDigitado);
-                System.out.println(matriculasModel.getDataMatricula());
-
-                MatriculasCadastro matriculasCadastro = new MatriculasCadastro(matriculasModel, matriculasPanel);
-
-                matriculasCadastro.setVisible(true);
-            }catch (ArrayIndexOutOfBoundsException ex){
-                JOptionPane.showMessageDialog(null,"Digite o código do aluno!", "Atenção", JOptionPane.INFORMATION_MESSAGE);
+            if(alunosModel == null){
+                JOptionPane.showMessageDialog(null, "Aluno não encontrado");
+                return;
             }
+
+            MatriculasModel matriculasModel = controleGeralController.recuperarMatriculasPorCodigoAluno(alunosModel.getCodigoAluno());
+
+            MatriculasInfoWindow matriculasInfoWindow = new MatriculasInfoWindow(matriculasModel);
+            matriculasInfoWindow.setVisible(true);
+
         });
 
         JButton btnteste = new JButton("INSERIR BOX DE MES");
@@ -144,10 +122,12 @@ public class ControleGeralWindow extends JDialog {
         JTable tabelaAssiduidade = criaTabelaAssiduidade();
         JScrollPane scrollPaneAssiduidade = new JScrollPane(tabelaAssiduidade);
         scrollPaneAssiduidade.setPreferredSize(new Dimension(220,310));
+        tabelaAssiduidade.setRequestFocusEnabled(false);
 
         JTable tabelaFaturas = criaTabelaFaturas();
         JScrollPane scrollPaneFaturas = new JScrollPane(tabelaFaturas);
         scrollPaneFaturas.setPreferredSize(new Dimension(0,310));
+        tabelaFaturas.setRequestFocusEnabled(false);
 
         this.tabelaMatriculas = tabelaMatriculas;
         this.tabelaFaturas = tabelaFaturas;
@@ -186,7 +166,7 @@ public class ControleGeralWindow extends JDialog {
         gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 2;
         subPanel.add(scrollPaneAssiduidade, gbcSubPanel);
 
-        gbcPanelPrincipal.gridx = 0; gbcPanelPrincipal.gridy = 0;
+        gbcPanelPrincipal.gridx = 0; gbcPanelPrincipal.gridy = 0; gbcSubPanel.insets = new Insets(0,0,20,0);
         gbcPanelPrincipal.anchor = GridBagConstraints.NORTHWEST;
         panel.add(subPanel,gbcPanelPrincipal);
 
@@ -208,8 +188,15 @@ public class ControleGeralWindow extends JDialog {
         gbcSubPanel.fill = GridBagConstraints.BOTH;
         subPanel2.add(scrollPaneFaturas, gbcSubPanel);
 
-        gbcPanelPrincipal.gridx = 1; gbcPanelPrincipal.gridy = 0; gbcPanelPrincipal.insets = new Insets(0,50,0,0);
+        gbcPanelPrincipal.gridx = 1; gbcPanelPrincipal.gridy = 0; gbcPanelPrincipal.insets = new Insets(0,50,20,0);
         panel.add(subPanel2,gbcPanelPrincipal);
+
+        addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowActivated(WindowEvent e) {
+                codigoAlunoTxf.requestFocus();
+            }
+        });
 
         add(panel);
     }
@@ -291,13 +278,23 @@ public class ControleGeralWindow extends JDialog {
         tabelaFaturas.setDefaultRenderer(Object.class, new DefaultTableCellRenderer() {
             @Override
             public Component getTableCellRendererComponent(JTable table, Object value, boolean isSelected, boolean hasFocus, int row, int column) {
-                if (tabelaFaturas.getValueAt(row, 2) == null) {
-                    setBackground(Color.red);
-                    setForeground(Color.white);
-                } else {
-                    setBackground(Color.green);
-                    setForeground(Color.black);
+                Date dataVencimento = (Date) tabelaFaturas.getValueAt(row, 0);
+
+                if (tabelaFaturas.getValueAt(row, 2) == null ) {
+                    if (dataVencimento.getTime() <= new Date().getTime()) {
+                        setBackground(Color.red);
+                        setForeground(Color.white);
+                    }
+                    else{
+                        setBackground(Color.white);
+                        setForeground(Color.black);
+                    }
                 }
+                else {
+                        setBackground(Color.green);
+                        setForeground(Color.black);
+                }
+
 
                 return super.getTableCellRendererComponent(table, value, isSelected, hasFocus, row, column);
             }
@@ -420,4 +417,5 @@ public class ControleGeralWindow extends JDialog {
         tableModelFaturas.setRowCount(0);
         tableModelAssiduidade.setRowCount(0);
     }
+
 }

@@ -4,6 +4,7 @@ import javax.swing.*;
 import java.awt.*;
 
 public abstract class EntidadesCadastro extends JDialog {
+    private boolean isReadOnly = false;
 
     public EntidadesCadastro(){
         setBackground(new Color(255,255,255));
@@ -18,6 +19,10 @@ public abstract class EntidadesCadastro extends JDialog {
     }
 
     public void criarBotoes(){
+        if(isReadOnly){
+            return;
+        }
+
         JButton btnFechar = new JButton("Cancelar");
         btnFechar.setBounds(100,580,120,30);
         btnFechar.setFont(new Font("Helvetica", Font.BOLD, 16));

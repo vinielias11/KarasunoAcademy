@@ -7,6 +7,8 @@ import graphic.entidades.base.EntidadesCadastro;
 import model.AlunosModel;
 
 import javax.swing.*;
+import javax.swing.border.Border;
+import javax.swing.border.LineBorder;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
@@ -17,6 +19,7 @@ import java.util.List;
 public class AlunosCadastro extends EntidadesCadastro {
     private AlunosModel alunosModel = new AlunosModel();
     private AlunosPanel alunosPanel;
+    private boolean isReadOnly = false;
 
     private boolean isEditando = false;
     public AlunosCadastro(AlunosPanel alunosPanel) {
@@ -26,6 +29,11 @@ public class AlunosCadastro extends EntidadesCadastro {
 
     public AlunosCadastro(AlunosModel dados, AlunosPanel alunosPanel) {
         this.alunosPanel = alunosPanel;
+        criaComponentes(dados);
+    }
+
+    public AlunosCadastro(AlunosModel dados){
+        isReadOnly = true;
         criaComponentes(dados);
     }
 
@@ -234,6 +242,38 @@ public class AlunosCadastro extends EntidadesCadastro {
             paisTxf.setText(dados.getPais());
             cepTxf.setText(dados.getCep());
             observacaoTxa.setText(dados.getObservacao());
+        }
+
+        if(isReadOnly){
+            celularTxf.setEditable(false);
+            celularTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            emailTxf.setEditable(false);
+            emailTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            enderecoTxf.setEditable(false);
+            enderecoTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            numeroTxf.setEditable(false);
+            numeroTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            complementoTxf.setEditable(false);
+            complementoTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            bairroTxf.setEditable(false);
+            bairroTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            comboBoxEstados.setEnabled(false);
+            comboBoxEstados.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            comboBoxCidades.setEnabled(false);
+            comboBoxCidades.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            cepTxf.setEditable(false);
+            cepTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            observacaoTxa.setEditable(false);
+            observacaoTxa.setOpaque(false);
+            Border border = new LineBorder(new Color(184, 207, 229));
+            observacaoTxa.setBorder(border);
+            nomeTxf.setEditable(false);
+            nomeTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            dateSpinner.setEnabled(false);
+            dateSpinner.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            sexoCmbox.setEnabled(false);
+            sexoCmbox.setBorder(javax.swing.BorderFactory.createEmptyBorder());
+            paisTxf.setBorder(javax.swing.BorderFactory.createEmptyBorder());
         }
 
         add(panel);

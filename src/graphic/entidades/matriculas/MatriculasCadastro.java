@@ -45,6 +45,10 @@ public class MatriculasCadastro extends EntidadesCadastro {
         construirViewCadastro(matriculasModelEditando);
     }
 
+    public MatriculasCadastro(MatriculasModel dados){
+        construirViewCadastro(dados);
+    }
+
     private void construirViewCadastro(MatriculasModel matriculasModelEditando){
         atualizaComponentesDuranteEdicao(matriculasModelEditando);
         configuracoesIniciaisPanel();
