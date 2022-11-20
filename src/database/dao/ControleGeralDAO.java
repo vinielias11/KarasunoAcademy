@@ -33,7 +33,7 @@ public class ControleGeralDAO {
 
     private final String insertAssiduidade = "INSERT INTO ASSIDUIDADE(CODIGO_MATRICULA) VALUES ((SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?))";
 
-    private final String selectAssiduidadeByIdAluno = "SELECT DATA_ENTRADA FROM ASSIDUIDADE WHERE CODIGO_MATRICULA = ((SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?))";
+    private final String selectAssiduidadeByIdAluno = "SELECT DATA_ENTRADA FROM ASSIDUIDADE WHERE CODIGO_MATRICULA = ((SELECT CODIGO_MATRICULA FROM MATRICULAS WHERE ID_ALUNO = ?)) AND EXTRACT (MONTH FROM DATA_ENTRADA) = ? AND EXTRACT (YEAR FROM DATA_ENTRADA) = ?";
 
     private final PreparedStatement pstSelectAlunoByCodigo;
     private final PreparedStatement pstSelectMatriculasModalidadesByIdAluno;
@@ -197,10 +197,12 @@ public class ControleGeralDAO {
         }
     }
 
-    public List<AssiduidadeModel> selectAssiduidadeByIdAluno(Integer idAluno) throws SQLException {
+    public List<AssiduidadeModel> selectAssiduidadeByIdAluno(Integer idAluno, Integer mes, Integer ano) throws SQLException {
         List<AssiduidadeModel> arrayListAssiduidade = new ArrayList<>();
 
         pstSelectAssiduidadeByIdAluno.setInt(1, idAluno);
+        pstSelectAssiduidadeByIdAluno.setInt(2, mes);
+        pstSelectAssiduidadeByIdAluno.setInt(3, ano);
 
         try {
             ResultSet resultadoQuery = pstSelectAssiduidadeByIdAluno.executeQuery();

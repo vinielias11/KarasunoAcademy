@@ -1,5 +1,7 @@
 package graphic.controle;
 
+import com.toedter.calendar.JMonthChooser;
+import com.toedter.calendar.JYearChooser;
 import controller.ControleGeralController;
 import graphic.entidades.alunos.AlunosCadastro;
 import model.*;
@@ -11,6 +13,8 @@ import javax.swing.table.DefaultTableModel;
 import javax.swing.text.MaskFormatter;
 import java.awt.*;
 import java.awt.event.*;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.util.Date;
 import java.util.List;
 import java.text.ParseException;
@@ -20,6 +24,8 @@ public class ControleGeralWindow extends JDialog {
     private JTextField showSituacaoTxf;
     private final ControleGeralController controleGeralController = new ControleGeralController();
     private AlunosModel alunosModel;
+
+    private MatriculasModel matriculasModel;
 
     public ControleGeralWindow() {
         super((Dialog) null);
@@ -116,8 +122,21 @@ public class ControleGeralWindow extends JDialog {
 
         });
 
-        JButton btnteste = new JButton("INSERIR BOX DE MES");
-        btnteste.setPreferredSize(new Dimension(200, 25));
+        JMonthChooser monthChooser = new JMonthChooser();
+        JYearChooser yearChooser = new JYearChooser();
+        monthChooser.addPropertyChangeListener("month", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                carregaDadosTabelaAssiduidade((monthChooser.getMonth()+1),yearChooser.getYear());
+            }
+        });
+
+        yearChooser.addPropertyChangeListener("year", new PropertyChangeListener() {
+            @Override
+            public void propertyChange(PropertyChangeEvent e) {
+                carregaDadosTabelaAssiduidade((monthChooser.getMonth()+1),yearChooser.getYear());
+            }
+        });
 
         JTable tabelaAssiduidade = criaTabelaAssiduidade();
         JScrollPane scrollPaneAssiduidade = new JScrollPane(tabelaAssiduidade);
@@ -143,13 +162,16 @@ public class ControleGeralWindow extends JDialog {
 
                 Integer codigoDigitado = Integer.parseInt(valorTxtField);
                 alunosModel = controleGeralController.recuperarAlunoPorCodigo(codigoDigitado);
+                matriculasModel = controleGeralController.recuperarMatriculasPorCodigoAluno(codigoDigitado);
 
                 if (alunosModel != null) {
                     showNomeAlunoTxf.setText(alunosModel.getNome());
                     carregaDadosTabelaMatriculas();
                     carregaDadosTabelaFaturas();
-                    marcaPresencaHoje();
-                    carregaDadosTabelaAssiduidade();
+                    if(matriculasModel.getDataEncerramento() == null){
+                        marcaPresencaHoje();
+                    }
+                    carregaDadosTabelaAssiduidade((monthChooser.getMonth()+1),yearChooser.getYear());
                 } else {
                     showNomeAlunoTxf.setText("Aluno não encontrado!");
                     limpaDadosDeTodasAsTabelas();
@@ -161,8 +183,10 @@ public class ControleGeralWindow extends JDialog {
 
         gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 0; gbcSubPanel.anchor = GridBagConstraints.NORTH; gbcSubPanel.insets = new Insets(0,0,25,0);
         subPanel.add(fotoAlunoTesteTxf, gbcSubPanel);
-        gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 1; gbcSubPanel.insets = new Insets(0,0,15,0);
-        subPanel.add(btnteste, gbcSubPanel);
+        gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 1; gbcSubPanel.anchor = GridBagConstraints.WEST; gbcSubPanel.insets = new Insets(0,0,15,0);
+        subPanel.add(monthChooser, gbcSubPanel);
+        gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 1; gbcSubPanel.anchor = GridBagConstraints.EAST; gbcSubPanel.insets = new Insets(0,0,15,0);
+        subPanel.add(yearChooser, gbcSubPanel);
         gbcSubPanel.gridx = 0; gbcSubPanel.gridy = 2;
         subPanel.add(scrollPaneAssiduidade, gbcSubPanel);
 
@@ -390,9 +414,9 @@ public class ControleGeralWindow extends JDialog {
         }
     }
 
-    private void carregaDadosTabelaAssiduidade() {
+    private void carregaDadosTabelaAssiduidade(Integer mes, Integer ano) {
         DefaultTableModel tableModel = (DefaultTableModel) tabelaAssiduidade.getModel();
-        List<AssiduidadeModel> assiduidadesBanco = controleGeralController.recuperarAssiduidadePorCodigoAluno(alunosModel.getId());
+        List<AssiduidadeModel> assiduidadesBanco = controleGeralController.recuperarAssiduidadePorCodigoAluno(alunosModel.getId(),mes,ano);
 
         tableModel.setRowCount(0);
 

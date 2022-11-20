@@ -62,9 +62,9 @@ public class ControleGeralController {
         }
     }
 
-    public List<AssiduidadeModel> recuperarAssiduidadePorCodigoAluno(Integer idAluno) {
+    public List<AssiduidadeModel> recuperarAssiduidadePorCodigoAluno(Integer idAluno, Integer mes, Integer ano) {
         try {
-            return controleGeralDAO.selectAssiduidadeByIdAluno(idAluno);
+            return controleGeralDAO.selectAssiduidadeByIdAluno(idAluno,mes,ano);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
