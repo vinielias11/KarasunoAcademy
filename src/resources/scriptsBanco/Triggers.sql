@@ -104,6 +104,13 @@ return new;
 end;
 $gerar_faturas$ LANGUAGE plpgsql;
 
+CREATE OR REPLACE FUNCTION DELETAR_ASSIDUIDADES() RETURNS TRIGGER AS $deletar_assiduidades$
+	BEGIN
+		delete from assiduidade where codigo_matricula = OLD.codigo_matricula;
+	RETURN OLD;
+	END;
+$deletar_assiduidades$ LANGUAGE PLPGSQL;
+
 create trigger gerar_faturas
 after insert
 on public.matriculas_modalidades
@@ -115,3 +122,8 @@ after delete
 on public.matriculas_modalidades
 for each row
 execute function public.atualizar_faturas();
+
+CREATE TRIGGER DELETAR_ASSIDUIDADES
+BEFORE DELETE
+ON PUBLIC.MATRICULAS
+FOR EACH ROW EXECUTE FUNCTION PUBLIC.DELETAR_ASSIDUIDADES();
