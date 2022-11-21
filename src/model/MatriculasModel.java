@@ -1,5 +1,6 @@
 package model;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 public class MatriculasModel extends EntidadesModel{
@@ -61,5 +62,19 @@ public class MatriculasModel extends EntidadesModel{
 
     public void setDataEncerramento(Date dataEncerramento) {
         this.dataEncerramento = dataEncerramento;
+    }
+
+    public String getDataMatriculaFormatada() {
+        Date data = new Date();
+        data.setTime(getDataMatricula().getTime());
+
+        return new SimpleDateFormat("dd/MM/yyyy").format(data);
+    }
+
+    public String getDataEncerramentoFormatada() {
+        Date data = new Date();
+        data.setTime(getDataEncerramento().getTime());
+
+        return new SimpleDateFormat("dd/MM/yyyy").format(data);
     }
 }

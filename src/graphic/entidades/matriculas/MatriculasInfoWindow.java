@@ -1,4 +1,4 @@
-package graphic.controle;
+package graphic.entidades.matriculas;
 
 import controller.ControleGeralController;
 import model.AlunosModel;
@@ -41,7 +41,7 @@ public class MatriculasInfoWindow extends JDialog {
         JTextField showDataMatricula = new JTextField();
         showDataMatricula.setPreferredSize(new Dimension(200,20));
         showDataMatricula.setEditable(false);
-        showDataMatricula.setText(matriculasModel.getDataMatricula().toString());
+        showDataMatricula.setText(matriculasModel.getDataMatriculaFormatada());
         showDataMatricula.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 
         JLabel labelDiaVencimentoPagamento = new JLabel();
@@ -63,7 +63,7 @@ public class MatriculasInfoWindow extends JDialog {
             showDataEncerramento.setText("Matricula Ativa");
         }
         else{
-            showDataEncerramento.setText(matriculasModel.getDataEncerramento().toString());
+            showDataEncerramento.setText(matriculasModel.getDataEncerramentoFormatada());
         }
         showDataEncerramento.setBorder(javax.swing.BorderFactory.createEmptyBorder());
 

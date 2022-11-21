@@ -4,6 +4,7 @@ import com.toedter.calendar.JMonthChooser;
 import com.toedter.calendar.JYearChooser;
 import controller.ControleGeralController;
 import graphic.entidades.alunos.AlunosCadastro;
+import graphic.entidades.matriculas.MatriculasInfoWindow;
 import model.*;
 
 import javax.swing.*;
